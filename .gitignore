@@ -43,6 +43,5 @@ replay_pid*
 #Test files
 test*
 
-.idea
 ### Mac OS ###
 .DS_Store
