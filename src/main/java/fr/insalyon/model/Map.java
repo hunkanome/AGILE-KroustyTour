@@ -11,6 +11,7 @@ public class Map {
      * Default constructor
      */
     public Map() {
+        this.intersections = new HashSet<>();
     }
 
     /**
@@ -22,11 +23,6 @@ public class Map {
      * 
      */
     private Set<Intersection> intersections;
-
-    /**
-     * 
-     */
-    private Set<Segment> segments;
 
 
     public Intersection getWarehouse() {
@@ -45,11 +41,24 @@ public class Map {
         this.intersections = intersections;
     }
 
-    public Set<Segment> getSegments() {
-        return segments;
+    public void addIntersection(Intersection intersection) {
+        this.intersections.add(intersection);
     }
 
-    public void setSegments(Set<Segment> segments) {
-        this.segments = segments;
+    public Intersection getIntersectionById(Long id) {
+        for (Intersection intersection : this.intersections) {
+            if (intersection.getId().equals(id)) {
+                return intersection;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Map{" +
+                "warehouse=" + warehouse +
+                ", intersections=" + intersections +
+                '}';
     }
 }

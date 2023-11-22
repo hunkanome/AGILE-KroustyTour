@@ -9,8 +9,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
+import fr.insalyon.model.*;
+
 public class XMLParser {
-    public static void ParseFile(String filename) {
+    public static Map ParseFile(String filename) {
+        // Create Map
+        Map map = new Map();
+        Long warehouseAddress = 0L;
+        Intersection intersection, originIntersection, destinationIntersection;
+        Segment segment;
         try {
             // Specify the path to your XML file
             File xmlFile = new File(filename);
@@ -41,34 +48,40 @@ public class XMLParser {
                     // Check the node name
                     if (element.getTagName().equals("warehouse")) {
                         // Parse warehouse information
-                        String address = element.getAttribute("address");
-                        System.out.println("Warehouse Address: " + address);
+                        warehouseAddress = Long.parseLong(element.getAttribute("address"));
                     } else if (element.getTagName().equals("intersection")) {
                         // Parse intersection information
                         String id = element.getAttribute("id");
                         String latitude = element.getAttribute("latitude");
                         String longitude = element.getAttribute("longitude");
-                        System.out.println("Intersection ID: " + id);
-                        System.out.println("Latitude: " + latitude);
-                        System.out.println("Longitude: " + longitude);
-                        System.out.println();
+                        intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude), Float.parseFloat(longitude));
+
+                        map.addIntersection(intersection);
                     } else if (element.getTagName().equals("segment")) {
-                        // <segment destination="195276" length="33.907093" name="Rue des Tuiliers" origin="21993015"/>
                         // Parse segment information
                         String origin = element.getAttribute("origin");
                         String destination = element.getAttribute("destination");
                         String length = element.getAttribute("length");
                         String name = element.getAttribute("name");
-                        System.out.println("Segment origin: " + origin);
-                        System.out.println("Segment destination: " + destination);
-                        System.out.println("Segment length: " + length);
-                        System.out.println("Segment name: " + name);
-                        System.out.println();
+
+                        originIntersection = map.getIntersectionById(Long.parseLong(origin));
+                        destinationIntersection = map.getIntersectionById(Long.parseLong(destination));
+
+                        segment = new Segment(originIntersection, destinationIntersection, name, Float.parseFloat(length));
+
+                        originIntersection.addOutwardSegment(segment);
                     }
+                }
+            }
+            // find the warehouse in the intersections and put it in the map
+            for (Intersection intersection1 : map.getIntersections()) {
+                if (intersection1.getId() == warehouseAddress) {
+                    map.setWarehouse(intersection1);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return map;
     }
 }

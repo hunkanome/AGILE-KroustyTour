@@ -13,6 +13,13 @@ public class Segment {
     public Segment() {
     }
 
+    public Segment(Intersection origin, Intersection destination, String name, float length) {
+        this.origin = origin;
+        this.destination = destination;
+        this.name = name;
+        this.length = length;
+    }
+
     /**
      * 
      */
@@ -63,5 +70,15 @@ public class Segment {
 
     public void setLength(float length) {
         this.length = length;
+    }
+
+    @Override
+    public String toString() {
+        return "Segment{" +
+                "originID=" + origin.getId() +
+                ", destinationID=" + destination.getId() +
+                ", name='" + name + '\'' +
+                ", length=" + length +
+                '}';
     }
 }
