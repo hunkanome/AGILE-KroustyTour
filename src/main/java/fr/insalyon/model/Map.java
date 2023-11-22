@@ -21,12 +21,12 @@ public class Map {
     /**
      * 
      */
-    private Set<Intersection> intersections;
+    private List<Intersection> intersections;
 
     /**
      * 
      */
-    private Set<Segment> segments;
+    private List<Segment> segments;
 
 
     public Intersection getWarehouse() {
@@ -37,19 +37,19 @@ public class Map {
         this.warehouse = warehouse;
     }
 
-    public Set<Intersection> getIntersections() {
+    public List<Intersection> getIntersections() {
         return intersections;
     }
 
-    public void setIntersections(Set<Intersection> intersections) {
+    public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
-    public Set<Segment> getSegments() {
+    public List<Segment> getSegments() {
         return segments;
     }
 
-    public void setSegments(Set<Segment> segments) {
+    public void setSegments(List<Segment> segments) {
         this.segments = segments;
     }
 }

@@ -10,7 +10,19 @@ public class Path {
     /**
      * Default constructor
      */
-    public Path() {
+    public Path(Intersection startIntersection, Intersection endIntersection) {
+        this.start = startIntersection;
+        this.end = endIntersection;
+        this.segments = new HashSet<>();
+    }
+
+    /**
+     * Constructor with set of segments
+     */
+    public Path(Intersection startIntersection, Intersection endIntersection, Set<Segment> segments) {
+        this.start = startIntersection;
+        this.end = endIntersection;
+        this.segments = segments;
     }
 
     /**
