@@ -75,7 +75,7 @@ public class XMLParser {
             }
             // find the warehouse in the intersections and put it in the map
             for (Intersection intersection1 : map.getIntersections()) {
-                if (intersection1.getId() == warehouseAddress) {
+                if (intersection1.getId().equals(warehouseAddress)) {
                     map.setWarehouse(intersection1);
                 }
             }
