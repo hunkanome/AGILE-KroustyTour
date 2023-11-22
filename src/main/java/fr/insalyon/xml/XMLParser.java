@@ -31,7 +31,7 @@ public class XMLParser {
             NodeList nodeList = root.getChildNodes();
 
             // Iterate through the nodes
-            for (int i = 0; i < 10 ; i++) { // nodeList.getLength()
+            for (int i = 0; i < nodeList.getLength() ; i++) {
                 Node node = nodeList.item(i);
 
                 // Check if the node is an element node
@@ -51,6 +51,18 @@ public class XMLParser {
                         System.out.println("Intersection ID: " + id);
                         System.out.println("Latitude: " + latitude);
                         System.out.println("Longitude: " + longitude);
+                        System.out.println();
+                    } else if (element.getTagName().equals("segment")) {
+                        // <segment destination="195276" length="33.907093" name="Rue des Tuiliers" origin="21993015"/>
+                        // Parse segment information
+                        String origin = element.getAttribute("origin");
+                        String destination = element.getAttribute("destination");
+                        String length = element.getAttribute("length");
+                        String name = element.getAttribute("name");
+                        System.out.println("Segment origin: " + origin);
+                        System.out.println("Segment destination: " + destination);
+                        System.out.println("Segment length: " + length);
+                        System.out.println("Segment name: " + name);
                         System.out.println();
                     }
                 }
