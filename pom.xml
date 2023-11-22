@@ -63,4 +63,12 @@
 		</plugins>
 	</reporting>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.1</version>
+        </dependency>
+    </dependencies>
+
 </project>
