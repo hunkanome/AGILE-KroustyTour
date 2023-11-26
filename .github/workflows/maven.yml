@@ -57,6 +57,7 @@ jobs:
   generate-doc:
     name: Generate & Deploy Javadoc
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Deploy JavaDoc
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
