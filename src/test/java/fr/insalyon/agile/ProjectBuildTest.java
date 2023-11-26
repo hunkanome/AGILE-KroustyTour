@@ -1,4 +1,4 @@
-package agile;
+package fr.insalyon.agile;
 
 import static org.junit.jupiter.api.Assertions.*;
 
