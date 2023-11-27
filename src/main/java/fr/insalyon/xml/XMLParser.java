@@ -12,9 +12,9 @@ import java.io.File;
 import fr.insalyon.model.*;
 
 public class XMLParser {
-    public static Map parseFile(String filename) {
+    public static Map ParseFile(String filename) {
         // Create Map
-        Map map = new Map();
+        CityMap map = new CityMap();
         long warehouseAddress = 0L;
         Intersection intersection, originIntersection, destinationIntersection;
         Segment segment;
