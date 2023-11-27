@@ -26,7 +26,7 @@ public class Tour {
     /**
      * 
      */
-    private Map map;
+    private CityMap map;
 
     /**
      * 
@@ -49,11 +49,11 @@ public class Tour {
         this.courier = courier;
     }
 
-    public Map getMap() {
+    public CityMap getMap() {
         return map;
     }
 
-    public void setMap(Map map) {
+    public void setMap(CityMap map) {
         this.map = map;
     }
 

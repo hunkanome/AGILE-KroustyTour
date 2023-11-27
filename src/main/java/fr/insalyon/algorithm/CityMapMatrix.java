@@ -1,17 +1,17 @@
 package fr.insalyon.algorithm;
 
 import fr.insalyon.model.Intersection;
-import fr.insalyon.model.Map;
+import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
 
 import java.util.*;
 
-public class MapMatrix {
+public class CityMapMatrix {
 
     protected Path[][] arrayPaths;
 
-    MapMatrix(Map map, List<Intersection> deliveries) {
+    CityMapMatrix(CityMap map, List<Intersection> deliveries) {
         Iterator<Intersection> i1 = deliveries.iterator();
         Iterator<Intersection> i2 = deliveries.iterator();
 
@@ -39,7 +39,7 @@ public class MapMatrix {
 
     public void setArrayPaths(Path[][] arrayPaths) { this.arrayPaths = arrayPaths; }
 
-    private Path dijkstra(Map map, Intersection startNode, Intersection endNode) {
+    private Path dijkstra(CityMap map, Intersection startNode, Intersection endNode) {
         // map.getIntersections() node index is its id
         float[] distances = new float[map.getIntersections().size()];
         int[] predecessors = new int[map.getIntersections().size()];
@@ -47,7 +47,7 @@ public class MapMatrix {
 
         // init distances
         Arrays.fill(distances, Float.MAX_VALUE);
-        distances[map.getIntersections().indexOf(startNode)] = 0;
+        distances[startNode.getIndex()] = 0;
         // init predecessors
         Arrays.fill(predecessors, -1);
 
@@ -57,7 +57,7 @@ public class MapMatrix {
 
             for (Segment segment : startNode.getOutwardSegments()) {
                 Intersection destinationNode = segment.getDestination();
-                int destinationNodeIndex = map.getIntersections().indexOf(destinationNode);
+                int destinationNodeIndex = destinationNode.getIndex();
 
                 if (greyNodes.contains(originNodeIndex)) {
                     // the intersection is a grey node
@@ -85,7 +85,7 @@ public class MapMatrix {
         // we get the list of intersections of the shortest path
         ArrayList<Intersection> intersectionsPath = new ArrayList<>();
 
-        int currentNodeIndex = map.getIntersections().indexOf(endNode);
+        int currentNodeIndex = endNode.getIndex();
         while (predecessors[currentNodeIndex] != -1) {
             intersectionsPath.addFirst(map.getIntersections().get(currentNodeIndex));
             currentNodeIndex = predecessors[currentNodeIndex];

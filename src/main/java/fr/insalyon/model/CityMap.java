@@ -57,7 +57,7 @@ public class CityMap {
 
     @Override
     public String toString() {
-        return "Map{" +
+        return "CityMap{" +
                 "warehouse=" + warehouse +
                 ", intersections=" + intersections +
                 '}';
