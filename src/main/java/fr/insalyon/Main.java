@@ -18,23 +18,17 @@ import static java.lang.Float.max;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        int mapWidth = 600;
-        int mapHeight = 600;
+    public void start(Stage primaryStage) throws Exception {
         /* Loading map data */
-        CityMap map = XMLParser.parseFile("data/xml/largeMap.xml");
+        CityMap map = XMLParser.parseFile("data/xml/mediumMap.xml");
 
-        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
-        //Scene scene = new Scene(root, 1000, 700);
-        //primaryStage.setTitle("Calculateur de tours de livraison en vélo");
-        //primaryStage.setScene(scene);
-        //primaryStage.show();
-        VBox root = new VBox();
-        Canvas canvas = new Canvas(mapHeight, mapWidth);
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        Scene scene = new Scene(root, 1000, 700);
+        Canvas canvas = (Canvas) scene.lookup("#canvas_map");
         fillMap(map, canvas);
 
-        root.getChildren().add(canvas);
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setTitle("Calculateur de tours de livraison en vélo");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
