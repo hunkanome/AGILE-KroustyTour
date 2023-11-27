@@ -13,10 +13,30 @@ public class Intersection {
     public Intersection() {
     }
 
+    public Intersection(Long id, float latitude, float longitude, int index) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.outwardSegments = new HashSet<>();
+        this.index = index;
+    }
+
+    public Intersection(Long id, float latitude, float longitude, Set<Segment> outwardSegments) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.outwardSegments = outwardSegments;
+    }
+
+    /**
+     *
+     */
+    private int index;
+
     /**
      * 
      */
-    private int id;
+    private Long id;
 
     /**
      * 
@@ -33,11 +53,19 @@ public class Intersection {
      */
     private Set<Segment> outwardSegments;
 
-    public int getId() {
+    public int getIndex() {
+        return index;
+    }
+
+    public void setId(int index) {
+        this.index = index;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,5 +91,20 @@ public class Intersection {
 
     public void setOutwardSegments(Set<Segment> outwardSegments) {
         this.outwardSegments = outwardSegments;
+    }
+
+    public void addOutwardSegment(Segment segment) {
+        this.outwardSegments.add(segment);
+    }
+
+    @Override
+    public String toString() {
+        return "Intersection{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", outwardSegments=" + outwardSegments +
+                ", index=" + index +
+                '}';
     }
 }
