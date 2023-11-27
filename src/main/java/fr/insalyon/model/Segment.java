@@ -1,44 +1,33 @@
 package fr.insalyon.model;
 
-import java.util.*;
-
 /**
- * 
+ * A segment of a road between two intersections.
+ * The direction of a segment matters, it is not bidirectionnal
+ * @see Intersection
  */
 public class Segment {
 
-    /**
-     * Default constructor
-     */
-    public Segment() {
-    }
+    private Intersection origin;
 
+    private Intersection destination;
+
+    private String name;
+
+    private float length;
+
+    /**
+     * Construct a segment
+     * @param origin starting intersection of the segment
+     * @param destination arrival intersection of the segment
+     * @param name name of the street
+     * @param length length of the segment
+     */
     public Segment(Intersection origin, Intersection destination, String name, float length) {
         this.origin = origin;
         this.destination = destination;
         this.name = name;
         this.length = length;
     }
-
-    /**
-     * 
-     */
-    private Intersection origin;
-
-    /**
-     * 
-     */
-    private Intersection destination;
-
-    /**
-     * 
-     */
-    private String name;
-
-    /**
-     * 
-     */
-    private float length;
 
     public Intersection getOrigin() {
         return origin;
