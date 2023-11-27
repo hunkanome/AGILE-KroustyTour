@@ -4,11 +4,13 @@ import fr.insalyon.xml.XMLParser;
 import fr.insalyon.model.*;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import static java.lang.Float.max;
@@ -22,6 +24,11 @@ public class Main extends Application {
         /* Loading map data */
         CityMap map = XMLParser.parseFile("data/xml/largeMap.xml");
 
+        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        //Scene scene = new Scene(root, 1000, 700);
+        //primaryStage.setTitle("Calculateur de tours de livraison en vélo");
+        //primaryStage.setScene(scene);
+        //primaryStage.show();
         VBox root = new VBox();
         Canvas canvas = new Canvas(mapHeight, mapWidth);
         fillMap(map, canvas);
