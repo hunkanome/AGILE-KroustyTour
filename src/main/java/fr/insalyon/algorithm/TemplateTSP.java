@@ -17,11 +17,11 @@ public abstract class TemplateTSP implements TSP {
 		this.timeLimit = timeLimit;
 		this.g = g;
 		bestSol = new Integer[g.getNbVertices()];
-		Collection<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
+		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
-		Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
+		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
 		visited.add(0); // The first visited vertex is 0
-		bestSolCost = Integer.MAX_VALUE;
+		bestSolCost = Float.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0);
 	}
 	
@@ -44,7 +44,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return a lower bound of the cost of paths in <code>g</code> starting from <code>currentVertex</code>, visiting 
 	 * every vertex in <code>unvisited</code> exactly once, and returning back to vertex <code>0</code>.
 	 */
-	protected abstract int bound(Integer currentVertex, Collection<Integer> unvisited);
+	protected abstract float bound(Integer currentVertex, Collection<Integer> unvisited);
 	
 	/**
 	 * Method that must be defined in TemplateTSP subclasses
@@ -65,12 +65,10 @@ public abstract class TemplateTSP implements TSP {
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, float currentCost){
 		if (System.currentTimeMillis() - startTime > timeLimit) return;
-		if (unvisited.size() == 0){
-	    	if (g.isArc(currentVertex,0)){ 
-	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 
-	    			visited.toArray(bestSol);
-	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
-	    		}
+		if (unvisited.isEmpty()){
+	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < bestSolCost)){
+				visited.toArray(bestSol);
+				bestSolCost = currentCost+g.getCost(currentVertex,0);
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
 	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);

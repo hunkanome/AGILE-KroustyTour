@@ -5,8 +5,13 @@ import java.util.Iterator;
 
 public class TSP1 extends TemplateTSP {
 	@Override
-	protected int bound(Integer currentVertex, Collection<Integer> unvisited) {
-		return 0;
+	protected float bound(Integer currentVertex, Collection<Integer> unvisited) {
+		float bound = 0;
+		for (Integer i : unvisited) {
+			bound += g.getCost(currentVertex, i);
+		}
+		return bound;
+//		return 0;
 	}
 
 	@Override
