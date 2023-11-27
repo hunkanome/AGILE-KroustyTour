@@ -12,12 +12,13 @@ import java.io.File;
 import fr.insalyon.model.*;
 
 public class XMLParser {
-    public static Map ParseFile(String filename) {
+    public static Map parseFile(String filename) {
         // Create Map
         Map map = new Map();
-        Long warehouseAddress = 0L;
+        long warehouseAddress = 0L;
         Intersection intersection, originIntersection, destinationIntersection;
         Segment segment;
+
         try {
             // Specify the path to your XML file
             File xmlFile = new File(filename);
@@ -46,30 +47,32 @@ public class XMLParser {
                     Element element = (Element) node;
 
                     // Check the node name
-                    if (element.getTagName().equals("warehouse")) {
-                        // Parse warehouse information
-                        warehouseAddress = Long.parseLong(element.getAttribute("address"));
-                    } else if (element.getTagName().equals("intersection")) {
-                        // Parse intersection information
-                        String id = element.getAttribute("id");
-                        String latitude = element.getAttribute("latitude");
-                        String longitude = element.getAttribute("longitude");
-                        intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude), Float.parseFloat(longitude));
-
-                        map.addIntersection(intersection);
-                    } else if (element.getTagName().equals("segment")) {
-                        // Parse segment information
-                        String origin = element.getAttribute("origin");
-                        String destination = element.getAttribute("destination");
-                        String length = element.getAttribute("length");
-                        String name = element.getAttribute("name");
-
-                        originIntersection = map.getIntersectionById(Long.parseLong(origin));
-                        destinationIntersection = map.getIntersectionById(Long.parseLong(destination));
-
-                        segment = new Segment(originIntersection, destinationIntersection, name, Float.parseFloat(length));
-
-                        originIntersection.addOutwardSegment(segment);
+                    switch (element.getTagName()) {
+                        case "warehouse" :
+                            // Parse warehouse information
+                            warehouseAddress = Long.parseLong(element.getAttribute("address"));
+                            break;
+                        case "intersection" :
+                            // Parse intersection information
+                            String id = element.getAttribute("id");
+                            String latitude = element.getAttribute("latitude");
+                            String longitude = element.getAttribute("longitude");
+                            intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude), Float.parseFloat(longitude));
+                            map.addIntersection(intersection);
+                            break;
+                        case "segment" :
+                            // Parse segment information
+                            String origin = element.getAttribute("origin");
+                            String destination = element.getAttribute("destination");
+                            String length = element.getAttribute("length");
+                            String name = element.getAttribute("name");
+                            originIntersection = map.getIntersectionById(Long.parseLong(origin));
+                            destinationIntersection = map.getIntersectionById(Long.parseLong(destination));
+                            segment = new Segment(originIntersection, destinationIntersection, name, Float.parseFloat(length));
+                            originIntersection.addOutwardSegment(segment);
+                            break;
+                        default :
+                            break;
                     }
                 }
             }
