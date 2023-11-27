@@ -31,8 +31,16 @@ public class RunTSP {
 		costMatrix[3][3].setLength(0);
 		Graph g = new DeliveryGraph(costMatrix);
 
+		// Measure the time
+		long start = System.currentTimeMillis();
+
 		// Search for a solution
-		tsp.searchSolution(10000, g);
+		for(int i=0; i<10000; i++) {
+			tsp.searchSolution(10000, g);
+		}
+
+		// Print time duration
+		System.out.println("Duration: " + (System.currentTimeMillis() - start) + " ms");
 
 		// Print the solution
 		for (int i = 0; i < costMatrix.length; i++) {
