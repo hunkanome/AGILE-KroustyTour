@@ -1,7 +1,7 @@
 package fr.insalyon.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -12,7 +12,7 @@ public class CityMap {
      * Default constructor
      */
     public CityMap() {
-        this.intersections = new HashSet<>();
+        this.intersections = new ArrayList<>();
     }
 
     /**
@@ -23,7 +23,7 @@ public class CityMap {
     /**
      * 
      */
-    private Set<Intersection> intersections;
+    private List<Intersection> intersections;
 
 
     public Intersection getWarehouse() {
@@ -34,11 +34,11 @@ public class CityMap {
         this.warehouse = warehouse;
     }
 
-    public Set<Intersection> getIntersections() {
+    public List<Intersection> getIntersections() {
         return intersections;
     }
 
-    public void setIntersections(Set<Intersection> intersections) {
+    public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
