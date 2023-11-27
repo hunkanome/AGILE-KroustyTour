@@ -7,6 +7,14 @@ import java.util.*;
  */
 public class Path {
 
+
+    public Path() {
+        this.start = null;
+        this.end = null;
+        this.segments = new ArrayList<>();
+        this.length = 0;
+    }
+
     /**
      * Default constructor
      */

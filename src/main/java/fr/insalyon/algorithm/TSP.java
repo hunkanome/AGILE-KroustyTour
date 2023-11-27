@@ -15,12 +15,12 @@ public interface TSP {
 	 * @return the ith visited vertex in the solution computed by <code>searchSolution</code> 
 	 * (-1 if <code>searcheSolution</code> has not been called yet, or if i < 0 or i >= g.getNbSommets())
 	 */
-	public Integer getSolution(int i);
+	public int getSolution(int i);
 	
 	/** 
 	 * @return the total cost of the solution computed by <code>searchSolution</code> 
 	 * (-1 if <code>searcheSolution</code> has not been called yet).
 	 */
-	public int getSolutionCost();
+	public float getSolutionCost();
 
 }
