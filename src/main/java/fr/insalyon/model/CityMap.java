@@ -1,16 +1,17 @@
 package fr.insalyon.model;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 
  */
-public class Map {
+public class CityMap {
 
     /**
      * Default constructor
      */
-    public Map() {
+    public CityMap() {
         this.intersections = new HashSet<>();
     }
 
