@@ -71,4 +71,20 @@ jobs:
           java-version: 21
           target-folder: javadoc # url will be https://hunkanome.github.io/AGILE-KroustyTour/javadoc
           project: maven
-      
+
+  code-quality:
+    name: SonarQube Quality test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      with:
+        projectBaseDir: src
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
