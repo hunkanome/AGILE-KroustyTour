@@ -10,7 +10,7 @@ public class DeliveryGraph implements Graph {
 
 	/**
 	 * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-	 * @param nbVertices
+	 * @param cost
 	 */
 	public DeliveryGraph(Path[][] cost){
 		this.nbVertices = cost.length;
