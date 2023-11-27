@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.* ?>
+
+<!-- To add shortcuts to menus, see https://stackoverflow.com/questions/21209461/javafx-menu-item-show-shortcuts-on-right-hand-side -->
+
+
+<MenuBar>
+	<menus>
+		<Menu text="File">
+			<items>
+				<MenuItem text="Open map"/>
+				<MenuItem text="Export tours"/>
+				<MenuItem text="Import tours"/>
+				<MenuItem text="Exit"/>
+			</items>
+		</Menu>
+		<Menu text="Help">
+		</Menu>
+	</menus>
+</MenuBar>
