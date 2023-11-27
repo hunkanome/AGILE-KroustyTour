@@ -12,7 +12,7 @@ import java.io.File;
 import fr.insalyon.model.*;
 
 public class XMLParser {
-    public static Map ParseFile(String filename) {
+    public static CityMap parseFile(String filename) {
         // Create Map
         CityMap map = new CityMap();
         long warehouseAddress = 0L;
