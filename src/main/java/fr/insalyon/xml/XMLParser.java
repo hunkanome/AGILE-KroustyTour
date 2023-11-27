@@ -87,6 +87,7 @@ public class XMLParser {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            map = null;
         }
         return map;
     }
