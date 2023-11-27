@@ -38,6 +38,8 @@ public class XMLParser {
             // Get all child nodes under the root element
             NodeList nodeList = root.getChildNodes();
 
+            int indexIntersection = 0;
+
             // Iterate through the nodes
             for (int i = 0; i < nodeList.getLength() ; i++) {
                 Node node = nodeList.item(i);
@@ -57,7 +59,8 @@ public class XMLParser {
                             String id = element.getAttribute("id");
                             String latitude = element.getAttribute("latitude");
                             String longitude = element.getAttribute("longitude");
-                            intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude), Float.parseFloat(longitude));
+                            intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude), Float.parseFloat(longitude), indexIntersection);
+                            indexIntersection++;
                             map.addIntersection(intersection);
                             break;
                         case "segment" :

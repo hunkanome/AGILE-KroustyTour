@@ -13,11 +13,12 @@ public class Intersection {
     public Intersection() {
     }
 
-    public Intersection(Long id, float latitude, float longitude) {
+    public Intersection(Long id, float latitude, float longitude, int index) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.outwardSegments = new HashSet<>();
+        this.index = index;
     }
 
     public Intersection(Long id, float latitude, float longitude, Set<Segment> outwardSegments) {
@@ -26,6 +27,11 @@ public class Intersection {
         this.longitude = longitude;
         this.outwardSegments = outwardSegments;
     }
+
+    /**
+     *
+     */
+    private int index;
 
     /**
      * 
@@ -46,6 +52,14 @@ public class Intersection {
      * 
      */
     private Set<Segment> outwardSegments;
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setId(int index) {
+        this.index = index;
+    }
 
     public Long getId() {
         return id;
@@ -90,6 +104,7 @@ public class Intersection {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", outwardSegments=" + outwardSegments +
+                ", index=" + index +
                 '}';
     }
 }
