@@ -13,6 +13,7 @@ public abstract class TemplateTSP implements TSP {
 	
 	public void searchSolution(int timeLimit, Graph g){
 		if (timeLimit <= 0) return;
+		if (g.getNbVertices()<=0) return;
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
 		this.g = g;
