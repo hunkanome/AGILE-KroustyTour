@@ -3,46 +3,103 @@ package fr.insalyon.algorithm;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Map;
 import fr.insalyon.model.Path;
+import fr.insalyon.model.Segment;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class MapMatrix {
 
-    protected float[][] arrayDistances;
     protected Path[][] arrayPaths;
 
-    MapMatrix(List<Intersection> deliveries) {
+    MapMatrix(Map map, List<Intersection> deliveries) {
         Iterator<Intersection> i1 = deliveries.iterator();
         Iterator<Intersection> i2 = deliveries.iterator();
 
-        int i = 0, j = 0, length;
-        this.arrayDistances = new float[deliveries.size()][deliveries.size()];
+        int i = 0, j = 0;
+        this.arrayPaths = new Path[deliveries.size()][deliveries.size()];
 
         while (i1.hasNext()) {
             Intersection startIntersection = i1.next();
             while (i2.hasNext()) {
                 Intersection endIntersection = i2.next();
 
-                // Djikstra
-                arrayPaths[i][j] = djikstra(null, startIntersection, endIntersection);
-
+                if (i1 != i2) {
+                    // Dijkstra
+                    this.arrayPaths[i][j] = dijkstra(map, startIntersection, endIntersection);
+                } else {
+                    this.arrayPaths[i][j] = null;
+                }
                 j++;
             }
             i++;
         }
     }
 
-    private Path djikstra(Map map, Intersection startNode, Intersection endNode) {
+    public Path[][] getArrayPaths() { return arrayPaths; }
+
+    public void setArrayPaths(Path[][] arrayPaths) { this.arrayPaths = arrayPaths; }
+
+    private Path dijkstra(Map map, Intersection startNode, Intersection endNode) {
+        // map.getIntersections() node index is its id
+        float[] distances = new float[map.getIntersections().size()];
+        int[] predecessors = new int[map.getIntersections().size()];
+        PriorityQueue<Integer> greyNodes = new PriorityQueue<>(Comparator.comparing(index -> distances[index]));
+
+        // init distances
+        Arrays.fill(distances, Float.MAX_VALUE);
+        distances[map.getIntersections().indexOf(startNode)] = 0;
+        // init predecessors
+        Arrays.fill(predecessors, -1);
+
+        while (!greyNodes.isEmpty()) {
+            int originNodeIndex = greyNodes.peek();
+            Intersection originNode = map.getIntersections().get(originNodeIndex);
+
+            for (Segment segment : startNode.getOutwardSegments()) {
+                Intersection destinationNode = segment.getDestination();
+                int destinationNodeIndex = map.getIntersections().indexOf(destinationNode);
+
+                if (greyNodes.contains(originNodeIndex)) {
+                    // the intersection is a grey node
+                    if (distances[destinationNodeIndex] > distances[originNodeIndex] + segment.getLength()) {
+                        distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
+                        predecessors[destinationNodeIndex] = originNodeIndex;
+                    }
+                }
+                else if (predecessors[originNodeIndex] == -1) {
+                    // the intersection is a white node
+                    distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
+                    predecessors[destinationNodeIndex] = originNodeIndex;
+
+                    greyNodes.add(destinationNodeIndex);
+                }
+            }
+
+            // we pop the node from the priority queue
+            greyNodes.poll();
+        }
+
+        // shortest path
         Path path = new Path(startNode, endNode);
 
-        PriorityQueue<Intersection> greyNodes = new PriorityQueue<>();
+        // we get the list of intersections of the shortest path
+        ArrayList<Intersection> intersectionsPath = new ArrayList<>();
 
-        float[] distancesArray = new float[map.getIntersections().size()];
-        Arrays.fill(distancesArray, Float.MAX_VALUE);
-        distancesArray[map.getIntersections().indexOf(startNode)] = 0;
+        int currentNodeIndex = map.getIntersections().indexOf(endNode);
+        while (predecessors[currentNodeIndex] != -1) {
+            intersectionsPath.addFirst(map.getIntersections().get(currentNodeIndex));
+            currentNodeIndex = predecessors[currentNodeIndex];
+        }
+        intersectionsPath.addFirst(startNode);
+
+        // we construct the path made of segments
+        for (int i = 0; i<intersectionsPath.size()-1; i++) {
+            for (Segment segment : intersectionsPath.get(i).getOutwardSegments()) {
+                if (segment.getDestination() == intersectionsPath.get(i+1)) {
+                    path.appendSegment(segment);
+                }
+            }
+        }
 
         return path;
     }

@@ -13,13 +13,14 @@ public class Path {
     public Path(Intersection startIntersection, Intersection endIntersection) {
         this.start = startIntersection;
         this.end = endIntersection;
-        this.segments = new HashSet<>();
+        this.segments = new ArrayList<>();
+        this.length = 0;
     }
 
     /**
      * Constructor with set of segments
      */
-    public Path(Intersection startIntersection, Intersection endIntersection, Set<Segment> segments) {
+    public Path(Intersection startIntersection, Intersection endIntersection, List<Segment> segments) {
         this.start = startIntersection;
         this.end = endIntersection;
         this.segments = segments;
@@ -33,12 +34,17 @@ public class Path {
     /**
      * 
      */
-    private Set<Segment> segments;
+    private List<Segment> segments;
 
     /**
      * 
      */
     private Intersection end;
+
+    /**
+     *
+     */
+    private float length;
 
     public Intersection getStart() {
         return start;
@@ -48,11 +54,11 @@ public class Path {
         this.start = start;
     }
 
-    public Set<Segment> getSegments() {
+    public List<Segment> getSegments() {
         return segments;
     }
 
-    public void setSegments(Set<Segment> segments) {
+    public void setSegments(List<Segment> segments) {
         this.segments = segments;
     }
 
@@ -62,5 +68,14 @@ public class Path {
 
     public void setEnd(Intersection end) {
         this.end = end;
+    }
+
+    public float getLength() { return length; }
+
+    public void setLength(float length) { this.length = length; }
+
+    public void appendSegment(Segment segment) {
+        this.segments.add(segment);
+        this.length += segment.getLength();
     }
 }
