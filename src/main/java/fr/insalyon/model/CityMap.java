@@ -42,13 +42,13 @@ public class CityMap {
         this.intersections.add(intersection);
     }
 
-    public Intersection getIntersectionById(Long id) {
+    public Intersection getIntersectionById(Long id) throws IndexOutOfBoundsException {
         for (Intersection intersection : this.intersections) {
             if (intersection.getId().equals(id)) {
                 return intersection;
             }
         }
-        return null;
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
