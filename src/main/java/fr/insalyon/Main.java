@@ -1,6 +1,6 @@
 package fr.insalyon;
 
-import fr.insalyon.xml.XMLParser;
+import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.model.*;
 
 import javafx.application.Application;
@@ -21,7 +21,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-		CityMap map = XMLParser.parseFile("data/xml/mediumMap.xml");
+		CityMap map = CityMapXMLParser.parseFile("data/xml/mediumMap.xml");
 
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
 		Scene scene = new Scene(root, 1000, 700);
