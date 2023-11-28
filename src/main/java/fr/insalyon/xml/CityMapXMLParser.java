@@ -102,9 +102,9 @@ public class CityMapXMLParser {
 			}
 			map.setIntersections(intersections);
 
-		} catch (NumberFormatException | NullPointerException e) {
+		} catch (NumberFormatException e) {
 			// If the number parsing fail (not a number, not present, ...)
-			throw new BadlyFormedXMLException("Error while parsing intersections");
+			throw new BadlyFormedXMLException("Malformed intersection element");
 		}
 	}
 
@@ -120,13 +120,17 @@ public class CityMapXMLParser {
 
 				Intersection originIntersection = map.getIntersectionById(Long.parseLong(origin));
 				Intersection destinationIntersection = map.getIntersectionById(Long.parseLong(destination));
+				if (originIntersection == destinationIntersection) {
+					throw new BadlyFormedXMLException("Segment's origin and destination must be different");
+				}
+				
 				Segment segment = new Segment(originIntersection, destinationIntersection, name,
 						Float.parseFloat(length));
 				originIntersection.addOutwardSegment(segment);
 			}
-		} catch (NumberFormatException | NullPointerException e) {
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 			// If the number parsing fail (not a number, not present, ...)
-			throw new BadlyFormedXMLException("Error while parsing segments");
+			throw new BadlyFormedXMLException("Malformed segment element");
 		}
 	}
 
@@ -139,9 +143,9 @@ public class CityMapXMLParser {
 				Intersection intersection = map.getIntersectionById(Long.parseLong(address));
 
 				map.setWarehouse(intersection);
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException | IndexOutOfBoundsException e) {
 				// If the number parsing fail (not a number, not present, ...)
-				throw new BadlyFormedXMLException("Error while parsing warehouse");
+				throw new BadlyFormedXMLException("Malformed warehouse element");
 			}
 		} else {
 			throw new BadlyFormedXMLException("A map XML document must contain exactly one warehouse");
