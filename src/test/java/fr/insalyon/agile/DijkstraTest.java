@@ -39,7 +39,15 @@ class DijkstraTest extends TestCase {
 
         this.mapMatrix = new CityMapMatrix(this.map, this.listDeliveries);
 
-
+        for (int i = 0; i < this.mapMatrix.getArrayPaths().length; i++) {
+            for (int j = 0; j < this.mapMatrix.getArrayPaths().length; j++) {
+                if (i != j) {
+                    assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
+                } else {
+                    assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
+                }
+            }
+        }
     }
 
     protected void setUpGraph() {
