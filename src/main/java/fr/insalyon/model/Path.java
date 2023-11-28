@@ -86,4 +86,14 @@ public class Path {
         this.segments.add(segment);
         this.length += segment.getLength();
     }
+
+    @Override
+    public String toString() {
+        return "Path{" +
+                "start=" + start.getId() +
+                ", segments=" + segments +
+                ", end=" + end.getId() +
+                ", length=" + length +
+                '}';
+    }
 }
