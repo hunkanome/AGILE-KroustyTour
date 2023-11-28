@@ -3,16 +3,28 @@ package fr.insalyon.model;
 import java.util.*;
 
 /**
- * 
+ * An intersection at the end of one or more segments
+ * @see Segment
  */
 public class Intersection {
 
-    /**
-     * Default constructor
-     */
-    public Intersection() {
-    }
+    private int index;
 
+    private final Long id;
+
+    private float latitude;
+
+    private float longitude;
+
+    private Set<Segment> outwardSegments;
+
+    /**
+     * Construct a new intersection with no outwards segments
+     * @param id identifier of the intersection from the XML file
+     * @param latitude lagitude of the intersection point
+     * @param longitude longitude of the intersection point
+     * @param index index in the intersection array of the CityMap class
+     */
     public Intersection(Long id, float latitude, float longitude, int index) {
         this.id = id;
         this.latitude = latitude;
@@ -21,52 +33,32 @@ public class Intersection {
         this.index = index;
     }
 
-    public Intersection(Long id, float latitude, float longitude, Set<Segment> outwardSegments) {
+    /**
+     * Construct a new intersection with some outwards segments
+     * @param id identifier of the intersection from the XML file
+     * @param latitude lagitude of the intersection point
+     * @param longitude longitude of the intersection point
+     * @param index index in the map array of all intersection
+     * @param outwardSegments the list of the segments leaving the intersection
+     */
+    public Intersection(Long id, float latitude, float longitude, int index, Set<Segment> outwardSegments) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.outwardSegments = outwardSegments;
+        this.index = index;
     }
-
-    /**
-     *
-     */
-    private int index;
-
-    /**
-     * 
-     */
-    private Long id;
-
-    /**
-     * 
-     */
-    private float latitude;
-
-    /**
-     * 
-     */
-    private float longitude;
-
-    /**
-     * 
-     */
-    private Set<Segment> outwardSegments;
 
     public int getIndex() {
         return index;
     }
 
-    public void setId(int index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public float getLatitude() {

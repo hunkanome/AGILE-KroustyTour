@@ -1,37 +1,28 @@
 package fr.insalyon.model;
 
-import java.util.*;
+import java.util.Set;
 
 /**
- * 
+ * A sequence of deliveries located on a single path and handled by a courier.
+ * @see Delivery
+ * @see Courier
+ * @see Path
+ * @see CityMap
  */
 public class Tour {
+
+    private Set<Delivery> deliveries;
+
+    private Courier courier;
+
+    private CityMap map;
+
+    private Path path;
 
     /**
      * Default constructor
      */
-    public Tour() {
-    }
-
-    /**
-     * 
-     */
-    private Set<Delivery> deliveries;
-
-    /**
-     * 
-     */
-    private Courier courier;
-
-    /**
-     * 
-     */
-    private Map map;
-
-    /**
-     * 
-     */
-    private Path path;
+    public Tour() {}
 
     public Set<Delivery> getDeliveries() {
         return deliveries;
@@ -49,11 +40,11 @@ public class Tour {
         this.courier = courier;
     }
 
-    public Map getMap() {
+    public CityMap getMap() {
         return map;
     }
 
-    public void setMap(Map map) {
+    public void setMap(CityMap map) {
         this.map = map;
     }
 

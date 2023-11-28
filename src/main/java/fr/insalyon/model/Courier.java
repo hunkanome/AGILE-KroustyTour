@@ -1,16 +1,14 @@
 package fr.insalyon.model;
 
-import java.util.*;
-
 /**
- * 
+ * A courier than can carry out a delivery or a tour of deliveries
+ * @see Delivery
+ * @see Tour
  */
 public class Courier {
 
     /**
      * Default constructor
      */
-    public Courier() {
-    }
-
+    public Courier() {}
 }

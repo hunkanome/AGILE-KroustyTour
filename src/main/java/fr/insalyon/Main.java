@@ -60,5 +60,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        // CityMap map = XMLParser.parseFile("data/xml/testMapError.xml");
+        // System.out.println(map);
     }
 }
