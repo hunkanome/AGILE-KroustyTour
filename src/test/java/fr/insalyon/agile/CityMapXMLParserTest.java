@@ -33,7 +33,7 @@ class CityMapXMLParserTest {
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/badlyFormedMapXMLDocuments.csv", numLinesToSkip = 1)
-	void testBadlFormedMapXMLDocument(String document, String expectedMessage) {
+	void testBadlyFormedMapXMLDocument(String document, String expectedMessage) {
 		InputStream input = new ByteArrayInputStream(document.getBytes());
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		Exception exception = assertThrows(BadlyFormedXMLException.class, () -> {
