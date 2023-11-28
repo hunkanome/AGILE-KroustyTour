@@ -47,11 +47,14 @@ public class CityMapXMLParser {
 			DocumentBuilder builder = this.getDocumentBuilder();
 			Document document = builder.parse(input);
 			Element root = document.getDocumentElement();
+			if (!root.getTagName().equals("map")) {
+				throw new BadlyFormedXMLException("The root of a map XML document must be a map element");
+			}
 
 			this.parseIntersections(root, map);
 			this.parseSegments(root, map);
 			this.parseWarehouse(root, map);
-		} catch (SAXParseException e) {
+		} catch (SAXParseException | BadlyFormedXMLException e) {
 			throw new BadlyFormedXMLException("XML file is badly formed : " + e.getMessage());
 		} catch (Exception e) {
 			throw new XMLParserException("Error while parsing XML file : " + e.getMessage());
@@ -83,6 +86,10 @@ public class CityMapXMLParser {
 	private void parseIntersections(Element root, CityMap map) throws BadlyFormedXMLException {
 		try {
 			NodeList intersectionNodes = root.getElementsByTagName("intersection");
+			if (intersectionNodes.getLength() < 1) {
+				throw new BadlyFormedXMLException("A map XML document must contain at least one Intersection");
+			}
+			
 			List<Intersection> intersections = new ArrayList<>();
 			for (int i = 0; i < intersectionNodes.getLength(); i++) {
 				Element intersectionElement = (Element) intersectionNodes.item(i);
@@ -137,7 +144,7 @@ public class CityMapXMLParser {
 				throw new BadlyFormedXMLException("Error while parsing warehouse");
 			}
 		} else {
-			throw new BadlyFormedXMLException("A map must contain exactly sone warehouse");
+			throw new BadlyFormedXMLException("A map XML document must contain exactly one warehouse");
 		}
 	}
 }
