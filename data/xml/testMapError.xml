@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<map>
-<warehouse address="25303831"/>
-<intersection id="0" latitude="45" longitude="4"/>
-<intersection id="1" latitude="45" longitude="8"/>
-<segment destination="1" length="79.02355" name="Rue Antoine Charial" origin="0"/>
-<segment destination="0" length="69.480034" name="Rue Antoine Charial" />
-</map>

@@ -21,7 +21,7 @@ public class Intersection {
     /**
      * Construct a new intersection with no outwards segments
      * @param id identifier of the intersection from the XML file
-     * @param latitude lagitude of the intersection point
+     * @param latitude latitude of the intersection point
      * @param longitude longitude of the intersection point
      * @param index index in the intersection array of the CityMap class
      */
@@ -36,7 +36,7 @@ public class Intersection {
     /**
      * Construct a new intersection with some outwards segments
      * @param id identifier of the intersection from the XML file
-     * @param latitude lagitude of the intersection point
+     * @param latitude latitude of the intersection point
      * @param longitude longitude of the intersection point
      * @param index index in the map array of all intersection
      * @param outwardSegments the list of the segments leaving the intersection

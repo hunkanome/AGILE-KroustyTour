@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import static java.lang.Float.max;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 
 public class Main extends Application {
@@ -21,7 +23,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-		CityMap map = CityMapXMLParser.parseFile("data/xml/mediumMap.xml");
+		
+		InputStream input = new FileInputStream("data/xml/largeMap.xml");
+		CityMapXMLParser parser = new CityMapXMLParser(input);
+		CityMap map = parser.parse();
 
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
 		Scene scene = new Scene(root, 1000, 700);
