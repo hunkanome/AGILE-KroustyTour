@@ -2,10 +2,7 @@ package fr.insalyon.controller;
 
 import static java.lang.Float.max;
 
-import java.util.Optional;
-
 import fr.insalyon.model.CityMap;
-import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
 import javafx.fxml.FXML;
@@ -16,69 +13,55 @@ import javafx.scene.paint.Color;
 public class CityMapController {
 	@FXML
 	private Canvas canvasMap;
+    /**
+     * Used to keep track of the last click X coordinate to make dragging possible
+     */
+    private double lastClickX = -1;
+    /**
+     * Used to keep track of the last click Y coordinate to make dragging possible
+     */
+    private double lastClickY = -1;
 
 	public void initialize(CityMap map) {
-		fillMap(map, canvasMap);
-	}
-
-	private <T> T getOptionalValue(Optional<T> value) {
-		if (value.isEmpty()) {
-			throw new IllegalArgumentException("No value found");
-		}
-		return value.get();
-	}
-
-	private float getMaxLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLatitude)
-								 .max(Float::compare);
-		return getOptionalValue(max);
-	}
-
-	private float getMinLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLatitude)
-								 .min(Float::compare);
-		return getOptionalValue(max);
-	}
-
-	private float getMaxLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLongitude)
-								 .max(Float::compare);
-		return getOptionalValue(max);
-	}
-
-	private float getMinLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLongitude)
-								 .min(Float::compare);
-		return getOptionalValue(max);
-	}
-
-	private void fillMap(CityMap map, Canvas canvas) {
-		// Getting max lat and long coordinates
-		float maxLat = getMaxLatitude(map);
-		float maxLong = getMaxLongitude(map);
-		float minLat = getMinLatitude(map);
-		float minLong = getMinLongitude(map);
-		float latDiff = maxLat - minLat;
-		float longDiff = maxLong - minLong;
-		float coeff = max(latDiff, longDiff);
-		// Scaling Graphic Context
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.scale(1, -1);
-		gc.translate(0, -(latDiff * (float)(canvas.getHeight()) / coeff));
-		// Scaling coordinates
-		map.getIntersections().forEach(intersection -> {
-			intersection.setLatitude((intersection.getLatitude() - minLat) * (float)(canvas.getHeight()) / coeff);
-			intersection.setLongitude((intersection.getLongitude() - minLong) * (float)(canvas.getWidth()) / coeff);
+		fillMap(map, canvasMap, 1, 0, 0);
+		canvasMap.setOnScroll(event -> {
+			clearCanvas();
+			double zoomFactor = event.getDeltaY() > 0 ? 1.02 : 0.98;
+			fillMap(map, canvasMap, zoomFactor, 0,0);
 		});
-		map.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> drawSegment(gc, segment)));
+        canvasMap.setOnMousePressed(event -> {
+            lastClickX = event.getX();
+            lastClickY = event.getY();
+        });
+        canvasMap.setOnMouseDragged(event -> {
+            clearCanvas();
+            fillMap(map, canvasMap, 1,event.getX() - lastClickX, event.getY() - lastClickY);
+            lastClickX = event.getX();
+            lastClickY = event.getY();
+        });
+	}
+
+	private void fillMap(CityMap map, Canvas canvas, double zoomFactor, double xTranslation, double yTranslation) {
+		// Calculating max size of map
+		float latDiff = map.getMaxLatitude() - map.getMinLatitude();
+		float longDiff = map.getMaxLongitude() - map.getMinLongitude();
+		float coeff = max(latDiff, longDiff);
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+        // Zooming by the specified amount (no effect is 1)
+		gc.scale(zoomFactor, zoomFactor);
+        // translating by the specified amounts (no effect if 0)
+        gc.translate(xTranslation, yTranslation);
+		gc.setFill(Color.RED);
+		gc.fillRect(0, 0, canvasMap.getWidth(), canvasMap.getHeight());
+		// Scaling coordinates
+		map.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+            // Calculating better coordinates to display on map
+			double yOrigin = (map.getMaxLatitude() - segment.getOrigin().getLatitude()) / coeff * canvas.getHeight();
+			double xOrigin = (segment.getOrigin().getLongitude() - map.getMinLongitude()) / coeff * canvas.getWidth();
+			double yDestination = (map.getMaxLatitude() - segment.getDestination().getLatitude()) / coeff * canvas.getHeight();
+			double xDestination = (segment.getDestination().getLongitude() - map.getMinLongitude()) / coeff * canvas.getWidth();
+			drawLine(gc, xOrigin, yOrigin, xDestination, yDestination);
+		}));
 	}
 
 	private void drawPath(GraphicsContext gc, Path path){
@@ -88,9 +71,12 @@ public class CityMapController {
 		}
 	}
 
-	private void drawSegment(GraphicsContext gc, Segment segment) {
+	private void drawLine(GraphicsContext gc, double x1, double y1, double x2, double y2) {
 		gc.setStroke(Color.BLUE);
-		gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(), segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
+		gc.strokeLine(x1, y1, x2, y2);
 	}
-	
+
+	private void clearCanvas() {
+		canvasMap.getGraphicsContext2D().clearRect(0, 0, canvasMap.getWidth(), canvasMap.getHeight());
+	}
 }
