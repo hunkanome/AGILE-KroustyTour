@@ -1,17 +1,18 @@
 package fr.insalyon.agile;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
 import junit.framework.TestCase;
-import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 
 /**
  *
@@ -24,19 +25,19 @@ class DijkstraTest extends TestCase {
     private CityMapMatrix mapMatrix;
 
     @Test
-    void testCityMapCreation() {
+    public void testCityMapCreation() {
         setUpGraph();
         setUpCityMap();
 
-        assertEquals(this.map.getWarehouse(), null);
+        Assertions.assertNull(this.map.getWarehouse());
         for (int i = 0; i < 5; i++) {
             long id = this.map.getIntersections().get(i).getId();
-            assertEquals(id, i+1);
+            Assertions.assertEquals(id, i+1);
         }
     }
 
     @Test
-    void testCityMapMatrixCreation() {
+    public void testCityMapMatrixCreation() {
         setUpGraph();
         setUpCityMap();
         int nbDeliveries = 2;
@@ -47,9 +48,9 @@ class DijkstraTest extends TestCase {
         for (int i = 0; i < this.mapMatrix.getArrayPaths().length; i++) {
             for (int j = 0; j < this.mapMatrix.getArrayPaths().length; j++) {
                 if (i != j) {
-                    assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
+                    Assertions.assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
                 } else {
-                    assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
+                    Assertions.assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
                 }
             }
         }
