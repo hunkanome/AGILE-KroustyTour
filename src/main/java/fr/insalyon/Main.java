@@ -23,8 +23,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-		
-		InputStream input = new FileInputStream("data/xml/largeMap.xml");
+		InputStream input = new FileInputStream("data/xml/smallMap.xml");
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		CityMap map = parser.parse();
 
@@ -32,6 +31,9 @@ public class Main extends Application {
 		Scene scene = new Scene(root, 1000, 700);
 		Canvas canvas = (Canvas) scene.lookup("#canvas_map");
 		fillMap(map, canvas);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        Path path = new Path(map.getWarehouse(), map.getIntersectionById(251047560l), map.getWarehouse().getOutwardSegments().stream().toList());
+        drawPath(gc, path);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
 		primaryStage.setScene(scene);
@@ -96,6 +98,13 @@ public class Main extends Application {
 			intersection.setLongitude((intersection.getLongitude() - minLong) * (float)(canvas.getWidth()) / coeff);
 		});
 		map.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> drawSegment(gc, segment)));
+	}
+
+	private void drawPath(GraphicsContext gc, Path path){
+		gc.setStroke(Color.RED);
+		for (Segment segment : path.getSegments()) {
+			gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(), segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
+		}
 	}
 
 	private void drawSegment(GraphicsContext gc, Segment segment) {
