@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane prefHeight="675.0" prefWidth="250.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
+			style="&#10;" text="Contrôles" textAlignment="CENTER"
+			wrapText="false">
+			<font>
+				<Font size="18.0" />
+			</font>
+			<textFill>
+				<Color red="0.624" green="0.624" blue="0.624" fx:id="x8" />
+			</textFill>
+		</Label>
+	</children>
+</AnchorPane>
+        

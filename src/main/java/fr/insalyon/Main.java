@@ -10,7 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -18,20 +18,27 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-
 		InputStream input = new FileInputStream("data/xml/mediumMap.xml");
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		CityMap map = parser.parse();
 
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
-		FXMLLoader mapLoader = new FXMLLoader(getClass().getClassLoader().getResource("CityMap.fxml"));
-		Parent cityMapCanvas = mapLoader.load();
+		HBox panelsContainer = (HBox) root.lookup("#panelsContainer");
+		
+		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ControlPanel.fxml"));
+		Parent controlPanel = controlPanelLoader.load();
+		panelsContainer.getChildren().add(controlPanel);
 
-		CityMapController cityMapController = mapLoader.getController();
+		FXMLLoader cityMapPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("CityMapPanel.fxml"));
+		Parent cityMapPanel = cityMapPanelLoader.load();
+		CityMapController cityMapController = cityMapPanelLoader.getController();
 		cityMapController.initialize(map);
+		panelsContainer.getChildren().add(cityMapPanel);
+		
+		FXMLLoader detailPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("DetailPanel.fxml"));
+		Parent detailPanel = detailPanelLoader.load();
+		panelsContainer.getChildren().add(detailPanel);
 
-		AnchorPane mapContainer = (AnchorPane) root.lookup("#mapContainer");
-		mapContainer.getChildren().add(cityMapCanvas);
 		Scene scene = new Scene(root, 1000, 700);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");

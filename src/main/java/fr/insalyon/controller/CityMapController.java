@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
+import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -28,22 +29,34 @@ public class CityMapController {
 	}
 
 	private float getMaxLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLatitude).max(Float::compare);
+		Optional<Float> max = map.getIntersections()
+				                 .stream()
+								 .map(Intersection::getLatitude)
+								 .max(Float::compare);
 		return getOptionalValue(max);
 	}
 
 	private float getMinLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLatitude).min(Float::compare);
+		Optional<Float> max = map.getIntersections()
+				                 .stream()
+								 .map(Intersection::getLatitude)
+								 .min(Float::compare);
 		return getOptionalValue(max);
 	}
 
 	private float getMaxLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLongitude).max(Float::compare);
+		Optional<Float> max = map.getIntersections()
+				                 .stream()
+								 .map(Intersection::getLongitude)
+								 .max(Float::compare);
 		return getOptionalValue(max);
 	}
 
 	private float getMinLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLongitude).min(Float::compare);
+		Optional<Float> max = map.getIntersections()
+				                 .stream()
+								 .map(Intersection::getLongitude)
+								 .min(Float::compare);
 		return getOptionalValue(max);
 	}
 
@@ -59,20 +72,25 @@ public class CityMapController {
 		// Scaling Graphic Context
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.scale(1, -1);
-		gc.translate(0, -(latDiff * (float) (canvas.getHeight()) / coeff));
+		gc.translate(0, -(latDiff * (float)(canvas.getHeight()) / coeff));
 		// Scaling coordinates
 		map.getIntersections().forEach(intersection -> {
-			intersection.setLatitude((intersection.getLatitude() - minLat) * (float) (canvas.getHeight()) / coeff);
-			intersection.setLongitude((intersection.getLongitude() - minLong) * (float) (canvas.getWidth()) / coeff);
+			intersection.setLatitude((intersection.getLatitude() - minLat) * (float)(canvas.getHeight()) / coeff);
+			intersection.setLongitude((intersection.getLongitude() - minLong) * (float)(canvas.getWidth()) / coeff);
 		});
-		map.getIntersections().forEach(
-				intersection -> intersection.getOutwardSegments().forEach(segment -> drawSegment(gc, segment)));
+		map.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> drawSegment(gc, segment)));
+	}
+
+	private void drawPath(GraphicsContext gc, Path path){
+		gc.setStroke(Color.RED);
+		for (Segment segment : path.getSegments()) {
+			gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(), segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
+		}
 	}
 
 	private void drawSegment(GraphicsContext gc, Segment segment) {
 		gc.setStroke(Color.BLUE);
-		gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(),
-				segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
+		gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(), segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
 	}
 	
 }

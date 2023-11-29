@@ -11,7 +11,7 @@ public class CityMapMatrix {
 
     protected Path[][] arrayPaths;
 
-    CityMapMatrix(CityMap map, List<Intersection> deliveries) {
+    public CityMapMatrix(CityMap map, List<Intersection> deliveries) {
         Iterator<Intersection> i1 = deliveries.iterator();
         Iterator<Intersection> i2 = deliveries.iterator();
 
