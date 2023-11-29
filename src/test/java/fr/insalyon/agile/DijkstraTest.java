@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 
 /**
  *
@@ -27,7 +28,11 @@ class DijkstraTest extends TestCase {
         setUpGraph();
         setUpCityMap();
 
-        assertEquals(this.map.toString(), "CityMap{warehouse=null, intersections=[Intersection{id=1, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=1, destinationID=5, name='', length=9.0}, Segment{originID=1, destinationID=3, name='', length=3.0}, Segment{originID=1, destinationID=4, name='', length=5.0}], index=0}, Intersection{id=2, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=2, destinationID=6, name='', length=10.0}], index=1}, Intersection{id=3, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=3, destinationID=5, name='', length=1.0}, Segment{originID=3, destinationID=1, name='', length=3.0}], index=2}, Intersection{id=4, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=4, destinationID=6, name='', length=4.0}, Segment{originID=4, destinationID=1, name='', length=5.0}], index=3}, Intersection{id=5, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=5, destinationID=3, name='', length=1.0}, Segment{originID=5, destinationID=1, name='', length=9.0}, Segment{originID=5, destinationID=6, name='', length=2.0}], index=4}, Intersection{id=6, latitude=1.0, longitude=1.0, outwardSegments=[Segment{originID=6, destinationID=2, name='', length=10.0}, Segment{originID=6, destinationID=4, name='', length=4.0}, Segment{originID=6, destinationID=5, name='', length=2.0}], index=5}]}");
+        assertEquals(this.map.getWarehouse(), null);
+        for (int i = 0; i < 5; i++) {
+            long id = this.map.getIntersections().get(i).getId();
+            assertEquals(id, i+1);
+        }
     }
 
     @Test
