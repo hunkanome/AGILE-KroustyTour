@@ -1,5 +1,7 @@
 package fr.insalyon.geometry;
 
+import java.util.Objects;
+
 /**
  * Represents geographical coordinates with latitude and longitude values.
  * 
@@ -64,5 +66,24 @@ public class GeoCoordinates {
 	public void setLongitude(Float longitude) {
 		this.longitude = longitude;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(latitude, longitude);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GeoCoordinates other = (GeoCoordinates) obj;
+		return Objects.equals(latitude, other.latitude) && Objects.equals(longitude, other.longitude);
+	}
+	
+	
 
 }
