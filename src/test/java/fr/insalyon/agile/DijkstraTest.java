@@ -1,7 +1,10 @@
 package fr.insalyon.agile;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Test;
 
 import fr.insalyon.algorithm.CityMapMatrix;
@@ -10,13 +13,13 @@ import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
 import junit.framework.TestCase;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
  *
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DijkstraTest extends TestCase {
 
     private ArrayList<Intersection> listIntersections = new ArrayList<>();
@@ -26,9 +29,6 @@ class DijkstraTest extends TestCase {
 
     @Test
     public void testCityMapCreation() {
-        setUpGraph();
-        setUpCityMap();
-
         Assertions.assertNull(this.map.getWarehouse());
         for (int i = 0; i < 5; i++) {
             long id = this.map.getIntersections().get(i).getId();
@@ -38,11 +38,8 @@ class DijkstraTest extends TestCase {
 
     @Test
     public void testCityMapMatrixCreation() {
-        setUpGraph();
-        setUpCityMap();
         int nbDeliveries = 2;
         setUpListDeliveries(nbDeliveries);
-
         this.mapMatrix = new CityMapMatrix(this.map, this.listDeliveries);
 
         for (int i = 0; i < this.mapMatrix.getArrayPaths().length; i++) {
@@ -56,7 +53,9 @@ class DijkstraTest extends TestCase {
         }
     }
 
-    protected void setUpGraph() {
+    @BeforeAll
+    public void setUpGraph() {
+        System.out.println("setUpGraph");
         Intersection s = new Intersection(1L, 1.0f, 1.0f, 0);
         Intersection e = new Intersection(2L, 1.0f, 1.0f, 1);
         Intersection a = new Intersection(3L, 1.0f, 1.0f, 2);
@@ -92,7 +91,9 @@ class DijkstraTest extends TestCase {
         this.listIntersections.add(s); this.listIntersections.add(e); this.listIntersections.add(a);
         this.listIntersections.add(b); this.listIntersections.add(c); this.listIntersections.add(d);
     }
-    protected void setUpCityMap() {
+    @BeforeAll
+    public void setUpCityMap() {
+        System.out.println("setUpCityMap");
         this.map.setIntersections(this.listIntersections);
     }
     protected void setUpListDeliveries(int nbDeliveries) {
