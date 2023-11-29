@@ -128,7 +128,7 @@ public class CityMapMatrix {
      * @param newIntersection The new intersection to add
      * @see Intersection
      */
-    private void addIntersection(Intersection newIntersection) {
+    public void addIntersection(Intersection newIntersection) {
         int size = this.arrayPaths.length + 1;
         int i;
 
@@ -136,6 +136,7 @@ public class CityMapMatrix {
 
         // increase the size of the array
         this.arrayPaths = Arrays.copyOf(this.arrayPaths, size);
+        this.arrayPaths[size - 1] = new Path[size];
         for (i = 0; i < size - 1; i++) {
             this.arrayPaths[i] = Arrays.copyOf(this.arrayPaths[i], size);
         }

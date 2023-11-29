@@ -53,6 +53,31 @@ class DijkstraTest extends TestCase {
         }
     }
 
+    @Test
+    public void testAddIntersection() {
+        Intersection i = new Intersection(99L, 1.0f, 1.0f, map.getIntersections().size());
+
+        Segment i_to_d = new Segment(i, map.getIntersections().get(3), "", 3f);
+        Segment i_to_e = new Segment(i, map.getIntersections().get(4), "", 4f);
+
+        Segment d_to_i = new Segment(map.getIntersections().get(3), i, "", 3f);
+        Segment e_to_i = new Segment(map.getIntersections().get(4), i, "", 4f);
+
+        i.addOutwardSegment(i_to_d);
+        i.addOutwardSegment(i_to_e);
+
+        map.getIntersections().get(3).addOutwardSegment(d_to_i);
+        map.getIntersections().get(4).addOutwardSegment(e_to_i);
+
+        this.map.addIntersection(i);
+        this.listIntersections.add(i);
+
+        CityMapMatrix matrix = new CityMapMatrix(this.map, this.listIntersections);
+        matrix.addIntersection(i);
+
+        Assertions.assertEquals(matrix.getArrayPaths()[3][4].getLength(), 7f);
+    }
+
     @BeforeAll
     public void setUpGraph() {
         System.out.println("setUpGraph");
