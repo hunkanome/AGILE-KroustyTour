@@ -32,7 +32,7 @@ public class Main extends Application {
 		Canvas canvas = (Canvas) scene.lookup("#canvas_map");
 		fillMap(map, canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        Path path = new Path(map.getWarehouse(), map.getIntersectionById(251047560l), map.getWarehouse().getOutwardSegments().stream().toList());
+        Path path = new Path(map.getWarehouse(), map.getIntersectionById(251047560L), map.getWarehouse().getOutwardSegments().stream().toList());
         drawPath(gc, path);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
