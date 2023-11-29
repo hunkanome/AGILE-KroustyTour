@@ -9,25 +9,28 @@ import java.util.*;
 
 public class CityMapMatrix {
 
+    private final int NO_PREDECESSORS = -2;
     protected Path[][] arrayPaths;
 
-    CityMapMatrix(CityMap map, List<Intersection> deliveries) {
-        Iterator<Intersection> i1 = deliveries.iterator();
-        Iterator<Intersection> i2 = deliveries.iterator();
-
-        int i = 0, j = 0;
+    public CityMapMatrix(CityMap map, List<Intersection> deliveries) {
         this.arrayPaths = new Path[deliveries.size()][deliveries.size()];
 
-        while (i1.hasNext()) {
-            Intersection startIntersection = i1.next();
-            while (i2.hasNext()) {
-                Intersection endIntersection = i2.next();
+        int i = 0;
+        Iterator<Intersection> it1 = deliveries.iterator();
+        while (it1.hasNext()) {
+            Intersection startIntersection = it1.next();
 
-                if (i1 != i2) {
+            int j = 0;
+            Iterator<Intersection> it2 = deliveries.iterator();
+            while (it2.hasNext()) {
+                Intersection endIntersection = it2.next();
+
+                if (startIntersection != endIntersection) {
                     // Dijkstra
                     this.arrayPaths[i][j] = dijkstra(map, startIntersection, endIntersection);
+                    this.arrayPaths[j][i] = dijkstra(map, endIntersection, startIntersection);
                 } else {
-                    this.arrayPaths[i][j] = null;
+                    this.arrayPaths[i][j] = new Path(startIntersection, startIntersection, new ArrayList<>());
                 }
                 j++;
             }
@@ -50,23 +53,26 @@ public class CityMapMatrix {
         distances[startNode.getIndex()] = 0;
         // init predecessors
         Arrays.fill(predecessors, -1);
+        predecessors[startNode.getIndex()] = NO_PREDECESSORS;
+        // init greyNodes
+        greyNodes.add(startNode.getIndex());
 
         while (!greyNodes.isEmpty()) {
             int originNodeIndex = greyNodes.peek();
             Intersection originNode = map.getIntersections().get(originNodeIndex);
 
-            for (Segment segment : startNode.getOutwardSegments()) {
+            for (Segment segment : originNode.getOutwardSegments()) {
                 Intersection destinationNode = segment.getDestination();
                 int destinationNodeIndex = destinationNode.getIndex();
 
-                if (greyNodes.contains(originNodeIndex)) {
+                if (greyNodes.contains(destinationNodeIndex)) {
                     // the intersection is a grey node
                     if (distances[destinationNodeIndex] > distances[originNodeIndex] + segment.getLength()) {
                         distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
                         predecessors[destinationNodeIndex] = originNodeIndex;
                     }
                 }
-                else if (predecessors[originNodeIndex] == -1) {
+                else if (predecessors[destinationNodeIndex] == -1) {
                     // the intersection is a white node
                     distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
                     predecessors[destinationNodeIndex] = originNodeIndex;
@@ -86,7 +92,7 @@ public class CityMapMatrix {
         ArrayList<Intersection> intersectionsPath = new ArrayList<>();
 
         int currentNodeIndex = endNode.getIndex();
-        while (predecessors[currentNodeIndex] != -1) {
+        while (predecessors[currentNodeIndex] != -1 && predecessors[currentNodeIndex] != -2) {
             intersectionsPath.addFirst(map.getIntersections().get(currentNodeIndex));
             currentNodeIndex = predecessors[currentNodeIndex];
         }
