@@ -90,4 +90,14 @@ public class Path {
         this.segments.add(segment);
         this.length += segment.getLength();
     }
+
+    @Override
+    public String toString() {
+        return "Path{" +
+                "From I" + start.getId() +
+                ", to I" + end.getId() +
+                ", in " + length +
+                ", meters through " + segments +
+                '}';
+    }
 }
