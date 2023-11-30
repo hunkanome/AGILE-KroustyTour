@@ -1,38 +1,34 @@
 package fr.insalyon.agile;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Test;
 
 import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
-import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  *
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DijkstraTest extends TestCase {
+class DijkstraTest {
 
-    private ArrayList<Intersection> listIntersections = new ArrayList<>();
-    private CityMap map = new CityMap();
-    private ArrayList<Intersection> listDeliveries = new ArrayList<>();
-    private CityMapMatrix mapMatrix;
+    static private final ArrayList<Intersection> listIntersections = new ArrayList<>();
+    static private final CityMap map = new CityMap();
+    static private final ArrayList<Intersection> listDeliveries = new ArrayList<>();
+    static private CityMapMatrix mapMatrix;
 
     @Test
     public void testCityMapCreation() {
-        Assertions.assertNull(this.map.getWarehouse());
+        Assertions.assertNull(DijkstraTest.map.getWarehouse());
         for (int i = 0; i < 5; i++) {
-            long id = this.map.getIntersections().get(i).getId();
-            Assertions.assertEquals(id, i+1);
+            long id = DijkstraTest.map.getIntersections().get(i).getId();
+            Assertions.assertEquals(id, i);
         }
     }
 
@@ -40,14 +36,14 @@ class DijkstraTest extends TestCase {
     public void testCityMapMatrixCreation() {
         int nbDeliveries = 2;
         setUpListDeliveries(nbDeliveries);
-        this.mapMatrix = new CityMapMatrix(this.map, this.listDeliveries);
+        DijkstraTest.mapMatrix = new CityMapMatrix(DijkstraTest.map, DijkstraTest.listDeliveries);
 
-        for (int i = 0; i < this.mapMatrix.getArrayPaths().length; i++) {
-            for (int j = 0; j < this.mapMatrix.getArrayPaths().length; j++) {
+        for (int i = 0; i < DijkstraTest.mapMatrix.getArrayPaths().length; i++) {
+            for (int j = 0; j < DijkstraTest.mapMatrix.getArrayPaths().length; j++) {
                 if (i != j) {
-                    Assertions.assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
+                    Assertions.assertEquals(DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
                 } else {
-                    Assertions.assertEquals(this.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
+                    Assertions.assertEquals(DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
                 }
             }
         }
@@ -55,38 +51,47 @@ class DijkstraTest extends TestCase {
 
     @Test
     public void testAddIntersection() {
-        Intersection i = new Intersection(99L, 1.0f, 1.0f, map.getIntersections().size());
+        Intersection i = new Intersection(7357L, 1.0f, 1.0f, DijkstraTest.map.getIntersections().size());
 
-        Segment i_to_d = new Segment(i, map.getIntersections().get(3), "", 3f);
-        Segment i_to_e = new Segment(i, map.getIntersections().get(4), "", 4f);
+        Segment i_to_d = new Segment(i, DijkstraTest.map.getIntersections().get(5), "", 3f);
+        Segment i_to_e = new Segment(i, DijkstraTest.map.getIntersections().get(1), "", 4f);
 
-        Segment d_to_i = new Segment(map.getIntersections().get(3), i, "", 3f);
-        Segment e_to_i = new Segment(map.getIntersections().get(4), i, "", 4f);
+        Segment d_to_i = new Segment(DijkstraTest.map.getIntersections().get(5), i, "", 3f);
+        Segment e_to_i = new Segment(DijkstraTest.map.getIntersections().get(1), i, "", 4f);
 
         i.addOutwardSegment(i_to_d);
         i.addOutwardSegment(i_to_e);
 
-        map.getIntersections().get(3).addOutwardSegment(d_to_i);
-        map.getIntersections().get(4).addOutwardSegment(e_to_i);
+        DijkstraTest.map.getIntersections().get(5).addOutwardSegment(d_to_i);
+        DijkstraTest.map.getIntersections().get(1).addOutwardSegment(e_to_i);
 
-        this.map.addIntersection(i);
-        this.listIntersections.add(i);
+        DijkstraTest.map.addIntersection(i);
 
-        CityMapMatrix matrix = new CityMapMatrix(this.map, this.listIntersections);
+        CityMapMatrix matrix = new CityMapMatrix(DijkstraTest.map, DijkstraTest.listIntersections);
         matrix.addIntersection(i);
 
-        Assertions.assertEquals(matrix.getArrayPaths()[3][4].getLength(), 7f);
+        // path same as before
+        Assertions.assertEquals(matrix.getArrayPaths()[2][5].getLength(), 3f);
+
+        // path ending at new node
+        Assertions.assertEquals(matrix.getArrayPaths()[5][6].getLength(), 3f);
+
+        // path starting from new node
+        Assertions.assertEquals(matrix.getArrayPaths()[6][0].getLength(), 9f);
+
+        // path passing through new node
+        Assertions.assertEquals(matrix.getArrayPaths()[1][5].getLength(), 7f);
     }
 
     @BeforeAll
-    public void setUpGraph() {
+    public static void setUpGraph() {
         System.out.println("setUpGraph");
-        Intersection s = new Intersection(1L, 1.0f, 1.0f, 0);
-        Intersection e = new Intersection(2L, 1.0f, 1.0f, 1);
-        Intersection a = new Intersection(3L, 1.0f, 1.0f, 2);
-        Intersection b = new Intersection(4L, 1.0f, 1.0f, 3);
-        Intersection c = new Intersection(5L, 1.0f, 1.0f, 4);
-        Intersection d = new Intersection(6L, 1.0f, 1.0f, 5);
+        Intersection s = new Intersection(0L, 1.0f, 1.0f, 0);
+        Intersection e = new Intersection(1L, 1.0f, 1.0f, 1);
+        Intersection a = new Intersection(2L, 1.0f, 1.0f, 2);
+        Intersection b = new Intersection(3L, 1.0f, 1.0f, 3);
+        Intersection c = new Intersection(4L, 1.0f, 1.0f, 4);
+        Intersection d = new Intersection(5L, 1.0f, 1.0f, 5);
 
         Segment s1 = new Segment(a, c, "", 1.0f);
         Segment s3 = new Segment(a, s, "", 3.0f);
@@ -113,17 +118,17 @@ class DijkstraTest extends TestCase {
         a.setOutwardSegments(setA); b.setOutwardSegments(setB); c.setOutwardSegments(setC);
         d.setOutwardSegments(setD); e.setOutwardSegments(setE); s.setOutwardSegments(setS);
 
-        this.listIntersections.add(s); this.listIntersections.add(e); this.listIntersections.add(a);
-        this.listIntersections.add(b); this.listIntersections.add(c); this.listIntersections.add(d);
+        DijkstraTest.listIntersections.add(s); DijkstraTest.listIntersections.add(e); DijkstraTest.listIntersections.add(a);
+        DijkstraTest.listIntersections.add(b); DijkstraTest.listIntersections.add(c); DijkstraTest.listIntersections.add(d);
     }
     @BeforeAll
-    public void setUpCityMap() {
+    public static void setUpCityMap() {
         System.out.println("setUpCityMap");
-        this.map.setIntersections(this.listIntersections);
+        DijkstraTest.map.setIntersections((List<Intersection>) DijkstraTest.listIntersections.clone());
     }
     protected void setUpListDeliveries(int nbDeliveries) {
         for (int i = 0; i < nbDeliveries; i++) {
-            this.listDeliveries.add(this.listIntersections.get(i));
+            DijkstraTest.listDeliveries.add(DijkstraTest.listIntersections.get(i));
         }
     }
 }
