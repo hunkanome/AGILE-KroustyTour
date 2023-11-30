@@ -19,6 +19,10 @@ public class TimeWindow {
         throw new IllegalArgumentException("Invalid hour for time window");
     }
 
+    public int getStartHour() {
+        return startHour;
+    }
+
     public boolean isRightBefore(TimeWindow other) {
         return this.startHour + 1 == other.startHour;
     }
@@ -29,5 +33,9 @@ public class TimeWindow {
 
     public boolean isAfter(TimeWindow other) {
         return this.startHour > other.startHour;
+    }
+
+    public boolean equals(TimeWindow other) {
+        return this.startHour == other.startHour;
     }
 }

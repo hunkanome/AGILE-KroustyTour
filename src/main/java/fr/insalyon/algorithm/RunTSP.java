@@ -43,9 +43,9 @@ public class RunTSP {
 
 		Delivery[] deliveries = new Delivery[4];
 		deliveries[0] = new Delivery(courier, intersection1, tw8);
-		deliveries[1] = new Delivery(courier, intersection2, tw10);
+		deliveries[1] = new Delivery(courier, intersection2, tw8);
 		deliveries[2] = new Delivery(courier, intersection3, tw8);
-		deliveries[3] = new Delivery(courier, intersection4, tw10);
+		deliveries[3] = new Delivery(courier, intersection4, tw8);
 
 		DeliveryGraph g = new DeliveryGraph(costMatrix, deliveries);
 		// Measure the time

@@ -11,7 +11,7 @@ public class TSP1 extends TemplateTSP {
 			bound += g.getCost(currentVertex, i);
 		}
 		return bound;
-//		return 0;
+// 		return 0;
 	}
 
 	@Override

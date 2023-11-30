@@ -86,7 +86,7 @@ public abstract class TemplateTSP implements TSP {
 					if(currentCostTimeWindow > 55) { // If we are running out of time, we stop the branch
 						return;
 					}
-					if (deliveries[nextVertex].getTimeWindow() == currentTimeWindow) {
+					if (deliveries[nextVertex].getTimeWindow().equals(currentTimeWindow)) {
 						if (currentCostTimeWindow + g.getCost(currentVertex, nextVertex) < 5) {
 							currentCostTimeWindow = 5 - g.getCost(currentVertex, nextVertex);
 							currentCost = (((int)(currentCost / 60)) + 1) * 60 + currentCostTimeWindow;
@@ -103,8 +103,9 @@ public abstract class TemplateTSP implements TSP {
 				currentTimeWindow = g.getNextTimeWindow(currentTimeWindow);
 				it = iterator(currentVertex, unvisited, g);
 				if(currentTimeWindow == null) break;
-				//if (!g.hasDeliveriesInPrecedingTimeWindow(currentTimeWindow)) {
-				if (currentCostTimeWindow < 0) { // We didn't do anything in this time window
+
+				// if (currentCostTimeWindow < 0) { // We didn't do anything in this time window
+				if (!g.hasDeliveriesInPrecedingTimeWindow(currentTimeWindow)) {
 					currentCostTimeWindow = 0;
 					currentCost += 60; // an hour of waiting
 				}

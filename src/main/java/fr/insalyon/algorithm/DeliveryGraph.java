@@ -63,15 +63,30 @@ public class DeliveryGraph implements Graph {
 	// Get the next Time Window after current
 	// Algorithm : get minimal Time Window that is after current
 	public TimeWindow getNextTimeWindow(TimeWindow current) {
-		TimeWindow next = null;
-		for (Delivery delivery : deliveries) {
-			if (delivery.getTimeWindow().isAfter(current)) {
-				if (next == null) {
-					next = delivery.getTimeWindow();
-				} else if (delivery.getTimeWindow().isBefore(next)) {
-					next = delivery.getTimeWindow();
+//		TimeWindow next = null;
+//		for (Delivery delivery : deliveries) {
+//			if (delivery.getTimeWindow().isAfter(current)) {
+//				if (next == null) {
+//					next = delivery.getTimeWindow();
+//				} else if (delivery.getTimeWindow().isBefore(next)) {
+//					next = delivery.getTimeWindow();
+//				}
+//			}
+//		}
+//		return next;
+
+		// If there is a delivery with the next time window or with a bigger time window
+		// we return it, otherwise we return null
+		TimeWindow next;
+		try {
+			next = new TimeWindow(current.getStartHour() + 1);
+			for (Delivery delivery : deliveries) {
+				if (next == delivery.getTimeWindow() || delivery.getTimeWindow().isAfter(next)) {
+					return next;
 				}
 			}
+		} catch (IllegalArgumentException e) {
+			next = null;
 		}
 		return next;
 	}
@@ -89,8 +104,8 @@ public class DeliveryGraph implements Graph {
 
 	// Returns true if there is deliveries in the preceding Time Window
 	public boolean hasDeliveriesInPrecedingTimeWindow(TimeWindow current) {
-		for (Delivery delivery : deliveries) {
-			if (delivery.getTimeWindow().isRightBefore(current)) {
+		for(int i = 1; i < deliveries.length; i++) {
+			if(deliveries[i].getTimeWindow().isRightBefore(current)) {
 				return true;
 			}
 		}
