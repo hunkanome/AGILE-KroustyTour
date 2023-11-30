@@ -37,8 +37,7 @@ public class Intersection {
 	 * Construct a new intersection with some outwards segments
 	 * 
 	 * @param id              identifier of the intersection from the XML file
-	 * @param latitude        latitude of the intersection point
-	 * @param longitude       longitude of the intersection point
+	 * @param coordinates     the coordinates of the intersection
 	 * @param index           index in the map array of all intersection
 	 * @param outwardSegments the list of the segments leaving the intersection
 	 */
