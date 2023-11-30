@@ -51,6 +51,54 @@ public class CityMap {
         throw new IndexOutOfBoundsException();
     }
 
+    /**
+     * Used to obtain the maximum latitude of all intersections
+     * @return the maximum latitude or Float.MIN_VALUE if there is no intersection
+     */
+    public float getMaxLatitude() {
+        float max = Float.MIN_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getLatitude() > max)
+                max = intersection.getLatitude();
+        return max;
+    }
+
+    /**
+     * Used to obtain the minimum latitude of all intersections
+     * @return the minimum latitude or Float.MAX_VALUE if there is no intersection
+     */
+    public float getMinLatitude() {
+        float min = Float.MAX_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getLatitude() < min)
+                min = intersection.getLatitude();
+        return min;
+    }
+
+    /**
+     * Used to obtain the maximum longitude of all intersections
+     * @return the maximum longitude or Float.MIN_VALUE if there is no intersection
+     */
+    public float getMaxLongitude() {
+        float max = Float.MIN_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getLongitude() > max)
+                max = intersection.getLongitude();
+        return max;
+    }
+
+    /**
+     * Used to obtain the minimum longitude of all intersections
+     * @return the minimum longitude or Float.MAX_VALUE if there is no intersection
+     */
+    public float getMinLongitude() {
+        float min = Float.MAX_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getLongitude() < min)
+                min = intersection.getLongitude();
+        return min;
+    }
+
     @Override
     public String toString() {
         return "CityMap{" +
