@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <fx:include source="MenuBar.fxml" />
+    <HBox fx:id="panelsContainer" prefHeight="676.0" prefWidth="900.0">
+      <children>
+      </children>
+    </HBox>
+  </children>
+</VBox>

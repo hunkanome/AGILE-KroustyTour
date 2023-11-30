@@ -1,5 +1,6 @@
 package fr.insalyon.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -20,9 +21,18 @@ public class Tour {
     private Path path;
 
     /**
-     * Default constructor
+     * Construct a new tour with no deliveries
+     * Instantiate an empty set of deliveries and the path with an empty set of segments
+     * The start intersection is the warehouse, the end intersection is set at null
+     * @param courier The courier who handles the deliveries of the tour
+     * @param map The map where the deliveries are located
      */
-    public Tour() {}
+    public Tour(Courier courier, CityMap map) {
+        this.courier = courier;
+        this.map = map;
+        this.deliveries = new HashSet<>();
+        this.path = new Path(map.getWarehouse(), null);
+    }
 
     public Set<Delivery> getDeliveries() {
         return deliveries;

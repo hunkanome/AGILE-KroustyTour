@@ -15,9 +15,17 @@ public class Delivery {
     private TimeWindow timeWindow;
 
     /**
-     * Default constructor
+     * Construct a new delivery
+     * @param courier The courier handling the delivery
+     * @param location The intersection where delivery is requested
+     * @param timeWindow The time window during which delivery must be made
      */
-    public Delivery() {}
+    public Delivery(Courier courier, Intersection location, TimeWindow timeWindow) {
+        this.courier = courier;
+        this.location = location;
+        this.timeWindow = timeWindow;
+    }
+
 
     public Courier getCourier() {
         return courier;

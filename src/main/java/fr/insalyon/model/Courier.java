@@ -7,8 +7,33 @@ package fr.insalyon.model;
  */
 public class Courier {
 
+    private int id;
+
+    private boolean available;
+
     /**
-     * Default constructor
+     * Construct a new courier
+     * Define that he is available
+     * @param id the courier id
      */
-    public Courier() {}
+    public Courier(int id) {
+        this.id = id;
+        this.available = true;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 }

@@ -1,0 +1,12 @@
+document,expectedMessage
+"",XML file is badly formed : 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>,XML file is badly formed : 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><test></test>,XML file is badly formed : The root of a map XML document must be a map element
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map></map>,XML file is badly formed : A map XML document must contain at least one Intersection
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><intersection id="1" latitude="0" longitude="0"/></map>,XML file is badly formed : A map XML document must contain exactly one warehouse
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><intersection/></map>,XML file is badly formed : Malformed intersection element
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><warehouse address="2" /><intersection id="1" latitude="0" longitude="0" /></map>,XML file is badly formed : Malformed warehouse element
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><warehouse/><intersection id="1" latitude="0" longitude="0" /></map>,XML file is badly formed : Malformed warehouse element
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><warehouse address="1"/><intersection id="1" latitude="0" longitude="0"/><segment/></map>,XML file is badly formed : Malformed segment element
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><warehouse address="1"/><intersection id="1" latitude="0" longitude="0"/><segment destination="1" length="0" name="" origin="1"/></map>,XML file is badly formed : Segment's origin and destination must be different
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map><warehouse address="1"/><intersection id="1" latitude="0" longitude="0"/><segment destination="1" length="0" name="" origin="2"/></map>,XML file is badly formed : Malformed segment element
