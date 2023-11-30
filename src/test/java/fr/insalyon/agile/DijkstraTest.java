@@ -122,8 +122,7 @@ class DijkstraTest {
     }
     @BeforeAll
     public static void setUpCityMap() {
-        System.out.println("setUpCityMap");
-        DijkstraTest.map.setIntersections(new ArrayList<>(DijkstraTest.listIntersections));
+        DijkstraTest.map.setIntersections((ArrayList<Intersection>) DijkstraTest.listIntersections.clone());
     }
     protected void setUpListDeliveries(int nbDeliveries) {
         for (int i = 0; i < nbDeliveries; i++) {
