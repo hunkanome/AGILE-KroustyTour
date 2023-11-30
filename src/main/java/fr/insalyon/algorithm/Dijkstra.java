@@ -23,7 +23,7 @@ public class Dijkstra implements ShortestPathAlgorithm {
         distances[startNode.getIndex()] = 0;
         // init predecessors
         Arrays.fill(predecessors, -1);
-        predecessors[startNode.getIndex()] = NO_PREDECESSORS;
+        predecessors[startNode.getIndex()] = START_NODE_PREDECESSOR;
         // init greyNodes
         greyNodes.add(startNode.getIndex());
 
@@ -36,12 +36,12 @@ public class Dijkstra implements ShortestPathAlgorithm {
                 int destinationNodeIndex = destinationNode.getIndex();
 
                 if (greyNodes.contains(destinationNodeIndex) // the intersection is a grey node
-                        && (distances[destinationNodeIndex] > distances[originNodeIndex] + segment.getLength()) // and its distance is shorter from the current segment
+                        && (distances[destinationNodeIndex] > distances[originNodeIndex] + segment.getLength() + heuristic(destinationNode, endNode)) // and its distance is shorter from the current segment
                 ) {
-                    distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
+                    distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength() + heuristic(destinationNode, endNode);
                     predecessors[destinationNodeIndex] = originNodeIndex;
-                } else if (predecessors[destinationNodeIndex] == -1) { // the intersection is a white node
-                    distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength();
+                } else if (predecessors[destinationNodeIndex] == NO_PREDECESSOR) { // the intersection is a white node
+                    distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength() + heuristic(destinationNode, endNode);
                     predecessors[destinationNodeIndex] = originNodeIndex;
 
                     greyNodes.add(destinationNodeIndex);
@@ -54,8 +54,8 @@ public class Dijkstra implements ShortestPathAlgorithm {
         // we get the list of intersections of the shortest path
         ArrayList<Intersection> intersectionsPath = new ArrayList<>();
         int currentNodeIndex = endNode.getIndex();
-        while (predecessors[currentNodeIndex] != -1 // check if current node has a predecessor
-                && predecessors[currentNodeIndex] != -2 // check if current node is the start node
+        while (predecessors[currentNodeIndex] != NO_PREDECESSOR
+                && predecessors[currentNodeIndex] != START_NODE_PREDECESSOR
         ) {
             intersectionsPath.addFirst(map.getIntersections().get(currentNodeIndex));
             currentNodeIndex = predecessors[currentNodeIndex];
@@ -73,5 +73,9 @@ public class Dijkstra implements ShortestPathAlgorithm {
         }
 
         return shortestPath;
+    }
+
+    protected float heuristic(Intersection currentNode, Intersection endNode) {
+        return 0f;
     }
 }
