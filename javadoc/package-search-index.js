@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.insalyon"},{"l":"fr.insalyon.algorithm"},{"l":"fr.insalyon.model"},{"l":"fr.insalyon.xml"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.insalyon"},{"l":"fr.insalyon.algorithm"},{"l":"fr.insalyon.controller"},{"l":"fr.insalyon.model"},{"l":"fr.insalyon.xml"}];updateSearchResults();
