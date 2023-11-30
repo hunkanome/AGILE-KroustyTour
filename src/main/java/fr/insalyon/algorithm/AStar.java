@@ -17,10 +17,10 @@ public class AStar extends Dijkstra {
     @Override
     public float heuristic(Intersection currentNode, Intersection endNode) {
         //https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude
-        float lat1 = currentNode.getLatitude();
-        float lon1 = currentNode.getLongitude();
-        float lat2 = endNode.getLatitude();
-        float lon2 = endNode.getLongitude();
+        float lat1 = currentNode.getCoordinates().getLatitude();
+        float lon1 = currentNode.getCoordinates().getLongitude();
+        float lat2 = endNode.getCoordinates().getLatitude();
+        float lon2 = endNode.getCoordinates().getLongitude();
 
         final int R = 6371; // Radius of the earth
 
