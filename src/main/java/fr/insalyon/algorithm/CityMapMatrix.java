@@ -5,7 +5,11 @@ import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
 
-import java.util.*;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Class used to compute and store the matrix of the shortest path between the delivery intersections
@@ -20,6 +24,12 @@ public class CityMapMatrix {
 
     private final List<Intersection> intersections;
 
+    /**
+     * Construct a new matrix of shortest path between passed locations
+     * @param map the map which intersections and segments are used to compute all shortest paths
+     * @param deliveries the deliveries locations
+     * @see Intersection
+     */
     public CityMapMatrix(CityMap map, List<Intersection> deliveries) {
         this.arrayPaths = new Path[deliveries.size()][deliveries.size()];
         this.map = map;
