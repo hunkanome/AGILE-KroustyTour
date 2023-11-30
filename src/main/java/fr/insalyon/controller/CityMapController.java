@@ -5,6 +5,8 @@ import fr.insalyon.geometry.Position;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
+import fr.insalyon.model.DataModel;
+
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,21 +14,27 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CityMapController {
 	@FXML
 	private Canvas canvasMap;
-	private CityMap cityMap;
-	/**
-	 * Used to keep track of the last click X coordinate to make dragging possible
-	 */
-	private double lastClickX = -1;
-	/**
-	 * Used to keep track of the last click Y coordinate to make dragging possible
-	 */
-	private double lastClickY = -1;
+
+  /**
+   * Used to keep track of the last click X coordinate to make dragging possible
+   */
+  private double lastClickX = -1;
+
+  /**
+   * Used to keep track of the last click Y coordinate to make dragging possible
+   */
+  private double lastClickY = -1;
+
+	private DataModel data;
 
 	public void initialize(CityMap map) {
-		cityMap = map;
+		this.data = new DataModel(map);
 		fillMap(1, 0, 0);
 	}
 
@@ -38,23 +46,25 @@ public class CityMapController {
 		gc.translate(xTranslation, yTranslation);
 		gc.setFill(Color.RED);
 		gc.fillRect(0, 0, canvasMap.getWidth(), canvasMap.getHeight());
+    
 		// Scaling coordinates
-		CoordinateTransformer transformer = new CoordinateTransformer(cityMap.getNorthWestMostCoordinates(),
-				cityMap.getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
+		CoordinateTransformer transformer = new CoordinateTransformer(data.getMap().getNorthWestMostCoordinates(),
+				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
 
 		gc.setStroke(Color.BLUE);
-		cityMap.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+		data.getMap().getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
 			// Calculating better coordinates to display on map
 			Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 			Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
 			drawLine(gc, origin, destination);
+
 		}));
 	}
 
 	private void drawPath(GraphicsContext gc, Path path) {
 		gc.setStroke(Color.RED);
-		CoordinateTransformer transformer = new CoordinateTransformer(cityMap.getNorthWestMostCoordinates(),
-				cityMap.getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
+		CoordinateTransformer transformer = new CoordinateTransformer(data.getMap().getNorthWestMostCoordinates(),
+				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
 		for (Segment segment : path.getSegments()) {
 			Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 			Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
