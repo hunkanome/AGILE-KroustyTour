@@ -25,7 +25,7 @@ class DijkstraTest {
     static private CityMapMatrix mapMatrix;
 
     @Test
-    public void testCityMapCreation() {
+    void testCityMapCreation() {
         Assertions.assertNull(DijkstraTest.map.getWarehouse());
         for (int i = 0; i < 5; i++) {
             long id = DijkstraTest.map.getIntersections().get(i).getId();
@@ -34,7 +34,7 @@ class DijkstraTest {
     }
 
     @Test
-    public void testCityMapMatrixCreation() {
+    void testCityMapMatrixCreation() {
         int nbDeliveries = 2;
         setUpListDeliveries(nbDeliveries);
         DijkstraTest.mapMatrix = new CityMapMatrix(DijkstraTest.map, DijkstraTest.listDeliveries);
@@ -42,16 +42,16 @@ class DijkstraTest {
         for (int i = 0; i < DijkstraTest.mapMatrix.getArrayPaths().length; i++) {
             for (int j = 0; j < DijkstraTest.mapMatrix.getArrayPaths().length; j++) {
                 if (i != j) {
-                    Assertions.assertEquals(DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength(), 16.0f);
+                    Assertions.assertEquals(16.0f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
                 } else {
-                    Assertions.assertEquals(DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength(), 0.0f);
+                    Assertions.assertEquals( 0.0f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
                 }
             }
         }
     }
 
     @Test
-    public void testAddIntersection() {
+    void testAddIntersection() {
         GeoCoordinates coords = new GeoCoordinates(1f, 1f);
         Intersection i = new Intersection(7357L, coords, DijkstraTest.map.getIntersections().size());
 
@@ -73,16 +73,16 @@ class DijkstraTest {
         matrix.addIntersection(i);
 
         // path same as before
-        Assertions.assertEquals(matrix.getArrayPaths()[2][5].getLength(), 3f);
+        Assertions.assertEquals(3f, matrix.getArrayPaths()[2][5].getLength());
 
         // path ending at new node
-        Assertions.assertEquals(matrix.getArrayPaths()[5][6].getLength(), 3f);
+        Assertions.assertEquals(3f, matrix.getArrayPaths()[5][6].getLength());
 
         // path starting from new node
-        Assertions.assertEquals(matrix.getArrayPaths()[6][0].getLength(), 9f);
+        Assertions.assertEquals(9f, matrix.getArrayPaths()[6][0].getLength());
 
         // path passing through new node
-        Assertions.assertEquals(matrix.getArrayPaths()[1][5].getLength(), 7f);
+        Assertions.assertEquals(7f, matrix.getArrayPaths()[1][5].getLength());
     }
 
     @BeforeAll
@@ -127,7 +127,7 @@ class DijkstraTest {
     @BeforeAll
     public static void setUpCityMap() {
         System.out.println("setUpCityMap");
-        DijkstraTest.map.setIntersections((List<Intersection>) DijkstraTest.listIntersections.clone());
+        DijkstraTest.map.setIntersections(new ArrayList<>(DijkstraTest.listIntersections));
     }
     protected void setUpListDeliveries(int nbDeliveries) {
         for (int i = 0; i < nbDeliveries; i++) {

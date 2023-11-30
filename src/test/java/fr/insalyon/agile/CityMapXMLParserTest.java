@@ -30,10 +30,10 @@ class CityMapXMLParserTest {
 		InputStream input = new ByteArrayInputStream(testXml.getBytes());
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		CityMap map = parser.parse();
-		
+
 		CityMap expectedResult = new CityMap();
-		Intersection intersection0 = new Intersection(0l, new GeoCoordinates(45f, 4f), 0);
-		Intersection intersection1 = new Intersection(1l, new GeoCoordinates(45f, 8f), 1);
+		Intersection intersection0 = new Intersection(0L, new GeoCoordinates(45f, 4f), 0);
+		Intersection intersection1 = new Intersection(1L, new GeoCoordinates(45f, 8f), 1);
 		expectedResult.setWarehouse(intersection0);
 		Segment s1 = new Segment(intersection0, intersection1, "Rue Antoine Charial", 79.02355f);
 		Segment s2 = new Segment(intersection1, intersection0, "Rue Antoine Charial", 69.480034f);
@@ -41,7 +41,7 @@ class CityMapXMLParserTest {
 		intersection1.addOutwardSegment(s2);
 		expectedResult.addIntersection(intersection0);
 		expectedResult.addIntersection(intersection1);
-		
+
 		assertEquals(expectedResult, map);
 	}
 
@@ -50,9 +50,7 @@ class CityMapXMLParserTest {
 	void testBadlyFormedMapXMLDocument(String document, String expectedMessage) {
 		InputStream input = new ByteArrayInputStream(document.getBytes());
 		CityMapXMLParser parser = new CityMapXMLParser(input);
-		Exception exception = assertThrows(BadlyFormedXMLException.class, () -> {
-			parser.parse();
-		});
+		Exception exception = assertThrows(BadlyFormedXMLException.class, parser::parse);
 
 		String actualMessage = exception.getMessage();
 
