@@ -2,6 +2,7 @@ package fr.insalyon.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The map of a city or a part of a city.
@@ -58,4 +59,23 @@ public class CityMap {
                 ", intersections=" + intersections +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(intersections, warehouse);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CityMap other = (CityMap) obj;
+		return Objects.equals(intersections, other.intersections) && Objects.equals(warehouse, other.warehouse);
+	}
+    
+    
 }
