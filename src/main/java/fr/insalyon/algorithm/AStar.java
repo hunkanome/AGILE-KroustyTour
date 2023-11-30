@@ -3,6 +3,14 @@ package fr.insalyon.algorithm;
 import fr.insalyon.model.Intersection;
 
 public class AStar extends Dijkstra {
+    /**
+     * Computes a minimum length to reach the endNode from the currentNode
+     *
+     * @param currentNode current node
+     * @param endNode another node (basically the end node of the shortest path we are computing)
+     * @return a float representing a distance (computed using the geographic position of the two intersections)
+     * @see Intersection
+     */
     @Override
     public float heuristic(Intersection currentNode, Intersection endNode) {
         //https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude

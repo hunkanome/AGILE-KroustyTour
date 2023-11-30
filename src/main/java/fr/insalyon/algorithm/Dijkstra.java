@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class Dijkstra implements ShortestPathAlgorithm {
+    static final int NO_PREDECESSOR = -1;
+    static final int START_NODE_PREDECESSOR = -2;
     @Override
     public Path shortestPath(CityMap map, Intersection startNode, Intersection endNode) {
         // map.getIntersections() node index is its id
@@ -75,6 +77,14 @@ public class Dijkstra implements ShortestPathAlgorithm {
         return shortestPath;
     }
 
+    /**
+     * Computes a minimum length to reach the endNode from the currentNode
+     *
+     * @param currentNode current node
+     * @param endNode another node (basically the end node of the shortest path we are computing)
+     * @return a float representing a distance (always 0 in Dijkstra)
+     * @see Intersection
+     */
     protected float heuristic(Intersection currentNode, Intersection endNode) {
         return 0f;
     }
