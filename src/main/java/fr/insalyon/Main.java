@@ -1,6 +1,9 @@
 package fr.insalyon;
 
 import fr.insalyon.xml.CityMapXMLParser;
+import fr.insalyon.geometry.CoordinateTransformer;
+import fr.insalyon.geometry.GeoCoordinates;
+import fr.insalyon.geometry.Position;
 import fr.insalyon.model.*;
 
 import javafx.application.Application;
@@ -23,7 +26,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-		
+
 		InputStream input = new FileInputStream("data/xml/largeMap.xml");
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		CityMap map = parser.parse();
@@ -31,11 +34,11 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
 		Scene scene = new Scene(root, 1000, 700);
 		Canvas canvas = (Canvas) scene.lookup("#canvas_map");
-		fillMap(map, canvas);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		fillMap(map, canvas);
 	}
 
 	private <T> T getOptionalValue(Optional<T> value) {
@@ -46,35 +49,27 @@ public class Main extends Application {
 	}
 
 	private float getMaxLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLatitude)
-								 .max(Float::compare);
-		return getOptionalValue(max);
+//		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLatitude).max(Float::compare);
+//		return getOptionalValue(max);
+		return 0;
 	}
 
 	private float getMinLatitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLatitude)
-								 .min(Float::compare);
-		return getOptionalValue(max);
+//		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLatitude).min(Float::compare);
+//		return getOptionalValue(max);
+		return 0;
 	}
 
 	private float getMaxLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLongitude)
-								 .max(Float::compare);
-		return getOptionalValue(max);
+//		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLongitude).max(Float::compare);
+//		return getOptionalValue(max);
+		return 0;
 	}
 
 	private float getMinLongitude(CityMap map) {
-		Optional<Float> max = map.getIntersections()
-				                 .stream()
-								 .map(Intersection::getLongitude)
-								 .min(Float::compare);
-		return getOptionalValue(max);
+//		Optional<Float> max = map.getIntersections().stream().map(Intersection::getLongitude).min(Float::compare);
+//		return getOptionalValue(max);
+		return 0;
 	}
 
 	private void fillMap(CityMap map, Canvas canvas) {
@@ -83,24 +78,27 @@ public class Main extends Application {
 		float maxLong = getMaxLongitude(map);
 		float minLat = getMinLatitude(map);
 		float minLong = getMinLongitude(map);
-		float latDiff = maxLat - minLat;
-		float longDiff = maxLong - minLong;
-		float coeff = max(latDiff, longDiff);
 		// Scaling Graphic Context
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.scale(1, -1);
-		gc.translate(0, -(latDiff * (float)(canvas.getHeight()) / coeff));
+
 		// Scaling coordinates
+		GeoCoordinates northWest = new GeoCoordinates(maxLat, minLong);
+		GeoCoordinates southEast = new GeoCoordinates(minLat, maxLong);
+		CoordinateTransformer transformer = new CoordinateTransformer(northWest, southEast, (float) canvas.getWidth(),
+				(float) canvas.getHeight());
 		map.getIntersections().forEach(intersection -> {
-			intersection.setLatitude((intersection.getLatitude() - minLat) * (float)(canvas.getHeight()) / coeff);
-			intersection.setLongitude((intersection.getLongitude() - minLong) * (float)(canvas.getWidth()) / coeff);
+			intersection.getOutwardSegments().forEach(segment -> {
+				drawSegment(gc, segment, transformer);
+			});
 		});
-		map.getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> drawSegment(gc, segment)));
 	}
 
-	private void drawSegment(GraphicsContext gc, Segment segment) {
+	private void drawSegment(GraphicsContext gc, Segment segment, CoordinateTransformer transformer) {
 		gc.setStroke(Color.BLUE);
-		gc.strokeLine(segment.getOrigin().getLongitude(), segment.getOrigin().getLatitude(), segment.getDestination().getLongitude(), segment.getDestination().getLatitude());
+
+		Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
+		Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
+		gc.strokeLine(origin.getX(), origin.getY(), destination.getX(), destination.getY());
 	}
 
 	public static void main(String[] args) {

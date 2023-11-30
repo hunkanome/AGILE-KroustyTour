@@ -83,7 +83,11 @@ public class GeoCoordinates {
 		GeoCoordinates other = (GeoCoordinates) obj;
 		return Objects.equals(latitude, other.latitude) && Objects.equals(longitude, other.longitude);
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "GeoCoordinates{"
+				+ "latitude=" + latitude + ", longitude=" + longitude + "}";
+	}
+	
 }

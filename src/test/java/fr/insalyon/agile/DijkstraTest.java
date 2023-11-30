@@ -1,13 +1,12 @@
 package fr.insalyon.agile;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Test;
 
 import fr.insalyon.algorithm.CityMapMatrix;
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
@@ -16,9 +15,6 @@ import junit.framework.TestCase;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- *
- */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DijkstraTest extends TestCase {
 
@@ -56,12 +52,13 @@ class DijkstraTest extends TestCase {
     @BeforeAll
     public void setUpGraph() {
         System.out.println("setUpGraph");
-        Intersection s = new Intersection(1L, 1.0f, 1.0f, 0);
-        Intersection e = new Intersection(2L, 1.0f, 1.0f, 1);
-        Intersection a = new Intersection(3L, 1.0f, 1.0f, 2);
-        Intersection b = new Intersection(4L, 1.0f, 1.0f, 3);
-        Intersection c = new Intersection(5L, 1.0f, 1.0f, 4);
-        Intersection d = new Intersection(6L, 1.0f, 1.0f, 5);
+        GeoCoordinates coords = new GeoCoordinates(1f, 1f);
+        Intersection s = new Intersection(1L, coords, 0);
+        Intersection e = new Intersection(2L, coords, 1);
+        Intersection a = new Intersection(3L, coords, 2);
+        Intersection b = new Intersection(4L, coords, 3);
+        Intersection c = new Intersection(5L, coords, 4);
+        Intersection d = new Intersection(6L, coords, 5);
 
         Segment s1 = new Segment(a, c, "", 1.0f);
         Segment s3 = new Segment(a, s, "", 3.0f);

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.*;
 
 public class CityMapXMLParser {
@@ -96,8 +97,8 @@ public class CityMapXMLParser {
 				String id = intersectionElement.getAttribute("id");
 				String latitude = intersectionElement.getAttribute("latitude");
 				String longitude = intersectionElement.getAttribute("longitude");
-				Intersection intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude),
-						Float.parseFloat(longitude), i);
+				GeoCoordinates coords = new GeoCoordinates(Float.parseFloat(latitude), Float.parseFloat(longitude));
+				Intersection intersection = new Intersection(Long.parseLong(id), coords, i);
 				intersections.add(intersection);
 			}
 			map.setIntersections(intersections);
