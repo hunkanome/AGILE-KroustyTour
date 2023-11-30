@@ -12,11 +12,7 @@ import fr.insalyon.model.Segment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
-/**
- *
- */
 class DijkstraTest {
 
     static private final ArrayList<Intersection> listIntersections = new ArrayList<>();
