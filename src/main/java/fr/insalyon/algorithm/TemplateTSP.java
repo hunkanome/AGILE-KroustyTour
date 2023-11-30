@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static java.lang.Math.floor;
+
 import fr.insalyon.model.*;
 
 public abstract class TemplateTSP implements TSP {
@@ -27,7 +29,7 @@ public abstract class TemplateTSP implements TSP {
 		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
 		visited.add(0); // The first visited vertex is 0
 		bestSolCost = Float.MAX_VALUE;
-		branchAndBound(0, unvisited, visited, 0, g.getStartTimeWindow());
+		branchAndBound(0, unvisited, visited, 0, 0, g.getStartTimeWindow());
 	}
 	
 	public int getSolution(int i) {
@@ -68,8 +70,8 @@ public abstract class TemplateTSP implements TSP {
 	 * @param currentCost the cost of the path corresponding to <code>visited</code>
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
-			Collection<Integer> visited, float currentCost, TimeWindow currentTimeWindow){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+			Collection<Integer> visited, float currentCost, float currentCostTimeWindow, TimeWindow currentTimeWindow){
+		//if (System.currentTimeMillis() - startTime > timeLimit) return;
 		Integer nextVertex;
 		if (unvisited.isEmpty()){
 	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < bestSolCost)){
@@ -81,11 +83,18 @@ public abstract class TemplateTSP implements TSP {
 			while(true) {
 				while (it.hasNext()) {
 					nextVertex = it.next();
+					if(currentCostTimeWindow > 55) { // If we are running out of time, we stop the branch
+						return;
+					}
 					if (deliveries[nextVertex].getTimeWindow() == currentTimeWindow) {
+						if (currentCostTimeWindow + g.getCost(currentVertex, nextVertex) < 5) {
+							currentCostTimeWindow = 5 - g.getCost(currentVertex, nextVertex);
+							currentCost = (((int)(currentCost / 60)) + 1) * 60 + currentCostTimeWindow;
+						}
 						visited.add(nextVertex);
 						unvisited.remove(nextVertex);
-						branchAndBound(nextVertex, unvisited, visited,
-								currentCost + g.getCost(currentVertex, nextVertex), currentTimeWindow);
+						branchAndBound(nextVertex, unvisited, visited,currentCost + g.getCost(currentVertex, nextVertex),
+								currentCostTimeWindow + g.getCost(currentVertex, nextVertex), currentTimeWindow);
 						visited.remove(nextVertex);
 						unvisited.add(nextVertex);
 					}
@@ -94,6 +103,8 @@ public abstract class TemplateTSP implements TSP {
 				currentTimeWindow = g.getNextTimeWindow(currentTimeWindow);
 				it = iterator(currentVertex, unvisited, g);
 				if(currentTimeWindow == null) break;
+				if (currentCostTimeWindow < 0) currentCostTimeWindow = 0;
+				else currentCostTimeWindow = currentCostTimeWindow - 60;
 			}
 	    }
 	}

@@ -4,6 +4,8 @@ import fr.insalyon.model.*;
 
 
 public class DeliveryGraph implements Graph {
+	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
+
 	int nbVertices;
 	Path[][] cost;
 	Delivery[] deliveries;
@@ -27,7 +29,9 @@ public class DeliveryGraph implements Graph {
 	public float getCost(int i, int j) {
 		if (i<0 || i>=nbVertices || j<0 || j>=nbVertices)
 			return -1;
-		return cost[i][j].getLength();
+		if (i == j)
+			return 0;
+		return cost[i][j].getLength() / AVG_SPEED + 5;
 	}
 
 	@Override
@@ -62,5 +66,16 @@ public class DeliveryGraph implements Graph {
 			}
 		}
 		return nextTimeWindow;
+	}
+
+	public void printTimeCostGraph() {
+		System.out.println("Time cost graph:");
+		for (int i = 0; i < cost.length; i++) {
+			for (int j = 0; j < cost.length; j++) {
+				System.out.print(getCost(i, j) + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 }
