@@ -21,6 +21,6 @@
 			</textFill>
 		</Label>
 		<Canvas fx:id="canvasMap" height="582.0" layoutY="60.0"
-			width="664.0" />
+			width="664.0" onMousePressed="#saveMousePosition" onScroll="#zoomOnScroll" onMouseDragged="#moveOnDrag"/>
 	</children>
 </AnchorPane>
