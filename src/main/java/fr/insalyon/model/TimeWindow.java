@@ -5,16 +5,25 @@ package fr.insalyon.model;
  * @see Delivery
  * @see Courier
  */
-public enum TimeWindow {
-
-    EIGHT(8),
-    NINE(9),
-    TEN(10),
-    ELEVEN(11);
-
+public class TimeWindow {
     private int startHour;
 
-    TimeWindow(int hour) {
-        this.startHour = hour;
+    public TimeWindow(int hour) {
+        int[] possibleTimeWindows = {8, 9, 10, 11};
+        for (final int tw : possibleTimeWindows) {
+            if (tw == hour) {
+                this.startHour = hour;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Invalid hour for time window");
+    }
+
+    public boolean isRightBefore(TimeWindow other) {
+        return this.startHour + 1 == other.startHour;
+    }
+
+    public boolean isBefore(TimeWindow other) {
+        return this.startHour < other.startHour;
     }
 }

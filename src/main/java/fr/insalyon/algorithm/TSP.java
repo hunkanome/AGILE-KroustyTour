@@ -8,7 +8,7 @@ public interface TSP {
 	 * @param timeLimit
 	 * @param g
 	 */
-    void searchSolution(int timeLimit, Graph g);
+    void searchSolution(int timeLimit, DeliveryGraph g);
 	
 	/**
 	 * @param i

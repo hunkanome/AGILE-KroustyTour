@@ -17,7 +17,7 @@ class TSPTest {
 
         // Create a test graph
         Path[][] costMatrix = new Path[0][0];
-        Graph g = new DeliveryGraph(costMatrix);
+        DeliveryGraph g = new DeliveryGraph(costMatrix);
 
         // Search for a solution
         tsp.searchSolution(10000, g);
@@ -34,7 +34,7 @@ class TSPTest {
         Path[][] costMatrix = new Path[1][1];
         costMatrix[0][0] = new Path();
         costMatrix[0][0].setLength(0);
-        Graph g = new DeliveryGraph(costMatrix);
+        DeliveryGraph g = new DeliveryGraph(costMatrix);
 
         // Search for a solution
         tsp.searchSolution(10000, g);
@@ -72,7 +72,7 @@ class TSPTest {
         costMatrix[3][1].setLength(9);
         costMatrix[3][2].setLength(9);
         costMatrix[3][3].setLength(0);
-        Graph g = new DeliveryGraph(costMatrix);
+        DeliveryGraph g = new DeliveryGraph(costMatrix);
 
         // Search for a solution
         for(int i=0; i<10000; i++) {
