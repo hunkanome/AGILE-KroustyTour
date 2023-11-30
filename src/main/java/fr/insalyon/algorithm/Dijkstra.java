@@ -10,12 +10,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * Class implementing the dijkstra algorithm and defining a heuristic function
+ */
 public class Dijkstra implements ShortestPathAlgorithm {
     static final int NO_PREDECESSOR = -1;
     static final int START_NODE_PREDECESSOR = -2;
     @Override
     public Path shortestPath(CityMap map, Intersection startNode, Intersection endNode) {
-        // map.getIntersections() node index is its id
+        // the index of the node in map.getIntersections() is used as its index in distances and predecessors
         float[] distances = new float[map.getIntersections().size()];
         int[] predecessors = new int[map.getIntersections().size()];
         PriorityQueue<Integer> greyNodes = new PriorityQueue<>(Comparator.comparing(index -> distances[index]));

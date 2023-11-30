@@ -4,6 +4,9 @@ import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Path;
 
+/**
+ * Interface for the implementations of the various shortest path algorithms
+ */
 public interface ShortestPathAlgorithm {
     /**
      * Computes a Path, being the shortest path between two nodes

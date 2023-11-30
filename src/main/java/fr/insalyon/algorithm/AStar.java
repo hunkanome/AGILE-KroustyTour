@@ -2,6 +2,9 @@ package fr.insalyon.algorithm;
 
 import fr.insalyon.model.Intersection;
 
+/**
+ * Class implementing the A* algorithm using the geographical distance as heuristic
+ */
 public class AStar extends Dijkstra {
     /**
      * Computes a minimum length to reach the endNode from the currentNode
