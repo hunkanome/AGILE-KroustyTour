@@ -1,5 +1,7 @@
 package fr.insalyon.model;
 
+import java.util.Objects;
+
 /**
  * A segment of a road between two intersections.
  * The direction of a segment matters, it is not bidirectionnal
@@ -70,4 +72,24 @@ public class Segment {
                 ", length=" + length +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(destination, length, name, origin);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Segment other = (Segment) obj;
+		return Objects.equals(destination, other.destination)
+				&& Float.floatToIntBits(length) == Float.floatToIntBits(other.length)
+				&& Objects.equals(name, other.name) && Objects.equals(origin, other.origin);
+	}
+    
 }

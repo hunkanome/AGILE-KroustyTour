@@ -5,17 +5,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.insalyon.algorithm.CityMapMatrix;
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
-/**
- *
- */
 class DijkstraTest {
 
     static private final ArrayList<Intersection> listIntersections = new ArrayList<>();
@@ -41,9 +38,9 @@ class DijkstraTest {
         for (int i = 0; i < DijkstraTest.mapMatrix.getArrayPaths().length; i++) {
             for (int j = 0; j < DijkstraTest.mapMatrix.getArrayPaths().length; j++) {
                 if (i != j) {
-                    Assertions.assertEquals(16f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
+                    Assertions.assertEquals(16.0f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
                 } else {
-                    Assertions.assertEquals(0f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
+                    Assertions.assertEquals( 0.0f, DijkstraTest.mapMatrix.getArrayPaths()[i][j].getLength());
                 }
             }
         }
@@ -51,7 +48,8 @@ class DijkstraTest {
 
     @Test
     void testAddIntersection() {
-        Intersection i = new Intersection(7357L, 1.0f, 1.0f, DijkstraTest.map.getIntersections().size());
+        GeoCoordinates coords = new GeoCoordinates(1f, 1f);
+        Intersection i = new Intersection(7357L, coords, DijkstraTest.map.getIntersections().size());
 
         Segment i_to_d = new Segment(i, DijkstraTest.map.getIntersections().get(5), "", 3f);
         Segment i_to_e = new Segment(i, DijkstraTest.map.getIntersections().get(1), "", 4f);
@@ -85,12 +83,14 @@ class DijkstraTest {
 
     @BeforeAll
     public static void setUpGraph() {
-        Intersection s = new Intersection(0L, 1.0f, 1.0f, 0);
-        Intersection e = new Intersection(1L, 1.0f, 1.0f, 1);
-        Intersection a = new Intersection(2L, 1.0f, 1.0f, 2);
-        Intersection b = new Intersection(3L, 1.0f, 1.0f, 3);
-        Intersection c = new Intersection(4L, 1.0f, 1.0f, 4);
-        Intersection d = new Intersection(5L, 1.0f, 1.0f, 5);
+        System.out.println("setUpGraph");
+        GeoCoordinates coords = new GeoCoordinates(1f, 1f);
+        Intersection s = new Intersection(0L, coords, 0);
+        Intersection e = new Intersection(1L, coords, 1);
+        Intersection a = new Intersection(2L, coords, 2);
+        Intersection b = new Intersection(3L, coords, 3);
+        Intersection c = new Intersection(4L, coords, 4);
+        Intersection d = new Intersection(5L, coords, 5);
 
         Segment s1 = new Segment(a, c, "", 1.0f);
         Segment s3 = new Segment(a, s, "", 3.0f);

@@ -2,6 +2,9 @@ package fr.insalyon.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import fr.insalyon.geometry.GeoCoordinates;
 
 /**
  * The map of a city or a part of a city.
@@ -50,7 +53,15 @@ public class CityMap {
         }
         throw new IndexOutOfBoundsException();
     }
+    
+    public GeoCoordinates getNorthWestMostCoordinates() {
+    	return new GeoCoordinates(this.getMaxLatitude(), this.getMinLongitude());
+    }
 
+    public GeoCoordinates getSouthEastMostCoordinates() {
+    	return new GeoCoordinates(this.getMinLatitude(), this.getMaxLongitude());
+    }
+    
     /**
      * Used to obtain the maximum latitude of all intersections
      * @return the maximum latitude or Float.MIN_VALUE if there is no intersection
@@ -58,8 +69,8 @@ public class CityMap {
     public float getMaxLatitude() {
         float max = Float.MIN_VALUE;
         for (Intersection intersection : this.intersections)
-            if (intersection.getLatitude() > max)
-                max = intersection.getLatitude();
+            if (intersection.getCoordinates().getLatitude() > max)
+                max = intersection.getCoordinates().getLatitude();
         return max;
     }
 
@@ -70,8 +81,8 @@ public class CityMap {
     public float getMinLatitude() {
         float min = Float.MAX_VALUE;
         for (Intersection intersection : this.intersections)
-            if (intersection.getLatitude() < min)
-                min = intersection.getLatitude();
+            if (intersection.getCoordinates().getLatitude() < min)
+                min = intersection.getCoordinates().getLatitude();
         return min;
     }
 
@@ -82,8 +93,8 @@ public class CityMap {
     public float getMaxLongitude() {
         float max = Float.MIN_VALUE;
         for (Intersection intersection : this.intersections)
-            if (intersection.getLongitude() > max)
-                max = intersection.getLongitude();
+            if (intersection.getCoordinates().getLongitude() > max)
+                max = intersection.getCoordinates().getLongitude();
         return max;
     }
 
@@ -94,8 +105,8 @@ public class CityMap {
     public float getMinLongitude() {
         float min = Float.MAX_VALUE;
         for (Intersection intersection : this.intersections)
-            if (intersection.getLongitude() < min)
-                min = intersection.getLongitude();
+            if (intersection.getCoordinates().getLongitude() < min)
+                min = intersection.getCoordinates().getLongitude();
         return min;
     }
 
@@ -106,4 +117,23 @@ public class CityMap {
                 ", intersections=" + intersections +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(intersections, warehouse);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CityMap other = (CityMap) obj;
+		return Objects.equals(intersections, other.intersections) && Objects.equals(warehouse, other.warehouse);
+	}
+    
+    
 }

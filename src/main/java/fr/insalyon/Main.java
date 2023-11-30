@@ -18,7 +18,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		/* Loading map data */
-		InputStream input = new FileInputStream("data/xml/mediumMap.xml");
+		InputStream input = new FileInputStream("data/xml/largeMap.xml");
 		CityMapXMLParser parser = new CityMapXMLParser(input);
 		CityMap map = parser.parse();
 
