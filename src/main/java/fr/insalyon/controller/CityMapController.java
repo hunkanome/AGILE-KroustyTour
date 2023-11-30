@@ -14,9 +14,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CityMapController {
 	@FXML
 	private Canvas canvasMap;
