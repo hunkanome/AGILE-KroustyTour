@@ -11,7 +11,6 @@ import fr.insalyon.model.*;
 public abstract class TemplateTSP implements TSP {
 	private Integer[] bestSol;
 	protected DeliveryGraph g;
-	protected Delivery[] deliveries;
 	private float bestSolCost;
 	private int timeLimit;
 	private long startTime;
@@ -22,7 +21,6 @@ public abstract class TemplateTSP implements TSP {
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
 		this.g = g;
-		this.deliveries = g.deliveries;
 		bestSol = new Integer[g.getNbVertices()];
 		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
@@ -71,7 +69,7 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, float currentCost, float currentCostTimeWindow, TimeWindow currentTimeWindow){
-		//if (System.currentTimeMillis() - startTime > timeLimit) return;
+		if (System.currentTimeMillis() - startTime > timeLimit) return;
 		Integer nextVertex;
 		if (unvisited.isEmpty()){
 	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < bestSolCost)){
@@ -86,7 +84,7 @@ public abstract class TemplateTSP implements TSP {
 					if(currentCostTimeWindow > 55) { // If we are running out of time, we stop the branch
 						return;
 					}
-					if (deliveries[nextVertex].getTimeWindow().equals(currentTimeWindow)) {
+					if (g.getDelivery(nextVertex).getTimeWindow().equals(currentTimeWindow)) {
 						if (currentCostTimeWindow + g.getCost(currentVertex, nextVertex) < 5) {
 							currentCostTimeWindow = 5 - g.getCost(currentVertex, nextVertex);
 							currentCost = (((int)(currentCost / 60)) + 1) * 60 + currentCostTimeWindow;
@@ -102,14 +100,16 @@ public abstract class TemplateTSP implements TSP {
 				// Change the time window
 				currentTimeWindow = g.getNextTimeWindow(currentTimeWindow);
 				it = iterator(currentVertex, unvisited, g);
-				if(currentTimeWindow == null) break;
+				if(currentTimeWindow == null) {
+					break;
+				}
 
-				// if (currentCostTimeWindow < 0) { // We didn't do anything in this time window
 				if (!g.hasDeliveriesInPrecedingTimeWindow(currentTimeWindow)) {
 					currentCostTimeWindow = 0;
 					currentCost += 60; // an hour of waiting
+				} else {
+					currentCostTimeWindow = currentCostTimeWindow - 60;
 				}
-				else currentCostTimeWindow = currentCostTimeWindow - 60;
 			}
 	    }
 	}

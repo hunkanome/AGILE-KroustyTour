@@ -1,5 +1,7 @@
 package fr.insalyon.model;
 
+import java.util.Objects;
+
 /**
  * A one-hour time interval during which a courier can make a delivery
  * @see Delivery
@@ -8,9 +10,10 @@ package fr.insalyon.model;
 public class TimeWindow {
     private int startHour;
 
+    private static final int[] possibleTimeWindows = {8, 9, 10, 11};
+
     public TimeWindow(int hour) {
-        int[] possibleTimeWindows = {8, 9, 10, 11};
-        for (final int tw : possibleTimeWindows) {
+        for (int tw : possibleTimeWindows) {
             if (tw == hour) {
                 this.startHour = hour;
                 return;
@@ -35,7 +38,20 @@ public class TimeWindow {
         return this.startHour > other.startHour;
     }
 
-    public boolean equals(TimeWindow other) {
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.startHour);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TimeWindow other = (TimeWindow) obj;
         return this.startHour == other.startHour;
     }
 }
