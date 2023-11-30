@@ -39,11 +39,11 @@ public class RunTSP {
 		TimeWindow tw8 = new TimeWindow(8);
 		TimeWindow tw9 = new TimeWindow(9);
 		TimeWindow tw10 = new TimeWindow(10);
-		// TimeWindow tw11 = new TimeWindow(11);
+		TimeWindow tw11 = new TimeWindow(11);
 
 		Delivery[] deliveries = new Delivery[4];
 		deliveries[0] = new Delivery(courier, intersection1, tw8);
-		deliveries[1] = new Delivery(courier, intersection2, tw9);
+		deliveries[1] = new Delivery(courier, intersection2, tw10);
 		deliveries[2] = new Delivery(courier, intersection3, tw8);
 		deliveries[3] = new Delivery(courier, intersection4, tw10);
 

@@ -26,4 +26,8 @@ public class TimeWindow {
     public boolean isBefore(TimeWindow other) {
         return this.startHour < other.startHour;
     }
+
+    public boolean isAfter(TimeWindow other) {
+        return this.startHour > other.startHour;
+    }
 }

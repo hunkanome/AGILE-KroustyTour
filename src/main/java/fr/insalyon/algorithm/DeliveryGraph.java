@@ -31,6 +31,9 @@ public class DeliveryGraph implements Graph {
 			return -1;
 		if (i == j)
 			return 0;
+		if(j==0) {
+			return cost[i][j].getLength() / AVG_SPEED;
+		}
 		return cost[i][j].getLength() / AVG_SPEED + 5;
 	}
 
@@ -57,15 +60,20 @@ public class DeliveryGraph implements Graph {
 		return earliest;
 	}
 
+	// Get the next Time Window after current
+	// Algorithm : get minimal Time Window that is after current
 	public TimeWindow getNextTimeWindow(TimeWindow current) {
-		TimeWindow nextTimeWindow = null;
+		TimeWindow next = null;
 		for (Delivery delivery : deliveries) {
-			if (current.isRightBefore(delivery.getTimeWindow())) {
-				nextTimeWindow = delivery.getTimeWindow();
-				break;
+			if (delivery.getTimeWindow().isAfter(current)) {
+				if (next == null) {
+					next = delivery.getTimeWindow();
+				} else if (delivery.getTimeWindow().isBefore(next)) {
+					next = delivery.getTimeWindow();
+				}
 			}
 		}
-		return nextTimeWindow;
+		return next;
 	}
 
 	public void printTimeCostGraph() {
@@ -77,5 +85,15 @@ public class DeliveryGraph implements Graph {
 			System.out.println();
 		}
 		System.out.println();
+	}
+
+	// Returns true if there is deliveries in the preceding Time Window
+	public boolean hasDeliveriesInPrecedingTimeWindow(TimeWindow current) {
+		for (Delivery delivery : deliveries) {
+			if (delivery.getTimeWindow().isRightBefore(current)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

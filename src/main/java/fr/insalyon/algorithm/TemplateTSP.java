@@ -76,7 +76,7 @@ public abstract class TemplateTSP implements TSP {
 		if (unvisited.isEmpty()){
 	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < bestSolCost)){
 				visited.toArray(bestSol);
-				bestSolCost = currentCost+g.getCost(currentVertex,0);
+				bestSolCost = currentCost + g.getCost(currentVertex,0);
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
 	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
@@ -103,7 +103,11 @@ public abstract class TemplateTSP implements TSP {
 				currentTimeWindow = g.getNextTimeWindow(currentTimeWindow);
 				it = iterator(currentVertex, unvisited, g);
 				if(currentTimeWindow == null) break;
-				if (currentCostTimeWindow < 0) currentCostTimeWindow = 0;
+				//if (!g.hasDeliveriesInPrecedingTimeWindow(currentTimeWindow)) {
+				if (currentCostTimeWindow < 0) { // We didn't do anything in this time window
+					currentCostTimeWindow = 0;
+					currentCost += 60; // an hour of waiting
+				}
 				else currentCostTimeWindow = currentCostTimeWindow - 60;
 			}
 	    }
