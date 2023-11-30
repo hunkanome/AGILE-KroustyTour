@@ -32,15 +32,15 @@ class CityMapXMLParserTest {
 		CityMap map = parser.parse();
 		
 		CityMap expectedResult = new CityMap();
-		Intersection warehouse = new Intersection(0l, new GeoCoordinates(45f, 4f), 0);
-		expectedResult.setWarehouse(warehouse);
-		expectedResult.addIntersection(warehouse);
-		Intersection intersection = new Intersection(1l, new GeoCoordinates(45f, 8f), 1);
-		expectedResult.addIntersection(intersection);
-		Segment s1 = new Segment(warehouse, intersection, "Rue Antoine Charial", 69.480034f);
-		Segment s2 = new Segment(intersection, warehouse, "Rue Antoine Charial", 79.02355f);
-		warehouse.addOutwardSegment(s2);
-		intersection.addOutwardSegment(s1);
+		Intersection intersection0 = new Intersection(0l, new GeoCoordinates(45f, 4f), 0);
+		Intersection intersection1 = new Intersection(1l, new GeoCoordinates(45f, 8f), 1);
+		expectedResult.setWarehouse(intersection0);
+		Segment s1 = new Segment(intersection0, intersection1, "Rue Antoine Charial", 79.02355f);
+		Segment s2 = new Segment(intersection1, intersection0, "Rue Antoine Charial", 69.480034f);
+		intersection0.addOutwardSegment(s1);
+		intersection1.addOutwardSegment(s2);
+		expectedResult.addIntersection(intersection0);
+		expectedResult.addIntersection(intersection1);
 		
 		assertEquals(expectedResult, map);
 	}

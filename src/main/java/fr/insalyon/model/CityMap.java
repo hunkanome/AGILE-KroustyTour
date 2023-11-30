@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import fr.insalyon.geometry.GeoCoordinates;
+
 /**
  * The map of a city or a part of a city.
  * It contains a list all intersections and the intersection warehouse is located
@@ -50,6 +52,62 @@ public class CityMap {
             }
         }
         throw new IndexOutOfBoundsException();
+    }
+    
+    public GeoCoordinates getNorthWestMostCoordinates() {
+    	return new GeoCoordinates(this.getMaxLatitude(), this.getMinLongitude());
+    }
+
+    public GeoCoordinates getSouthEastMostCoordinates() {
+    	return new GeoCoordinates(this.getMinLatitude(), this.getMaxLongitude());
+    }
+    
+    /**
+     * Used to obtain the maximum latitude of all intersections
+     * @return the maximum latitude or Float.MIN_VALUE if there is no intersection
+     */
+    public float getMaxLatitude() {
+        float max = Float.MIN_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getCoordinates().getLatitude() > max)
+                max = intersection.getCoordinates().getLatitude();
+        return max;
+    }
+
+    /**
+     * Used to obtain the minimum latitude of all intersections
+     * @return the minimum latitude or Float.MAX_VALUE if there is no intersection
+     */
+    public float getMinLatitude() {
+        float min = Float.MAX_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getCoordinates().getLatitude() < min)
+                min = intersection.getCoordinates().getLatitude();
+        return min;
+    }
+
+    /**
+     * Used to obtain the maximum longitude of all intersections
+     * @return the maximum longitude or Float.MIN_VALUE if there is no intersection
+     */
+    public float getMaxLongitude() {
+        float max = Float.MIN_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getCoordinates().getLongitude() > max)
+                max = intersection.getCoordinates().getLongitude();
+        return max;
+    }
+
+    /**
+     * Used to obtain the minimum longitude of all intersections
+     * @return the minimum longitude or Float.MAX_VALUE if there is no intersection
+     */
+    public float getMinLongitude() {
+        float min = Float.MAX_VALUE;
+        for (Intersection intersection : this.intersections)
+            if (intersection.getCoordinates().getLongitude() < min)
+                min = intersection.getCoordinates().getLongitude();
+        return min;
     }
 
     @Override

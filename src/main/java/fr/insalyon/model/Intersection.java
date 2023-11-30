@@ -78,7 +78,7 @@ public class Intersection {
 	}
 
 	public void addOutwardSegment(Segment segment) {
-//        this.outwardSegments.add(segment);
+        this.outwardSegments.add(segment);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class Intersection {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(coordinates, id, index, outwardSegments);
+		return Objects.hash(coordinates, id, index);
 	}
 
 	@Override
@@ -101,8 +101,8 @@ public class Intersection {
 		if (getClass() != obj.getClass())
 			return false;
 		Intersection other = (Intersection) obj;
-		return Objects.equals(coordinates, other.coordinates) && Objects.equals(id, other.id)
-				&& Objects.equals(outwardSegments, other.outwardSegments);
+		/* we don't compare outward segments to avoid recursion and stackoverflow */
+		return Objects.equals(coordinates, other.coordinates) && Objects.equals(id, other.id);
 	}
 
 }

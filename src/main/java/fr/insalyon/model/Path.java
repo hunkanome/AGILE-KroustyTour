@@ -94,10 +94,10 @@ public class Path {
     @Override
     public String toString() {
         return "Path{" +
-                "start=" + start.getId() +
-                ", segments=" + segments +
-                ", end=" + end.getId() +
-                ", length=" + length +
+                "From I" + start.getId() +
+                ", to I" + end.getId() +
+                ", in " + length +
+                ", meters through " + segments +
                 '}';
     }
 }
