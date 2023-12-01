@@ -84,9 +84,9 @@ class TSPTest {
         Intersection intersection4 = new Intersection(3L, 1, 1, 3);
 
         TimeWindow tw8 = new TimeWindow(8);
-        TimeWindow tw9 = new TimeWindow(9);
-        TimeWindow tw10 = new TimeWindow(10);
-        TimeWindow tw11 = new TimeWindow(11);
+//        TimeWindow tw9 = new TimeWindow(9);
+//        TimeWindow tw10 = new TimeWindow(10);
+//        TimeWindow tw11 = new TimeWindow(11);
 
         Delivery[] deliveries = new Delivery[4];
         deliveries[0] = new Delivery(courier, intersection1, tw8);
