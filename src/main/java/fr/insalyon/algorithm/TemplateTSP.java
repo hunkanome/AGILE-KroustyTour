@@ -14,6 +14,12 @@ public abstract class TemplateTSP implements TSP {
 	private float bestSolCost;
 	private int timeLimit;
 	private long startTime;
+
+	/**
+	 * Method that launches the resolution of the TSP
+	 * @param timeLimit maximal time limit of the resolution in miliseconds
+	 * @param g the graph on which the TSP should be resolved
+	 */
 	
 	public void searchSolution(int timeLimit, DeliveryGraph g){
 		if (timeLimit <= 0) return;
@@ -29,13 +35,20 @@ public abstract class TemplateTSP implements TSP {
 		bestSolCost = Float.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0, 0, g.getStartTimeWindow());
 	}
-	
+
+	/**
+	 * @param i
+	 * @return the i-th vertex of the best solution computed so far
+	 */
 	public int getSolution(int i) {
 		if (g != null && i>=0 && i<g.getNbVertices())
 			return bestSol[i];
 		return -1;
 	}
-	
+
+	/**
+	 * @return the cost of the best solution computed so far
+	 */
 	public float getSolutionCost(){
 		if (g != null)
 			return bestSolCost;
@@ -61,11 +74,13 @@ public abstract class TemplateTSP implements TSP {
 	protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g);
 	
 	/**
-	 * Template method of a branch and bound algorithm for solving the TSP in <code>g</code>.
+	 * Branch and bound algorithm for solving the TSP in <code>g</code>. Includes consideration of time windows.
 	 * @param currentVertex the last visited vertex
 	 * @param unvisited the set of vertex that have not yet been visited
 	 * @param visited the sequence of vertices that have been already visited (including currentVertex)
 	 * @param currentCost the cost of the path corresponding to <code>visited</code>
+	 * @param currentCostTimeWindow the time spent in the current time window
+	 * @param currentTimeWindow the current time window
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, float currentCost, float currentCostTimeWindow, TimeWindow currentTimeWindow){
