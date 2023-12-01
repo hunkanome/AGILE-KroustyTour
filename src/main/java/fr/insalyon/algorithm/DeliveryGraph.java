@@ -53,7 +53,7 @@ public class DeliveryGraph implements Graph {
 	 */
 	public Delivery getDelivery(int i) {
 		if (i<0 || i>=nbVertices) {
-			return null;
+			throw new IndexOutOfBoundsException("The index " + i + " is out of bounds");
 		}
 		return deliveries[i];
 	}
