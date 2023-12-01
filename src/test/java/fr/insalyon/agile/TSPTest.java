@@ -8,8 +8,6 @@ import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Time;
-
 class TSPTest {
 
     @Test
