@@ -95,8 +95,6 @@ class TSPTest {
         deliveries[3] = new Delivery(courier, intersection4, tw8);
 
         DeliveryGraph g = new DeliveryGraph(costMatrix, deliveries);
-        // Measure the time
-        long start = System.currentTimeMillis();
 
         tsp.searchSolution(10000, g);
 
