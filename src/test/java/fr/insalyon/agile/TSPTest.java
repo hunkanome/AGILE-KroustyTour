@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import fr.insalyon.algorithm.DeliveryGraph;
 import fr.insalyon.algorithm.TSP;
 import fr.insalyon.algorithm.TSP1;
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +36,9 @@ class TSPTest {
         costMatrix[0][0] = new Path();
         costMatrix[0][0].setLength(0);
         Delivery[] deliveries = new Delivery[1];
-        deliveries[0] = new Delivery(new Courier(),
-                new Intersection(0L, 1, 1, 0),
+        GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
+        deliveries[0] = new Delivery(new Courier(0),
+                new Intersection(0L, coordinates, 0),
                 new TimeWindow(8));
         DeliveryGraph g = new DeliveryGraph(costMatrix, deliveries);
 
@@ -77,11 +79,12 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier();
-        Intersection intersection1 = new Intersection(0L, 1, 1, 0);
-        Intersection intersection2 = new Intersection(1L, 1, 1, 1);
-        Intersection intersection3 = new Intersection(2L, 1, 1, 2);
-        Intersection intersection4 = new Intersection(3L, 1, 1, 3);
+        Courier courier = new Courier(0);
+        GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
+        Intersection intersection1 = new Intersection(0L, coordinates, 0);
+        Intersection intersection2 = new Intersection(1L, coordinates, 1);
+        Intersection intersection3 = new Intersection(2L, coordinates, 2);
+        Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
         TimeWindow tw8 = new TimeWindow(8);
 
@@ -130,11 +133,12 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier();
-        Intersection intersection1 = new Intersection(0L, 1, 1, 0);
-        Intersection intersection2 = new Intersection(1L, 1, 1, 1);
-        Intersection intersection3 = new Intersection(2L, 1, 1, 2);
-        Intersection intersection4 = new Intersection(3L, 1, 1, 3);
+        Courier courier = new Courier(0);
+        GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
+        Intersection intersection1 = new Intersection(0L, coordinates, 0);
+        Intersection intersection2 = new Intersection(1L, coordinates, 1);
+        Intersection intersection3 = new Intersection(2L, coordinates, 2);
+        Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
         TimeWindow tw8 = new TimeWindow(8);
         TimeWindow tw9 = new TimeWindow(9);
@@ -186,11 +190,12 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier();
-        Intersection intersection1 = new Intersection(0L, 1, 1, 0);
-        Intersection intersection2 = new Intersection(1L, 1, 1, 1);
-        Intersection intersection3 = new Intersection(2L, 1, 1, 2);
-        Intersection intersection4 = new Intersection(3L, 1, 1, 3);
+        Courier courier = new Courier(0);
+        GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
+        Intersection intersection1 = new Intersection(0L, coordinates, 0);
+        Intersection intersection2 = new Intersection(1L, coordinates, 1);
+        Intersection intersection3 = new Intersection(2L, coordinates, 2);
+        Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
         TimeWindow tw8 = new TimeWindow(8);
         TimeWindow tw10 = new TimeWindow(10);
