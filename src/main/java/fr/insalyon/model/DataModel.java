@@ -3,6 +3,8 @@ package fr.insalyon.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insalyon.observer.Observable;
+
 /**
  * Class used to store the data needed by the controllers
  * It contains a city map, a list of tours and a list of couriers.
@@ -10,7 +12,7 @@ import java.util.List;
  * @see Tour
  * @see Courier
  */
-public class DataModel {
+public class DataModel extends Observable {
 
     private CityMap map;
 
@@ -61,8 +63,15 @@ public class DataModel {
         return map;
     }
 
+    /**
+     * Sets the map with the given one.<br/>
+     * Notifies all the observers of the update
+     * 
+     * @param map - the map to set
+     */
     public void setMap(CityMap map) {
         this.map = map;
+        this.notify(this);
     }
 
     public List<Tour> getTours() {

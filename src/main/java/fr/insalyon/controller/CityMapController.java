@@ -11,6 +11,8 @@ import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
+import fr.insalyon.observer.Observable;
+import fr.insalyon.observer.Observer;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.xml.XMLParserException;
@@ -25,7 +27,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-public class CityMapController {
+public class CityMapController implements Observer {
 	@FXML
 	private Canvas canvasMap;
 
@@ -54,6 +56,7 @@ public class CityMapController {
 
 	public void initialize(DataModel dataModel) {
 		this.dataModel = dataModel;
+		this.dataModel.addObserver(this);
 		
 		if (this.dataModel.getMap() != null) {
 			transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
@@ -167,15 +170,6 @@ public class CityMapController {
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
 				dataModel.setMap(newMap);
-				transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
-						dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
-						(float) canvasMap.getHeight());
-				clearCanvas();
-				this.prevScaleFactor = this.scaleFactor;
-				this.scaleFactor = 1;
-				this.prevTranslationFactor = this.translationFactor.clone();
-				this.translationFactor = new Position(0f, 0f);
-				drawMap();
 				canvasContainer.setStyle("-fx-background-color: lightgrey");
 			} catch (BadlyFormedXMLException e) {
 				e.printStackTrace();
@@ -235,5 +229,20 @@ public class CityMapController {
 			canvasContainer.setStyle("-fx-background-color: lightgrey");
 		}
 		event.consume();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg == this.dataModel) {
+			transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
+					dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+					(float) canvasMap.getHeight());
+			clearCanvas();
+			this.prevScaleFactor = this.scaleFactor;
+			this.scaleFactor = 1;
+			this.prevTranslationFactor = this.translationFactor.clone();
+			this.translationFactor = new Position(0f, 0f);
+			drawMap();
+		}
 	}
 }
