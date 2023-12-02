@@ -234,7 +234,7 @@ public class CityMapController implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg == this.dataModel) {
+		if (arg.getClass() == CityMap.class) {
 			transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
 					dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
 					(float) canvasMap.getHeight());
@@ -244,6 +244,7 @@ public class CityMapController implements Observer {
 			this.prevTranslationFactor = this.translationFactor.copy();
 			this.translationFactor = new Position(0f, 0f);
 			drawMap();
+			this.parentController.displayToolBarMessage("Map loaded successfully");
 		}
 	}
 }

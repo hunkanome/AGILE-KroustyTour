@@ -65,13 +65,13 @@ public class DataModel extends Observable {
 
     /**
      * Sets the map with the given one.<br/>
-     * Notifies all the observers of the update
+     * Notifies all the observers of the update of the map
      * 
      * @param map - the map to set
      */
     public void setMap(CityMap map) {
         this.map = map;
-        this.notify(this);
+        this.notify(map);
     }
 
     public List<Tour> getTours() {
