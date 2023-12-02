@@ -99,5 +99,12 @@ public class MainController {
 			Platform.runLater(() -> toolBarMessage.setText(""));
 		}).start();
 	}
+	
+	/**
+	 * Quit the application
+	 */
+	public void quitApplication() {
+		System.exit(0);
+	}
 
 }

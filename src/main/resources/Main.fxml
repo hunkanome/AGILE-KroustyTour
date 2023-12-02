@@ -23,7 +23,7 @@
 						<MenuItem mnemonicParsing="false" text="Export tours" />
 						<MenuItem mnemonicParsing="false" text="Import tours" />
 						<SeparatorMenuItem mnemonicParsing="false" />
-						<MenuItem mnemonicParsing="false" text="Quit" />
+						<MenuItem mnemonicParsing="false" text="Quit" onAction="#quitApplication"/>
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">
