@@ -17,8 +17,14 @@ public class DataModel {
     private List<Tour> tours;
 
     private List<Courier> couriers;
-
+    
     /**
+     * Construct a new empty data model
+     */
+    public DataModel() {
+	}
+
+	/**
      * Construct a new data model
      * Initialize an empty list of tours and a list containing one courier
      * @param map The stored map

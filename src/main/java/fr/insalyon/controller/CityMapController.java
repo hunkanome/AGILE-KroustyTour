@@ -52,12 +52,15 @@ public class CityMapController {
 
 	private DataModel dataModel;
 
-	public void initialize(CityMap map) {
-		this.dataModel = new DataModel(map); // TODO create somewhere else and pass it in the args
-		transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
-				dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
-				(float) canvasMap.getHeight());
-		drawMap();
+	public void initialize(DataModel dataModel) {
+		this.dataModel = dataModel;
+		
+		if (this.dataModel.getMap() != null) {
+			transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
+					dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+					(float) canvasMap.getHeight());
+			drawMap();
+		}
 	}
 
 	private void drawMap() {

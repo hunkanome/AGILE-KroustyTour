@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="700.0" prefWidth="1000.0"
-	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-  <children>
-    <fx:include source="MenuBar.fxml" />
-    <HBox fx:id="panelsContainer" prefHeight="676.0" prefWidth="900.0">
-      <children>
-      </children>
-    </HBox>
-  </children>
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="fr.insalyon.controller.MainController">
+	<children>
+		<MenuBar>
+			<menus>
+				<Menu mnemonicParsing="false" text="File">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#openMapFile"
+							text="Open map" />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" text="Export tours" />
+						<MenuItem mnemonicParsing="false" text="Import tours" />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" text="Quit" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Edit">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Undo" />
+						<MenuItem mnemonicParsing="false" text="Redo" />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false"
+							text="Remove all deliveries" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" text="About" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<HBox fx:id="panelsContainer" prefHeight="676.0"
+			prefWidth="900.0">
+			<children>
+			</children>
+		</HBox>
+	</children>
 </VBox>
