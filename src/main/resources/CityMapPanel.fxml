@@ -20,8 +20,10 @@
 				<Color red="0.624" green="0.624" blue="0.624" />
 			</textFill>
 		</Label>
-		<AnchorPane layoutY="49.0" prefHeight="626.0"
-			prefWidth="664.0" style="-fx-background-color: lightgrey;">
+		<AnchorPane fx:id="canvasContainer" layoutY="49.0"
+			onDragDropped="#handleFileDropped" onDragOver="#handleFileOver" onDragExited="#handleFileExit"
+			prefHeight="626.0" prefWidth="664.0"
+			style="-fx-background-color: lightgrey;">
 			<children>
 				<Canvas fx:id="canvasMap" height="626.0"
 					onMouseDragged="#moveOnDrag" onMousePressed="#saveMousePosition"
