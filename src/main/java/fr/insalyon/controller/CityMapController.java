@@ -18,15 +18,15 @@ public class CityMapController {
 	@FXML
 	private Canvas canvasMap;
 
-  /**
-   * Used to keep track of the last click X coordinate to make dragging possible
-   */
-  private double lastClickX = -1;
+	/**
+	 * Used to keep track of the last click X coordinate to make dragging possible
+	 */
+	private double lastClickX = -1;
 
-  /**
-   * Used to keep track of the last click Y coordinate to make dragging possible
-   */
-  private double lastClickY = -1;
+	/**
+	 * Used to keep track of the last click Y coordinate to make dragging possible
+	 */
+	private double lastClickY = -1;
 
 	private DataModel data;
 
@@ -41,12 +41,11 @@ public class CityMapController {
 		gc.scale(zoomFactor, zoomFactor);
 		// translating by the specified amounts (no effect if 0)
 		gc.translate(xTranslation, yTranslation);
-		gc.setFill(Color.RED);
-		gc.fillRect(0, 0, canvasMap.getWidth(), canvasMap.getHeight());
-    
+
 		// Scaling coordinates
 		CoordinateTransformer transformer = new CoordinateTransformer(data.getMap().getNorthWestMostCoordinates(),
-				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
+				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+				(float) canvasMap.getHeight());
 
 		gc.setStroke(Color.BLUE);
 		data.getMap().getIntersections().forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
@@ -61,7 +60,8 @@ public class CityMapController {
 	private void drawPath(GraphicsContext gc, Path path) {
 		gc.setStroke(Color.RED);
 		CoordinateTransformer transformer = new CoordinateTransformer(data.getMap().getNorthWestMostCoordinates(),
-				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(), (float) canvasMap.getHeight());
+				data.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+				(float) canvasMap.getHeight());
 		for (Segment segment : path.getSegments()) {
 			Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 			Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
@@ -78,7 +78,9 @@ public class CityMapController {
 	}
 
 	private void clearCanvas() {
-		canvasMap.getGraphicsContext2D().clearRect(0, 0, canvasMap.getWidth() + 10, canvasMap.getHeight() + 10);
+		GraphicsContext gc = canvasMap.getGraphicsContext2D();
+		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
+		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
 	}
 
 	@FXML

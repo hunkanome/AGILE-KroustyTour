@@ -20,7 +20,13 @@
 				<Color red="0.624" green="0.624" blue="0.624" />
 			</textFill>
 		</Label>
-		<Canvas fx:id="canvasMap" height="582.0" layoutY="60.0"
-			width="664.0" onMousePressed="#saveMousePosition" onScroll="#zoomOnScroll" onMouseDragged="#moveOnDrag"/>
+		<AnchorPane layoutY="49.0" prefHeight="626.0"
+			prefWidth="664.0" style="-fx-background-color: lightgrey;">
+			<children>
+				<Canvas fx:id="canvasMap" height="626.0"
+					onMouseDragged="#moveOnDrag" onMousePressed="#saveMousePosition"
+					onScroll="#zoomOnScroll" width="664.0" />
+			</children>
+		</AnchorPane>
 	</children>
 </AnchorPane>
