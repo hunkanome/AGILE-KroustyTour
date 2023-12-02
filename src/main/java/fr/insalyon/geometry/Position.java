@@ -90,8 +90,13 @@ public class Position {
 		return "Position [x=" + x + ", y=" + y + "]";
 	}
 	
-	@Override
-	public Position clone() {
+	
+	/**
+	 * Copy the current Position instance
+	 * 
+	 * @return a copy of the current Position instance
+	 */
+	public Position copy() {
 		return new Position(x, y);
 	}
 	

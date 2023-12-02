@@ -19,7 +19,7 @@ public class Main extends Application {
 		MainController mainController = rootLoader.getController();
 		mainController.initialize(data);		
 
-		Scene scene = new Scene(root, 1000, 700);
+		Scene scene = new Scene(root);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
 		primaryStage.setScene(scene);

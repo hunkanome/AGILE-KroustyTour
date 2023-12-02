@@ -54,10 +54,13 @@ public class CityMapController implements Observer {
 
 	private DataModel dataModel;
 
-	public void initialize(DataModel dataModel) {
+	private MainController parentController;
+
+	public void initialize(DataModel dataModel, MainController mainController) {
+		this.parentController = mainController;
 		this.dataModel = dataModel;
 		this.dataModel.addObserver(this);
-		
+
 		if (this.dataModel.getMap() != null) {
 			transformer = new CoordinateTransformer(dataModel.getMap().getNorthWestMostCoordinates(),
 					dataModel.getMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
@@ -90,7 +93,7 @@ public class CityMapController implements Observer {
 		if (this.prevTranslationFactor != this.translationFactor) {
 			gc.translate(-this.prevTranslationFactor.getX(), -this.prevTranslationFactor.getY());
 			gc.translate(this.translationFactor.getX(), this.translationFactor.getY());
-			this.prevTranslationFactor = this.translationFactor.clone();
+			this.prevTranslationFactor = this.translationFactor.copy();
 		}
 
 		if (this.prevScaleFactor != this.scaleFactor) {
@@ -142,7 +145,7 @@ public class CityMapController implements Observer {
 	@FXML
 	private void moveOnDrag(MouseEvent event) {
 		clearCanvas();
-		this.prevTranslationFactor = this.translationFactor.clone();
+		this.prevTranslationFactor = this.translationFactor.copy();
 		float xFactor = (float) (event.getX() - lastClickX);
 		float yFactor = (float) (event.getY() - lastClickY);
 		this.translationFactor.setX(this.translationFactor.getX() + xFactor);
@@ -151,34 +154,33 @@ public class CityMapController implements Observer {
 		lastClickX = event.getX();
 		lastClickY = event.getY();
 	}
-	
+
 	/**
 	 * Open the given file and load it onto the map
 	 * 
 	 * @param path - the path to the file to load
 	 */
-	public void loadCityMapXMLFile(String path) {
-		// TODO : handle errors
+	public boolean loadCityMapXMLFile(String path) {
 		File mapFile = new File(path);
 		if (!mapFile.isFile()) {
-			System.err.println("The file you dropped is not a file");
+			this.parentController.displayToolBarMessage("The item is not a file");
 		} else if (!mapFile.canRead()) {
-			System.err.println("The file you dropped is not readable");
+			this.parentController.displayToolBarMessage("The file is not readable");
 		} else {
 			try {
+				canvasContainer.setStyle("-fx-background-color: lightgrey");
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
 				dataModel.setMap(newMap);
-				canvasContainer.setStyle("-fx-background-color: lightgrey");
-			} catch (BadlyFormedXMLException e) {
-				e.printStackTrace();
-			} catch (XMLParserException e) {
-				e.printStackTrace();
+				return true;
+			} catch (BadlyFormedXMLException | XMLParserException e) {
+				this.parentController.displayToolBarMessage(e);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				this.parentController.displayToolBarMessage("The file " + path + " could not be found.");
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -192,17 +194,16 @@ public class CityMapController implements Observer {
 		boolean success = false;
 		if (db.hasFiles()) {
 			List<File> files = db.getFiles();
-			if (files.size() != 1) {
-				System.err.println("You can only drop one file at a time");
+			if (files.size() == 1) {
+				success = this.loadCityMapXMLFile(files.get(0).getAbsolutePath());
 			} else {
-				this.loadCityMapXMLFile(files.get(0).getAbsolutePath());
+				this.parentController.displayToolBarMessage("Only one file can be loaded");
 			}
 		}
 		/*
 		 * let the source know whether the string was successfully transferred and used
 		 */
 		event.setDropCompleted(success);
-
 		event.consume();
 	}
 
@@ -240,7 +241,7 @@ public class CityMapController implements Observer {
 			clearCanvas();
 			this.prevScaleFactor = this.scaleFactor;
 			this.scaleFactor = 1;
-			this.prevTranslationFactor = this.translationFactor.clone();
+			this.prevTranslationFactor = this.translationFactor.copy();
 			this.translationFactor = new Position(0f, 0f);
 			drawMap();
 		}
