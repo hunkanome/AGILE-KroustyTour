@@ -27,6 +27,12 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
       run: mvn clean install
     - name: Upload Build Artifact # Don't know if this step is useful
@@ -48,6 +54,12 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
       run: mvn clean install
     - name: Run unit tests
@@ -64,6 +76,12 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - name: Deploy JavaDoc
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
         with:
