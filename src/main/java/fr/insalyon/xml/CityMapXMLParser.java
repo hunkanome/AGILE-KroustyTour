@@ -14,8 +14,30 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.*;
 
+/**
+ * Parse a XML file containing a CityMap and construct the corresponding CityMap
+ * object.<br/>
+ * The XML file must be formatted as follow :
+ * 
+ * <pre>
+ * {@code
+ * <map>
+ * <intersection id="1" latitude="45.770365" longitude="4.874439"/>
+ * <intersection id="2" latitude="45.770365" longitude="4.874439"/>
+ * <intersection id="3" latitude="45.770365" longitude="4.874439"/>
+ * <segment origin="1" destination="2" length="100" name="rue de la paix"/>
+ * <segment origin="2" destination="3" length="200" name="rue de la joie"/>
+ * <warehouse address="1"/>
+ * </map>
+ * }
+ * </pre>
+ * 
+ * It must contain at least one intersection and exactly one warehouse.<br/>
+ * The order of the intersections and segments is not important.<br/>
+ */
 public class CityMapXMLParser {
 
 	private final InputStream input;
@@ -89,15 +111,15 @@ public class CityMapXMLParser {
 			if (intersectionNodes.getLength() < 1) {
 				throw new BadlyFormedXMLException("A map XML document must contain at least one Intersection");
 			}
-			
+
 			List<Intersection> intersections = new ArrayList<>();
 			for (int i = 0; i < intersectionNodes.getLength(); i++) {
 				Element intersectionElement = (Element) intersectionNodes.item(i);
 				String id = intersectionElement.getAttribute("id");
 				String latitude = intersectionElement.getAttribute("latitude");
 				String longitude = intersectionElement.getAttribute("longitude");
-				Intersection intersection = new Intersection(Long.parseLong(id), Float.parseFloat(latitude),
-						Float.parseFloat(longitude), i);
+				GeoCoordinates coords = new GeoCoordinates(Float.parseFloat(latitude), Float.parseFloat(longitude));
+				Intersection intersection = new Intersection(Long.parseLong(id), coords, i);
 				intersections.add(intersection);
 			}
 			map.setIntersections(intersections);
@@ -123,7 +145,7 @@ public class CityMapXMLParser {
 				if (originIntersection == destinationIntersection) {
 					throw new BadlyFormedXMLException("Segment's origin and destination must be different");
 				}
-				
+
 				Segment segment = new Segment(originIntersection, destinationIntersection, name,
 						Float.parseFloat(length));
 				originIntersection.addOutwardSegment(segment);
