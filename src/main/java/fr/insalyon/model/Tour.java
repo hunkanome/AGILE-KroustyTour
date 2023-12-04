@@ -23,7 +23,7 @@ public class Tour {
     /**
      * Construct a new tour with no deliveries
      * Instantiate an empty list of deliveries and the path with an empty list of segments
-     * The start intersection is the warehouse, the end intersection is list at null
+     * The start intersection is the warehouse, the end intersection is set at null
      * @param courier The courier who handles the deliveries of the tour
      * @param map The map where the deliveries are located
      */
