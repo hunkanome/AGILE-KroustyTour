@@ -31,7 +31,7 @@ public abstract class TemplateTSP implements TSP {
 		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
 		visited.add(0); // The first visited vertex is 0
 		this.bestSolCost = Float.MAX_VALUE;
-		branchAndBound(0, unvisited, visited, 0);
+		branchAndBound(0, unvisited, visited, 0, 0, g.getStartTimeWindow());
 	}
 
 	/**

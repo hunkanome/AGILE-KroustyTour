@@ -1,6 +1,8 @@
 package fr.insalyon.algorithm;
 
+import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Path;
+import fr.insalyon.model.TimeWindow;
 
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
@@ -25,6 +27,10 @@ public class DeliveryGraph implements Graph {
 		return nbVertices;
 	}
 
+	@Override
+	public Path[][] getCost() {
+		return this.cost;
+	}
 
 	/**
 	 * @param i the origin vertex
