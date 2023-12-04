@@ -38,7 +38,7 @@ public class DataModel extends Observable {
         this.map = map;
         this.tours = new ArrayList<>();
         this.couriers = new ArrayList<>(1);
-        this.couriers.add(new Courier(0));
+        this.couriers.add(new Courier());
     }
 
     /**
@@ -55,7 +55,7 @@ public class DataModel extends Observable {
         this.couriers = new ArrayList<>(nbCouriers);
 
         for(int i=0; i<nbCouriers; i++) {
-            this.couriers.add(new Courier(i));
+            this.couriers.add(new Courier());
         }
     }
 

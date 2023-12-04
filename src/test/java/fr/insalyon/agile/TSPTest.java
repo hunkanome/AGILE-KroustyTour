@@ -37,7 +37,7 @@ class TSPTest {
         costMatrix[0][0].setLength(0);
         Delivery[] deliveries = new Delivery[1];
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
-        deliveries[0] = new Delivery(new Courier(0),
+        deliveries[0] = new Delivery(new Courier(),
                 new Intersection(0L, coordinates, 0),
                 new TimeWindow(8));
         DeliveryGraph g = new DeliveryGraph(costMatrix, deliveries);
@@ -79,7 +79,7 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier(0);
+        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -133,7 +133,7 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier(0);
+        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -190,7 +190,7 @@ class TSPTest {
         costMatrix[3][2].setLength(900);
         costMatrix[3][3].setLength(0);
 
-        Courier courier = new Courier(0);
+        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
