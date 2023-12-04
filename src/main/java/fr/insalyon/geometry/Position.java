@@ -84,7 +84,20 @@ public class Position {
 		Position other = (Position) obj;
 		return Objects.equals(x, other.x) && Objects.equals(y, other.y);
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "Position [x=" + x + ", y=" + y + "]";
+	}
+	
+	
+	/**
+	 * Copy the current Position instance
+	 * 
+	 * @return a copy of the current Position instance
+	 */
+	public Position copy() {
+		return new Position(x, y);
+	}
+	
 }
