@@ -1,10 +1,17 @@
 package fr.insalyon.algorithm;
 
+import fr.insalyon.model.Path;
+
 public interface Graph {
 	/**
 	 * @return the number of vertices in <code>this</code>
 	 */
     int getNbVertices();
+
+	/**
+	 * @return the cost matrix
+	 */
+	Path[][] getCost();
 
 	/**
 	 * @param i 

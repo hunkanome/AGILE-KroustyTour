@@ -26,6 +26,9 @@ public class DeliveryGraph implements Graph {
 		return nbVertices;
 	}
 
+	public Path[][] getCost() {
+		return cost;
+	}
 
 	/**
 	 * @param i the origin vertex
