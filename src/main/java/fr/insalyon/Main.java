@@ -21,7 +21,7 @@ public class Main extends Application {
 
 		Scene scene = new Scene(root);
 
-		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
+		primaryStage.setTitle("KroustyTour");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
