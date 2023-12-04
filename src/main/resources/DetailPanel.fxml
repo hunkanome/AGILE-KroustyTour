@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="675.0" prefWidth="217.0"
-	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="675.0" prefWidth="315.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="fr.insalyon.controller.DetailsController">
 	<children>
 		<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
 			minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Détails"
@@ -18,6 +23,31 @@
 				<Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
 			</textFill>
 		</Label>
+		<Accordion layoutY="48.0" AnchorPane.bottomAnchor="0.0"
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			AnchorPane.topAnchor="48.0">
+			<panes>
+				<TitledPane text="Tour 1" fx:id="titledPane">
+					<content>
+						<!-- <ScrollPane>
+							<content>
+								<AnchorPane minHeight="0.0" minWidth="0.0"
+									prefHeight="180.0" prefWidth="313.0" fx:id="anchorPane">
+									<children>
+										<fx:include source="DeliberyTextualView.fxml" AnchorPane.leftAnchor="20.0" 
+											AnchorPane.topAnchor="10.0" /> <fx:include source="DeliberyTextualView.fxml" 
+											AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0" />
+										<Line endX="-100.0" endY="-30.800006866455078"
+											layoutX="132.0" layoutY="90.0" startX="-100.0"
+											startY="20.800003051757812" />
+										<Label layoutX="47.0" layoutY="77.0" text="14 min" />
+									</children>
+								</AnchorPane>
+							</content>
+						</ScrollPane> -->
+					</content>
+				</TitledPane>
+			</panes>
+		</Accordion>
 	</children>
 </AnchorPane>
-

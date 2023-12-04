@@ -9,21 +9,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700.0" prefWidth="1000.0"
-	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="fr.insalyon.controller.MainController">
+<VBox prefHeight="700.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insalyon.controller.MainController">
 	<children>
 		<MenuBar>
 			<menus>
 				<Menu mnemonicParsing="false" text="File">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#openMapFile"
-							text="Open map" />
+						<MenuItem mnemonicParsing="false" onAction="#openMapFile" text="Open map" />
 						<SeparatorMenuItem mnemonicParsing="false" />
 						<MenuItem mnemonicParsing="false" text="Export tours" />
 						<MenuItem mnemonicParsing="false" text="Import tours" />
 						<SeparatorMenuItem mnemonicParsing="false" />
-						<MenuItem mnemonicParsing="false" text="Quit" onAction="#quitApplication"/>
+						<MenuItem mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">
@@ -31,8 +28,7 @@
 						<MenuItem mnemonicParsing="false" text="Undo" />
 						<MenuItem mnemonicParsing="false" text="Redo" />
 						<SeparatorMenuItem mnemonicParsing="false" />
-						<MenuItem mnemonicParsing="false"
-							text="Remove all deliveries" />
+						<MenuItem mnemonicParsing="false" text="Remove all deliveries" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
@@ -42,15 +38,13 @@
 				</Menu>
 			</menus>
 		</MenuBar>
-		<HBox fx:id="panelsContainer" prefHeight="676.0"
-			prefWidth="900.0">
+		<HBox fx:id="panelsContainer" prefHeight="647.0" prefWidth="1085.0">
 			<children>
 			</children>
 		</HBox>
 		<ToolBar prefHeight="40.0" prefWidth="200.0">
 			<items>
-				<Label fx:id="toolBarMessage" prefHeight="17.0"
-					prefWidth="857.0" text="" />
+				<Label fx:id="toolBarMessage" prefHeight="17.0" prefWidth="857.0" text="" />
 			</items>
 		</ToolBar>
 	</children>
