@@ -15,7 +15,6 @@ import java.util.PriorityQueue;
  */
 public class Dijkstra implements ShortestPathAlgorithm {
     static final int NO_PREDECESSOR = -1;
-    static final int START_NODE_PREDECESSOR = -2;
     @Override
     public Path shortestPath(CityMap map, Intersection startNode, Intersection endNode) {
         // the index of the node in map.getIntersections() is used as its index in distances and predecessors
@@ -28,7 +27,6 @@ public class Dijkstra implements ShortestPathAlgorithm {
         distances[startNode.getIndex()] = 0;
         // init predecessors
         Arrays.fill(predecessors, -1);
-        predecessors[startNode.getIndex()] = START_NODE_PREDECESSOR;
         // init greyNodes
         greyNodes.add(startNode.getIndex());
 
@@ -45,7 +43,7 @@ public class Dijkstra implements ShortestPathAlgorithm {
                 ) {
                     distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength() + heuristic(destinationNode, endNode);
                     predecessors[destinationNodeIndex] = originNodeIndex;
-                } else if (predecessors[destinationNodeIndex] == NO_PREDECESSOR) { // the intersection is a white node
+                } else if (predecessors[destinationNodeIndex] == NO_PREDECESSOR && destinationNodeIndex != startNode.getIndex()) { // the intersection is a white node
                     distances[destinationNodeIndex] = distances[originNodeIndex] + segment.getLength() + heuristic(destinationNode, endNode);
                     predecessors[destinationNodeIndex] = originNodeIndex;
 
@@ -59,9 +57,7 @@ public class Dijkstra implements ShortestPathAlgorithm {
         // we get the list of intersections of the shortest path
         ArrayList<Intersection> intersectionsPath = new ArrayList<>();
         int currentNodeIndex = endNode.getIndex();
-        while (predecessors[currentNodeIndex] != NO_PREDECESSOR
-                && predecessors[currentNodeIndex] != START_NODE_PREDECESSOR
-        ) {
+        while (predecessors[currentNodeIndex] != NO_PREDECESSOR) {
             intersectionsPath.addFirst(map.getIntersections().get(currentNodeIndex));
             currentNodeIndex = predecessors[currentNodeIndex];
         }

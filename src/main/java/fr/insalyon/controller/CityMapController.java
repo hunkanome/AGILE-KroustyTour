@@ -3,7 +3,6 @@ package fr.insalyon.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.insalyon.algorithm.CityMapMatrix;
@@ -55,7 +54,7 @@ public class CityMapController implements Observer {
 
 	private DataModel dataModel;
 	private CityMapMatrix cityMapMatrix;
-	static int WAIT_TIME = 10;
+	static final int WAIT_TIME = 10;
 	private TSP tsp = new TSP1();
 	private MainController parentController;
 

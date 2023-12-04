@@ -4,6 +4,9 @@ import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.TimeWindow;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
 	public static final int DELIVERY_TIME = 5;
@@ -119,29 +122,17 @@ public class DeliveryGraph implements Graph {
 	}
 
 	/**
-	 * @param current the current time window
-	 * @return true if there is at least one delivery in the time window preceding the current one
-	 */
-	public boolean hasDeliveriesInPrecedingTimeWindow(TimeWindow current) {
-		for(int i = 1; i < this.deliveries.length; i++) {
-			if(this.deliveries[i].getTimeWindow().isRightBefore(current)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Debugging method printing the cost graph (with times in minutes)
 	 */
 	public void printTimeCostGraph() {
-		System.out.println("Time cost graph:");
+		Logger logger = Logger.getLogger(getClass().getName());
+		logger.info("Time cost graph:\n");
 		for (int i = 0; i < this.cost.length; i++) {
 			for (int j = 0; j < this.cost.length; j++) {
-				System.out.print(getCost(i, j) + " ");
+				logger.log(Level.INFO ,"{0} ", getCost(i, j));
 			}
-			System.out.println();
+			logger.info("\n");
 		}
-		System.out.println();
+		logger.info("\n");
 	}
 }
