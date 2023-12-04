@@ -79,9 +79,9 @@ public class CityMapController implements Observer {
 				Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
 				drawLine(gc, origin, destination);
 			}));
-      if(dataModel.getSelectedIntersection() != null) {
-			  drawPoint(gc, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()));
-      }
+			if(dataModel.getSelectedIntersection() != null) {
+				drawPoint(gc, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()));
+			}
 		}
 	}
 
