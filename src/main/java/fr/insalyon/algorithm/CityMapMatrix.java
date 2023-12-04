@@ -1,5 +1,6 @@
 package fr.insalyon.algorithm;
 
+import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Path;
@@ -14,12 +15,9 @@ import java.util.ArrayList;
 public class CityMapMatrix {
 
     private final ShortestPathAlgorithm shortestPathAlgorithm = new AStar();
-
-    private Path[][] arrayPaths;
-
+    private DeliveryGraph graph;
     private final CityMap map;
-
-    private final List<Intersection> intersections;
+    private final List<Delivery> deliveries;
 
     /**
      * Construct a new matrix of shortest path between passed locations
@@ -27,31 +25,38 @@ public class CityMapMatrix {
      * @param deliveries the deliveries locations
      * @see Intersection
      */
-    public CityMapMatrix(CityMap map, List<Intersection> deliveries) {
-        this.arrayPaths = new Path[deliveries.size()][deliveries.size()];
+    public CityMapMatrix(CityMap map, List<Delivery> deliveries) {
+        Path[][] arrayPaths = new Path[deliveries.size()][deliveries.size()];
         this.map = map;
-        this.intersections = deliveries;
+        this.deliveries = deliveries;
 
         int i = 0;
-        for (Intersection startIntersection : deliveries) {
+        for (Delivery startIntersection : deliveries) {
             int j = 0;
-            for (Intersection endIntersection : deliveries) {
+            for (Delivery endIntersection : deliveries) {
                 if (startIntersection != endIntersection) {
                     // Dijkstra
-                    this.arrayPaths[i][j] = shortestPath(startIntersection, endIntersection);
-                    this.arrayPaths[j][i] = shortestPath(endIntersection, startIntersection);
+                    arrayPaths[i][j] = shortestPath(startIntersection.getLocation(), endIntersection.getLocation());
+                    arrayPaths[j][i] = shortestPath(endIntersection.getLocation(), startIntersection.getLocation());
                 } else {
-                    this.arrayPaths[i][j] = new Path(startIntersection, startIntersection, new ArrayList<>());
+                    arrayPaths[i][j] = new Path(startIntersection.getLocation(), startIntersection.getLocation(), new ArrayList<>());
                 }
                 j++;
             }
             i++;
         }
+        Delivery[] deliv = new Delivery[deliveries.size()];
+        deliveries.toArray(deliv);
+        this.graph = new DeliveryGraph(arrayPaths, deliv);
     }
 
-    public Path[][] getArrayPaths() { return arrayPaths; }
+    public DeliveryGraph getGraph() {
+        return this.graph;
+    }
 
-    public void setArrayPaths(Path[][] arrayPaths) { this.arrayPaths = arrayPaths; }
+    public void setGraph(DeliveryGraph graph) {
+        this.graph = graph;
+    }
 
     /**
      * Computes the shortest path between the two intersection
@@ -68,26 +73,29 @@ public class CityMapMatrix {
 
     /**
      * Add an intersection to the list and calculates the shortest path between this intersection and all the others
-     * @param newIntersection The new intersection to add
+     * @param newDelivery The new intersection to add
      * @see Intersection
      */
-    public void addIntersection(Intersection newIntersection) {
-        int size = this.arrayPaths.length + 1;
+    public void addDelivery(Delivery newDelivery) {
+        int size = this.graph.getNbVertices() + 1;
         int i;
 
-        this.intersections.add(newIntersection);
+        this.deliveries.add(newDelivery);
 
         // increase the size of the array
-        this.arrayPaths = Arrays.copyOf(this.arrayPaths, size);
-        this.arrayPaths[size - 1] = new Path[size];
+        Delivery[] deliv = new Delivery[deliveries.size()];
+        this.deliveries.toArray(deliv);
+        this.graph = new DeliveryGraph(Arrays.copyOf(this.graph.getCost(), size), deliv);
+        this.graph.getCost()[size - 1] = new Path[size];
         for (i = 0; i < size - 1; i++) {
-            this.arrayPaths[i] = Arrays.copyOf(this.arrayPaths[i], size);
+            this.graph.getCost()[i] = Arrays.copyOf(this.graph.getCost()[i], size);
         }
 
         // fill the array with the new paths
         for (i = 0; i < size; i++) {
-            this.arrayPaths[size - 1][i] = shortestPath(newIntersection, this.intersections.get(i));
-            this.arrayPaths[i][size - 1] = shortestPath(this.intersections.get(i), newIntersection);
+            this.graph.getCost()[size - 1][i] = shortestPath(newDelivery.getLocation(), this.deliveries.get(i).getLocation());
+            this.graph.getCost()[i][size - 1] = shortestPath(this.deliveries.get(i).getLocation(), newDelivery.getLocation());
         }
     }
+
 }
