@@ -14,27 +14,27 @@ public abstract class TemplateTSP implements TSP {
 	public void searchSolution(int timeLimit, Graph g){
 		if (timeLimit <= 0) return;
 		if (g.getNbVertices()<=0) return;
-		startTime = System.currentTimeMillis();	
+		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
 		this.g = g;
-		bestSol = new Integer[g.getNbVertices()];
+		this.bestSol = new Integer[g.getNbVertices()];
 		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
 		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
 		visited.add(0); // The first visited vertex is 0
-		bestSolCost = Float.MAX_VALUE;
+		this.bestSolCost = Float.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0);
 	}
 	
 	public int getSolution(int i){
-		if (g != null && i>=0 && i<g.getNbVertices())
-			return bestSol[i];
+		if (this.g != null && i>=0 && i<g.getNbVertices())
+			return this.bestSol[i];
 		return -1;
 	}
 	
 	public float getSolutionCost(){
-		if (g != null)
-			return bestSolCost;
+		if (this.g != null)
+			return this.bestSolCost;
 		return -1;
 	}
 	
@@ -65,20 +65,20 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, float currentCost){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		if (System.currentTimeMillis() - this.startTime > this.timeLimit) return;
 		if (unvisited.isEmpty()){
-	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < bestSolCost)){
-				visited.toArray(bestSol);
-				bestSolCost = currentCost+g.getCost(currentVertex,0);
+	    	if (g.isArc(currentVertex,0) && (currentCost+g.getCost(currentVertex,0) < this.bestSolCost)) {
+				visited.toArray(this.bestSol);
+				this.bestSolCost = currentCost + this.g.getCost(currentVertex,0);
 	    	}
-	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
-	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
-	        while (it.hasNext()){
+	    } else if (currentCost+bound(currentVertex,unvisited) < this.bestSolCost){
+	        Iterator<Integer> it = iterator(currentVertex, unvisited, this.g);
+	        while (it.hasNext()) {
 	        	Integer nextVertex = it.next();
 	        	visited.add(nextVertex);
 	            unvisited.remove(nextVertex);
 	            branchAndBound(nextVertex, unvisited, visited, 
-	            		currentCost+g.getCost(currentVertex, nextVertex));
+	            		currentCost + this.g.getCost(currentVertex, nextVertex));
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
 	        }	    
