@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class CityMapMatrix {
 
     private final ShortestPathAlgorithm shortestPathAlgorithm = new AStar();
-    private Graph graph;
+    private DeliveryGraph graph;
     private final CityMap map;
     private final List<Delivery> deliveries;
 
@@ -45,14 +45,16 @@ public class CityMapMatrix {
             }
             i++;
         }
-        this.graph = new DeliveryGraph(arrayPaths);
+        Delivery[] deliv = new Delivery[deliveries.size()];
+        deliveries.toArray(deliv);
+        this.graph = new DeliveryGraph(arrayPaths, deliv);
     }
 
-    public Graph getGraph() {
+    public DeliveryGraph getGraph() {
         return this.graph;
     }
 
-    public void setGraph(Graph graph) {
+    public void setGraph(DeliveryGraph graph) {
         this.graph = graph;
     }
 
@@ -81,7 +83,9 @@ public class CityMapMatrix {
         this.deliveries.add(newDelivery);
 
         // increase the size of the array
-        this.graph = new DeliveryGraph(Arrays.copyOf(this.graph.getCost(), size));
+        Delivery[] deliv = new Delivery[deliveries.size()];
+        this.deliveries.toArray(deliv);
+        this.graph = new DeliveryGraph(Arrays.copyOf(this.graph.getCost(), size), deliv);
         this.graph.getCost()[size - 1] = new Path[size];
         for (i = 0; i < size - 1; i++) {
             this.graph.getCost()[i] = Arrays.copyOf(this.graph.getCost()[i], size);

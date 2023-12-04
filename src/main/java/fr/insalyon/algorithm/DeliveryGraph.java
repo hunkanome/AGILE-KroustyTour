@@ -26,8 +26,9 @@ public class DeliveryGraph implements Graph {
 		return nbVertices;
 	}
 
+	@Override
 	public Path[][] getCost() {
-		return cost;
+		return this.cost;
 	}
 
 	/**
