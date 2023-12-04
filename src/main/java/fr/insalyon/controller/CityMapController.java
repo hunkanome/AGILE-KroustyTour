@@ -148,8 +148,8 @@ public class CityMapController implements Observer {
 	private void moveOnDrag(MouseEvent event) {
 		clearCanvas();
 		this.prevTranslationFactor = this.translationFactor.copy();
-		float xFactor = (float) (event.getX() - lastClickX);
-		float yFactor = (float) (event.getY() - lastClickY);
+		float xFactor = (float) ((event.getX() - lastClickX) / this.scaleFactor);
+		float yFactor = (float) ((event.getY() - lastClickY) / this.scaleFactor);
 		this.translationFactor.setX(this.translationFactor.getX() + xFactor);
 		this.translationFactor.setY(this.translationFactor.getY() + yFactor);
 		drawMap();
