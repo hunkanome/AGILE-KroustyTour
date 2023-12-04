@@ -1,45 +1,25 @@
 package fr.insalyon;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import fr.insalyon.controller.CityMapController;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.xml.CityMapXMLParser;
+import fr.insalyon.controller.MainController;
+import fr.insalyon.model.DataModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		/* Loading map data */
-		InputStream input = new FileInputStream("data/xml/smallMap.xml");
-		CityMapXMLParser parser = new CityMapXMLParser(input);
-		CityMap map = parser.parse();
-
-		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
-		HBox panelsContainer = (HBox) root.lookup("#panelsContainer");
+		DataModel data = new DataModel();
 		
-		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ControlPanel.fxml"));
-		Parent controlPanel = controlPanelLoader.load();
-		panelsContainer.getChildren().add(controlPanel);
+		FXMLLoader rootLoader = new FXMLLoader(getClass().getClassLoader().getResource("Main.fxml"));
+		Parent root = rootLoader.load();
+		MainController mainController = rootLoader.getController();
+		mainController.initialize(data);		
 
-		FXMLLoader cityMapPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("CityMapPanel.fxml"));
-		Parent cityMapPanel = cityMapPanelLoader.load();
-		CityMapController cityMapController = cityMapPanelLoader.getController();
-		cityMapController.initialize(map);
-		panelsContainer.getChildren().add(cityMapPanel);
-		
-		FXMLLoader detailPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("DetailPanel.fxml"));
-		Parent detailPanel = detailPanelLoader.load();
-		panelsContainer.getChildren().add(detailPanel);
-
-		Scene scene = new Scene(root, 1000, 700);
+		Scene scene = new Scene(root);
 
 		primaryStage.setTitle("Calculateur de tours de livraison en vélo");
 		primaryStage.setScene(scene);
