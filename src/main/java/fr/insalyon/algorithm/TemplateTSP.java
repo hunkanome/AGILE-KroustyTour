@@ -3,7 +3,6 @@ package fr.insalyon.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 
 import fr.insalyon.model.TimeWindow;
 
@@ -64,15 +63,6 @@ public abstract class TemplateTSP implements TSP {
 	protected abstract float bound(Integer currentVertex, Collection<Integer> unvisited);
 
 	/**
-	 * Method that must be defined in TemplateTSP subclasses
-	 * @param currentVertex vertex where we are located
-	 * @param unvisited vertices left to be explored
-	 * @param g the graph on which the TSP should be resolved
-	 * @return an iterator for visiting all vertices in <code>unvisited</code> which are successors of <code>currentVertex</code>
-	 */
-	protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g);
-
-	/**
 	 * Branch and bound algorithm for solving the TSP in <code>g</code>. Includes consideration of time windows.
 	 * @param currentVertex the last visited vertex
 	 * @param unvisited the set of vertex that have not yet been visited
@@ -96,9 +86,8 @@ public abstract class TemplateTSP implements TSP {
 
 		// Update best score if we have visited all the vertices
 		if (unvisited.isEmpty()){
-			if (
-					g.isArc(currentVertex,0) // If we can go back to the warehouse
-							&& (branchCost+g.getCost(currentVertex,0) < bestSolCost) // If the cost is better than the best solution
+			if (g.isArc(currentVertex,0) // If we can go back to the warehouse
+				&& (branchCost+g.getCost(currentVertex,0) < bestSolCost) // If the cost is better than the best solution
 			){
 				visited.toArray(bestSol);
 				bestSolCost = branchCost + g.getCost(currentVertex,0);

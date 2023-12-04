@@ -19,15 +19,4 @@ public class TSP1 extends TemplateTSP {
 		return bound;
 	}
 
-	/**
-	 * @param currentVertex the vertex from which the path starts
-	 * @param unvisited the set of unvisited vertices
-	 * @param g the graph
-	 * @return an iterator to iterate over the unvisited vertices different from <code>currentVertex</code>
-	 */
-	@Override
-	protected Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g) {
-		return new SeqIter(unvisited, currentVertex, g);
-	}
-
 }
