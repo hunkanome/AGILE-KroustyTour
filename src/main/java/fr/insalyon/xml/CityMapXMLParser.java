@@ -20,7 +20,7 @@ import fr.insalyon.model.*;
 /**
  * Parse a XML file containing a CityMap and construct the corresponding CityMap
  * object.<br/>
- * The XML file must be formatted as follow :
+ * The XML file must be formatted as follows :
  * 
  * <pre>
  * {@code
@@ -89,7 +89,7 @@ public class CityMapXMLParser {
 	 * prevent XXE attacks.
 	 * 
 	 * @return DocumentBuilder
-	 * @throws ParserConfigurationException
+	 * @throws ParserConfigurationException if a DocumentBuilder cannot be created
 	 * @see <a href=
 	 *      "https://rules.sonarsource.com/java/RSPEC-2755/">https://rules.sonarsource.com/java/RSPEC-2755/</a>
 	 */

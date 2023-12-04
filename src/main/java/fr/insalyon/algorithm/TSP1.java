@@ -1,7 +1,6 @@
 package fr.insalyon.algorithm;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class TSP1 extends TemplateTSP {
 

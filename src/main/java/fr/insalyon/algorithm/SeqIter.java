@@ -2,6 +2,7 @@ package fr.insalyon.algorithm;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SeqIter implements Iterator<Integer> {
 	private final Integer[] candidates;
@@ -11,9 +12,9 @@ public class SeqIter implements Iterator<Integer> {
 	 * Create an iterator to traverse the set of vertices in <code>unvisited</code> 
 	 * which are successors of <code>currentVertex</code> in <code>g</code>
 	 * Vertices are traversed in the same order as in <code>unvisited</code>
-	 * @param unvisited
-	 * @param currentVertex
-	 * @param g
+	 * @param unvisited vertices left to be explored
+	 * @param currentVertex vertex where we are located
+	 * @param g the graph
 	 */
 	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g){
 		this.candidates = new Integer[unvisited.size()];
@@ -30,11 +31,16 @@ public class SeqIter implements Iterator<Integer> {
 
 	@Override
 	public Integer next() {
+		if (!hasNext()){
+			throw new NoSuchElementException();
+		}
 		nbCandidates--;
 		return candidates[nbCandidates];
 	}
 
 	@Override
-	public void remove() {}
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
 
 }
