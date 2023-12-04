@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import fr.insalyon.algorithm.CityMapMatrix;
+import fr.insalyon.algorithm.TSP;
+import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
 import fr.insalyon.model.*;
@@ -50,6 +53,8 @@ public class CityMapController implements Observer {
 	private CoordinateTransformer transformer;
 
 	private DataModel dataModel;
+	private CityMapMatrix cityMapMatrix;
+	private TSP tsp = new TSP1();
 
 	private MainController parentController;
 

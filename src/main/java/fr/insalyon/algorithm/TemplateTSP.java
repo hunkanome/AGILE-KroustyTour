@@ -22,15 +22,15 @@ public abstract class TemplateTSP implements TSP {
 	public void searchSolution(int timeLimit, DeliveryGraph g){
 		if (timeLimit <= 0) return;
 		if (g.getNbVertices()<=0) return;
-		startTime = System.currentTimeMillis();
+		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
 		this.g = g;
-		bestSol = new Integer[g.getNbVertices()];
+		this.bestSol = new Integer[g.getNbVertices()];
 		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
 		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
 		visited.add(0); // The first visited vertex is 0
-		bestSolCost = Float.MAX_VALUE;
+		this.bestSolCost = Float.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0, 0, g.getStartTimeWindow());
 	}
 
@@ -39,8 +39,8 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the i-th vertex of the best solution computed so far
 	 */
 	public int getSolution(int i) {
-		if (g != null && i>=0 && i<g.getNbVertices())
-			return bestSol[i];
+		if (this.g != null && i>=0 && i<g.getNbVertices())
+			return this.bestSol[i];
 		return -1;
 	}
 
@@ -48,8 +48,8 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the cost of the best solution computed so far
 	 */
 	public float getSolutionCost(){
-		if (g != null)
-			return bestSolCost;
+		if (this.g != null)
+			return this.bestSolCost;
 		return -1;
 	}
 
