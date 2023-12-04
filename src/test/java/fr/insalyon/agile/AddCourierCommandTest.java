@@ -23,7 +23,7 @@ class AddCourierCommandTest {
     }
 
     @Test
-    void testAddCourierAlreadyPresent() {
+    void testAddCourierAlreadyAdded() {
         // Add courier shall not be added if it is already present
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
@@ -53,7 +53,7 @@ class AddCourierCommandTest {
     }
 
     @Test
-    void testUndoAddCourierNotPresent() {
+    void testUndoAddCourierAlreadyAdded() {
         // If the courier to remove is not present then nothing should happen
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
