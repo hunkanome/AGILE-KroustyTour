@@ -1,7 +1,8 @@
 package fr.insalyon.algorithm;
 
-import fr.insalyon.model.*;
-
+import fr.insalyon.model.Delivery;
+import fr.insalyon.model.Path;
+import fr.insalyon.model.TimeWindow;
 
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
