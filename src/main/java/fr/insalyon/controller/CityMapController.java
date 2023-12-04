@@ -44,8 +44,6 @@ public class CityMapController implements Observer {
 	private double prevScaleFactor = 1;
 	private double scaleFactor = 1;
 
-	private boolean isDragging = false;
-
 	private Position prevTranslationFactor = new Position(0f, 0f);
 	private Position translationFactor = new Position(0f, 0f);
 
@@ -135,16 +133,14 @@ public class CityMapController implements Observer {
 
 	@FXML
 	private void selectIntersection(MouseEvent event) {
-		if(isDragging) {
-			isDragging = false;
-		} else if (dataModel.getMap() != null && event.getEventType() != MouseEvent.DRAG_DETECTED) {
+		if (dataModel.getMap() != null) {
 			Position clickPosition = new Position((float) event.getX(), (float) event.getY());
 			clickPosition.divide(this.scaleFactor);
 			clickPosition.substract(this.translationFactor);
 			Position intersectionPosition;
 			Intersection selectedIntersection = null;
 			float distance;
-			float distanceMin = 10;
+			float distanceMin = 15;
 
 			for(Intersection intersection : dataModel.getMap().getIntersections()) {
 				intersectionPosition = transformer.transformToPosition(intersection.getCoordinates());
@@ -181,7 +177,6 @@ public class CityMapController implements Observer {
 	@FXML
 	private void moveOnDrag(MouseEvent event) {
 		clearCanvas();
-		isDragging = true;
 		this.prevTranslationFactor = this.translationFactor.copy();
 		float xFactor = (float) (event.getX() - lastClickX);
 		float yFactor = (float) (event.getY() - lastClickY);

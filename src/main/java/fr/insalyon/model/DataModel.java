@@ -98,6 +98,7 @@ public class DataModel extends Observable {
 
     public void setSelectedIntersection(Intersection selectedIntersection) {
         this.selectedIntersection = selectedIntersection;
+        this.notify(selectedIntersection);
     }
 
     /**
