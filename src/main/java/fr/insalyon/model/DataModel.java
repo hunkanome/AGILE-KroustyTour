@@ -19,6 +19,8 @@ public class DataModel extends Observable {
     private List<Tour> tours;
 
     private List<Courier> couriers;
+
+    private Intersection selectedIntersection;
     
     /**
      * Construct a new empty data model
@@ -88,6 +90,14 @@ public class DataModel extends Observable {
 
     public void setCouriers(List<Courier> couriers) {
         this.couriers = couriers;
+    }
+
+    public Intersection getSelectedIntersection() {
+        return selectedIntersection;
+    }
+
+    public void setSelectedIntersection(Intersection selectedIntersection) {
+        this.selectedIntersection = selectedIntersection;
     }
 
     /**
