@@ -7,7 +7,6 @@ package fr.insalyon.model;
  * @see TimeWindow
  */
 public class Delivery {
-
     private Courier courier;
 
     private Intersection location;
