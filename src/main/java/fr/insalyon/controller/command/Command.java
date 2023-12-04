@@ -1,4 +1,4 @@
-package fr.insalyon.command;
+package fr.insalyon.controller.command;
 
 /**
  * Interface for the command design pattern
