@@ -3,7 +3,6 @@ package fr.insalyon.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.insalyon.observer.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -15,15 +14,15 @@ import javafx.beans.property.SimpleObjectProperty;
  * @see Tour
  * @see Courier
  */
-public class DataModel extends Observable {
-// TODO use javafx.beans observables
-	private CityMap map;
+public class DataModel {
+// TODO use javafx.beans observables for lists
+	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);
 
 	private List<Tour> tours;
 
 	private List<Courier> couriers;
 
-	private Intersection selectedIntersection;
+	private final ObjectProperty<Intersection> selectedIntersection = new SimpleObjectProperty<>(null);
 
 	private final ObjectProperty<Tour> selectedTour = new SimpleObjectProperty<>(null);
 
@@ -39,13 +38,13 @@ public class DataModel extends Observable {
 	 * Construct a new data model Initialize an empty list of tours and a list
 	 * containing one courier
 	 * 
-	 * @param map The stored map
+	 * @param cityMap The stored map
 	 * @see CityMap
 	 * @see Courier
 	 * @see Tour
 	 */
-	public DataModel(CityMap map) {
-		this.map = map;
+	public DataModel(CityMap cityMap) {
+		this.cityMap.set(cityMap);
 		this.tours = new ArrayList<>();
 		this.couriers = new ArrayList<>(1);
 		this.couriers.add(new Courier(0));
@@ -60,8 +59,8 @@ public class DataModel extends Observable {
 	 * @see Courier
 	 * @see Tour
 	 */
-	public DataModel(CityMap map, int nbCouriers) {
-		this.map = map;
+	public DataModel(CityMap cityMap, int nbCouriers) {
+		this.cityMap.set(cityMap);
 		this.tours = new ArrayList<>();
 		this.couriers = new ArrayList<>(nbCouriers);
 
@@ -70,20 +69,32 @@ public class DataModel extends Observable {
 		}
 	}
 
-	public CityMap getMap() {
-		return map;
+	/**
+	 * Returns the property representing the city map.
+	 *
+	 * @return the property representing the city map
+	 */
+	public ObjectProperty<CityMap> cityMapProperty() {
+		return this.cityMap;
+	}
+	
+	/**
+	 * Returns the CityMap object.
+	 *
+	 * @return the CityMap object.
+	 */
+	public CityMap getCityMap() {
+		return cityMapProperty().get();
 	}
 
 	/**
-	 * Sets the map with the given one.<br/>
-	 * Notifies all the observers of the update of the map
+	 * Sets the CityMap for the DataModel.
 	 * 
-	 * @param map - the map to set
+	 * @param map the CityMap to set
 	 */
 	public void setMap(CityMap map) {
 		// TODO reset the whole model ?
-		this.map = map;
-		this.notify(map);
+		cityMapProperty().set(map);
 	}
 
 	public List<Tour> getTours() {
@@ -102,15 +113,6 @@ public class DataModel extends Observable {
 		this.couriers = couriers;
 	}
 
-	public Intersection getSelectedIntersection() {
-		return selectedIntersection;
-	}
-
-	public void setSelectedIntersection(Intersection selectedIntersection) {
-		this.selectedIntersection = selectedIntersection;
-		this.notify(selectedIntersection);
-	}
-
 	/**
 	 * Get an available couriers
 	 * 
@@ -126,26 +128,83 @@ public class DataModel extends Observable {
 		return null;
 	}
 
+	/**
+	 * Returns the property representing the selected intersection.
+	 *
+	 * @return the property representing the selected intersection
+	 */
+	public ObjectProperty<Intersection> selectedIntersectionProperty() {
+		return selectedIntersection;
+	}
+
+	/**
+	 * Returns the selected intersection.
+	 *
+	 * @return The selected intersection.
+	 */
+	public final Intersection getSelectedIntersection() {
+		return selectedIntersectionProperty().get();
+	}
+
+	/**
+	 * Sets the selected intersection.
+	 * 
+	 * @param intersection the intersection to be set as selected
+	 */
+	public final void setSelectedIntersection(Intersection intersection) {
+		selectedIntersectionProperty().set(intersection);
+	}
+
+	/**
+	 * Returns the property representing the selected tour.
+	 *
+	 * @return the property representing the selected tour
+	 */
 	public ObjectProperty<Tour> selectedTourProperty() {
 		return selectedTour;
 	}
 
+	/**
+	 * Returns the selected tour.
+	 *
+	 * @return the selected tour
+	 */
 	public final Tour getSelectedTour() {
 		return selectedTourProperty().get();
 	}
 
+	/**
+	 * Sets the selected tour.
+	 * 
+	 * @param tour the tour to be set as selected
+	 */
 	public final void setSelectedTour(Tour tour) {
 		selectedTourProperty().set(tour);
 	}
 
+	/**
+	 * Returns the property representing the selected delivery.
+	 *
+	 * @return the property representing the selected delivery
+	 */
 	public ObjectProperty<Delivery> selectedDeliveryProperty() {
 		return selectedDelivery;
 	}
 
+	/**
+	 * Returns the selected delivery.
+	 *
+	 * @return The selected delivery.
+	 */
 	public final Delivery getSelectedDelivery() {
 		return selectedDeliveryProperty().get();
 	}
 
+	/**
+	 * Sets the selected delivery.
+	 * 
+	 * @param delivery the delivery to be set as selected
+	 */
 	public final void setSelectedDelivery(Delivery delivery) {
 		selectedDeliveryProperty().set(delivery);
 	}

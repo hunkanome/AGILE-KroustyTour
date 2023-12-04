@@ -33,7 +33,7 @@ public class TourTextualView extends AnchorPane {
 		this.parent = parent;
 		this.dataModel = dataModel;
 
-		parent.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> this.dataModel.setSelectedTour(this.tour));
+		parent.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleClick);
 		dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("TourTextualView.fxml"));
@@ -84,6 +84,14 @@ public class TourTextualView extends AnchorPane {
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
+	}
+	
+	private void handleClick(MouseEvent event) {
+		if (this.parent.isExpanded()) {
+			this.dataModel.setSelectedTour(this.tour);
+		} else {
+			this.dataModel.setSelectedTour(null);
+		}
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
