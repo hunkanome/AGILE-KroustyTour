@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root prefHeight="49.0" prefWidth="239.0"
+	style="-fx-border-color: black;" type="AnchorPane"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label layoutX="6.0" layoutY="5.0" text="Delivery" />
+		<Label fx:id="hourLabel" alignment="TOP_RIGHT"
+			contentDisplay="RIGHT" layoutX="163.0" layoutY="16.0"
+			prefHeight="18.0" prefWidth="69.0" />
+	</children>
+</fx:root>
