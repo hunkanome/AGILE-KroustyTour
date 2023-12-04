@@ -6,8 +6,5 @@
 <fx:root type="AnchorPane" xmlns:fx="http://javafx.com/fxml/1"
 	xmlns="http://javafx.com/javafx/21">
 	<children>
-		<!-- <Line endX="-100.0" endY="-30.800006866455078" layoutX="132.0" layoutY="90.0" 
-			startX="-100.0" startY="20.800003051757812" /> <Label layoutX="47.0" layoutY="77.0" 
-			text="14 min" /> -->
 	</children>
 </fx:root>

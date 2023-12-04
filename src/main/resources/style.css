@@ -1,0 +1,7 @@
+.deliveryTextualView {
+	-fx-border-color: black;
+}
+
+.deliveryTextualView.selected {
+	-fx-background-color: #deebff;
+}

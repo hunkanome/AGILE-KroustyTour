@@ -25,28 +25,8 @@
 		</Label>
 		<Accordion layoutY="48.0" AnchorPane.bottomAnchor="0.0"
 			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-			AnchorPane.topAnchor="48.0">
+			AnchorPane.topAnchor="48.0" fx:id="accordion">
 			<panes>
-				<TitledPane text="Tour 1" fx:id="titledPane">
-					<content>
-						<!-- <ScrollPane>
-							<content>
-								<AnchorPane minHeight="0.0" minWidth="0.0"
-									prefHeight="180.0" prefWidth="313.0" fx:id="anchorPane">
-									<children>
-										<fx:include source="DeliberyTextualView.fxml" AnchorPane.leftAnchor="20.0" 
-											AnchorPane.topAnchor="10.0" /> <fx:include source="DeliberyTextualView.fxml" 
-											AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0" />
-										<Line endX="-100.0" endY="-30.800006866455078"
-											layoutX="132.0" layoutY="90.0" startX="-100.0"
-											startY="20.800003051757812" />
-										<Label layoutX="47.0" layoutY="77.0" text="14 min" />
-									</children>
-								</AnchorPane>
-							</content>
-						</ScrollPane> -->
-					</content>
-				</TitledPane>
 			</panes>
 		</Accordion>
 	</children>

@@ -31,7 +31,7 @@ public class Tour {
         this.courier = courier;
         this.map = map;
         this.deliveries = new ArrayList<>();
-        this.path = new Path(map.getWarehouse(), null);
+        this.path = new Path(map.getWarehouse(), null); // TODO change this to null and verify that it works
     }
 
     public List<Delivery> getDeliveries() {

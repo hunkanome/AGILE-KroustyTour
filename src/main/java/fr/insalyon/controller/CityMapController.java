@@ -15,6 +15,7 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
+import fr.insalyon.model.Tour;
 import fr.insalyon.observer.Observable;
 import fr.insalyon.observer.Observer;
 import fr.insalyon.xml.BadlyFormedXMLException;

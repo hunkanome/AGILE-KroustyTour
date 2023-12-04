@@ -1,10 +1,9 @@
 package fr.insalyon.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.insalyon.geometry.GeoCoordinates;
-import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Intersection;
@@ -12,24 +11,34 @@ import fr.insalyon.model.Path;
 import fr.insalyon.model.Segment;
 import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
-import fr.insalyon.observer.Observable;
-import fr.insalyon.observer.Observer;
 import fr.insalyon.view.TourTextualView;
 import javafx.fxml.FXML;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 
-public class DetailsController implements Observer {
+public class DetailsController {
 
 	private DataModel dataModel;
-	
+
 	@FXML
-	private TitledPane titledPane;
+	private Accordion accordion;
 
 	public void initialize(DataModel dataModel) {
 		this.dataModel = dataModel;
-		this.dataModel.addObserver(this);
-		TourTextualView view = new TourTextualView();
-		this.titledPane.setContent(view);
+		this.addTour();
+		this.addTour();
+	}
+	
+	private void addTour() {
+		TitledPane pane = new TitledPane();
+		pane.setText("New Tour");
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setFitToWidth(true);
+		pane.setContent(scrollPane);
+		TourTextualView view = new TourTextualView(pane, this.dataModel);
+		scrollPane.setContent(view);
+		accordion.getPanes().add(pane);
 		
 		// TODO : remove this to use the real things
 		Tour t = new Tour(null, null);
@@ -42,25 +51,17 @@ public class DetailsController implements Observer {
 		p.setStart(i1);
 		p.setEnd(i3);
 		t.setPath(p);
-		
+
 		Delivery d1 = new Delivery(null, i1, new TimeWindow(8));
-		Delivery d2 = new Delivery(null, i3, new TimeWindow(8));
-		Delivery d3 = new Delivery(null, i3, new TimeWindow(8));
-		Set<Delivery> set = new HashSet<>();
+		Delivery d2 = new Delivery(null, i2, new TimeWindow(9));
+		Delivery d3 = new Delivery(null, i3, new TimeWindow(10));
+		List<Delivery> set = new ArrayList<>();
 		set.add(d1);
 		set.add(d2);
 		set.add(d3);
 		t.setDeliveries(set);
-		
-		view.setTour(t);
-	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		if (arg.getClass() == CityMap.class) {
-			// TODO
-		} else if (arg.getClass() == Intersection.class) {
-			// TODO
-		}
+		view.setTour(t);
+	
 	}
 }

@@ -1,36 +1,58 @@
 package fr.insalyon.view;
 
+import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 public class DeliveryTextualView extends AnchorPane {
 
 	@FXML
 	private Label hourLabel;
-	
+
 	private Delivery delivery;
-	
-	private String hour;
-	
-	public DeliveryTextualView() {
+
+	private DataModel dataModel;
+
+	public DeliveryTextualView(DataModel dataModel) {
+		this.dataModel = dataModel;
+
+		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
+
+		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DeliveryTextualView.fxml"));
+		loader.setController(this);
+		loader.setRoot(this);
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DeliveryTextualView.fxml"));
-			loader.setController(this);
-			loader.setRoot(this);
 			loader.load();
 		} catch (Exception e) {
-			// TODO handle error
-			e.printStackTrace();
+			// TODO improve this error view
+			loader.setRoot(new Pane(new Label("An error occurred while loading the view.")));
 		}
 	}
-	
+
 	public void setContent(Delivery delivery, String hour) {
 		this.delivery = delivery;
-		this.hour = hour;
-		this.hourLabel.setText(hour);
+		if (this.hourLabel != null) {
+			this.hourLabel.setText(hour);
+		}
 	}
-	
+
+	@FXML
+	public void handleClick(MouseEvent event) {
+		this.dataModel.setSelectedDelivery(delivery);
+	}
+
+	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue, Delivery newValue) {
+		if (newValue == delivery) {
+			getStyleClass().add("selected");
+		} else {
+			getStyleClass().remove("selected");
+		}
+	}
+
 }
