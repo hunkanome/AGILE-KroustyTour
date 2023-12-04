@@ -89,7 +89,7 @@ public class CityMapXMLParser {
 	 * prevent XXE attacks.
 	 * 
 	 * @return DocumentBuilder
-	 * @throws ParserConfigurationException if a DocumentBuilder cannot be created
+	 * @throws ParserConfigurationException if a feature of the DocumentBuilderFactory cannot be set
 	 * @see <a href=
 	 *      "https://rules.sonarsource.com/java/RSPEC-2755/">https://rules.sonarsource.com/java/RSPEC-2755/</a>
 	 */
