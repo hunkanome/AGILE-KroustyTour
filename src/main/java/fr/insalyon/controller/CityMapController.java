@@ -70,18 +70,20 @@ public class CityMapController implements Observer {
 	}
 
 	private void drawMap() {
-		updateCanvasProperties();
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-
-		gc.setStroke(Color.BLUE);
-		dataModel.getMap().getIntersections()
-				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
-					// Calculating better coordinates to display on map
-					Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
-					Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
-					drawLine(gc, origin, destination);
-
-				}));
+		if (this.dataModel.getMap() != null) {
+			updateCanvasProperties();
+			GraphicsContext gc = canvasMap.getGraphicsContext2D();
+			
+			gc.setStroke(Color.BLUE);
+			dataModel.getMap().getIntersections()
+			.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+				// Calculating better coordinates to display on map
+				Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
+				Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
+				drawLine(gc, origin, destination);
+				
+			}));
+		}
 	}
 
 	/**
