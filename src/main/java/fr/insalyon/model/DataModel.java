@@ -21,9 +21,12 @@ public class DataModel extends Observable {
     private List<Courier> couriers;
     
     /**
-     * Construct a new empty data model
+     * Construct a new default data model
      */
     public DataModel() {
+        this.tours = new ArrayList<>();
+        this.couriers = new ArrayList<>(1);
+        this.couriers.add(new Courier());
 	}
 
 	/**
