@@ -1,13 +1,12 @@
 package fr.insalyon.algorithm;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class TSP1 extends TemplateTSP {
 
 	/**
-	 * @param currentVertex
-	 * @param unvisited
+	 * @param currentVertex vertex where we are located
+	 * @param unvisited vertices left to be explored
 	 * @return the lower bound of the cost of paths in <code>g</code> starting from <code>currentVertex</code>,
 	 */
 	@Override
