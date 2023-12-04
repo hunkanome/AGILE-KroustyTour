@@ -1,7 +1,8 @@
 package fr.insalyon.algorithm;
 
-import fr.insalyon.model.*;
-
+import fr.insalyon.model.Delivery;
+import fr.insalyon.model.Path;
+import fr.insalyon.model.TimeWindow;
 
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
@@ -13,7 +14,7 @@ public class DeliveryGraph implements Graph {
 
 	/**
 	 * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-	 * @param cost
+	 * @param cost matrix of path from each delivery to each delivery
 	 */
 	public DeliveryGraph(Path[][] cost, Delivery[] deliveries){
 		this.nbVertices = cost.length;
@@ -23,9 +24,13 @@ public class DeliveryGraph implements Graph {
 
 	@Override
 	public int getNbVertices() {
-		return nbVertices;
+		return this.nbVertices;
 	}
 
+	@Override
+	public Path[][] getCost() {
+		return this.cost;
+	}
 
 	/**
 	 * @param i the origin vertex
@@ -35,14 +40,14 @@ public class DeliveryGraph implements Graph {
 	@Override
 	public float getCost(int i, int j) {
 		float value;
-		if (i < 0 || i >= nbVertices || j < 0 || j >= nbVertices) {
+		if (i < 0 || i >= this.nbVertices || j < 0 || j >= this.nbVertices) {
 			value = -1;
 		} else if (i == j) {
 			value = 0;
 		} else if(j==0) {
-			value = cost[i][j].getLength() / AVG_SPEED;
+			value = this.cost[i][j].getLength() / AVG_SPEED;
 		} else {
-			value = cost[i][j].getLength() / AVG_SPEED + DELIVERY_TIME;
+			value = this.cost[i][j].getLength() / AVG_SPEED + DELIVERY_TIME;
 		}
 		return value;
 	}
@@ -52,10 +57,10 @@ public class DeliveryGraph implements Graph {
 	 * @return the delivery associated with the intersection
 	 */
 	public Delivery getDelivery(int i) {
-		if (i<0 || i>=nbVertices) {
+		if (i < 0 || i >= this.nbVertices) {
 			throw new IndexOutOfBoundsException("The index " + i + " is out of bounds");
 		}
-		return deliveries[i];
+		return this.deliveries[i];
 	}
 
 	/**
@@ -73,18 +78,20 @@ public class DeliveryGraph implements Graph {
 	 * @return the time window associated with the delivery at the intersection
 	 */
 	public TimeWindow getDeliveryTimeWindow(int i) {
-		if (i<0 || i>=nbVertices)
+		if (i < 0 || i >= this.nbVertices)
 			return null;
-		return deliveries[i].getTimeWindow();
+		return this.deliveries[i].getTimeWindow();
 	}
 
 	/**
 	 * @return the time window of the earliest delivery
 	 */
 	public TimeWindow getStartTimeWindow() {
-		if(nbVertices == 0) return null;
-		TimeWindow earliest = deliveries[0].getTimeWindow();
-		for (Delivery delivery : deliveries) {
+		if(this.nbVertices == 0) {
+			return null;
+		}
+		TimeWindow earliest = this.deliveries[0].getTimeWindow();
+		for (Delivery delivery : this.deliveries) {
 			if (delivery.getTimeWindow().isBefore(earliest)) {
 				earliest = delivery.getTimeWindow();
 			}
@@ -100,7 +107,7 @@ public class DeliveryGraph implements Graph {
 		TimeWindow next;
 		try {
 			next = new TimeWindow(current.getStartHour() + 1);
-			for (Delivery delivery : deliveries) {
+			for (Delivery delivery : this.deliveries) {
 				if (next == delivery.getTimeWindow() || delivery.getTimeWindow().isAfter(next)) {
 					return next;
 				}
@@ -116,8 +123,8 @@ public class DeliveryGraph implements Graph {
 	 * @return true if there is at least one delivery in the time window preceding the current one
 	 */
 	public boolean hasDeliveriesInPrecedingTimeWindow(TimeWindow current) {
-		for(int i = 1; i < deliveries.length; i++) {
-			if(deliveries[i].getTimeWindow().isRightBefore(current)) {
+		for(int i = 1; i < this.deliveries.length; i++) {
+			if(this.deliveries[i].getTimeWindow().isRightBefore(current)) {
 				return true;
 			}
 		}
@@ -129,8 +136,8 @@ public class DeliveryGraph implements Graph {
 	 */
 	public void printTimeCostGraph() {
 		System.out.println("Time cost graph:");
-		for (int i = 0; i < cost.length; i++) {
-			for (int j = 0; j < cost.length; j++) {
+		for (int i = 0; i < this.cost.length; i++) {
+			for (int j = 0; j < this.cost.length; j++) {
 				System.out.print(getCost(i, j) + " ");
 			}
 			System.out.println();
