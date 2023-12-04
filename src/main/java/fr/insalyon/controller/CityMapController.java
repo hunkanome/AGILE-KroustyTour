@@ -7,10 +7,7 @@ import java.util.List;
 
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
+import fr.insalyon.model.*;
 import fr.insalyon.observer.Observable;
 import fr.insalyon.observer.Observer;
 import fr.insalyon.xml.BadlyFormedXMLException;
@@ -81,8 +78,10 @@ public class CityMapController implements Observer {
 				Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 				Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
 				drawLine(gc, origin, destination);
-				
 			}));
+			if(dataModel.getSelectedIntersection() != null) {
+				drawPoint(gc, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()));
+			}
 		}
 	}
 
@@ -103,6 +102,10 @@ public class CityMapController implements Observer {
 			gc.scale(this.scaleFactor, this.scaleFactor);
 			this.prevScaleFactor = this.scaleFactor;
 		}
+	}
+
+	private void drawPoint(GraphicsContext gc, Position position) {
+		gc.fillOval(position.getX() - 5, position.getY() - 5, 10, 10);
 	}
 
 	private void drawPath(Path path) {
@@ -127,6 +130,34 @@ public class CityMapController implements Observer {
 		GraphicsContext gc = canvasMap.getGraphicsContext2D();
 		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
 		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
+	}
+
+	@FXML
+	private void selectIntersection(MouseEvent event) {
+		if (dataModel.getMap() != null) {
+			Position clickPosition = new Position((float) event.getX(), (float) event.getY());
+			clickPosition.divide(this.scaleFactor);
+			clickPosition.substract(this.translationFactor);
+			Position intersectionPosition;
+			Intersection selectedIntersection = null;
+			float distance;
+			float distanceMin = 15;
+
+			for(Intersection intersection : dataModel.getMap().getIntersections()) {
+				intersectionPosition = transformer.transformToPosition(intersection.getCoordinates());
+				distance = clickPosition.distanceTo(intersectionPosition);
+				if (distance < distanceMin) {
+					distanceMin = distance;
+					selectedIntersection = intersection;
+				}
+			}
+
+			if(selectedIntersection != null) {
+				this.dataModel.setSelectedIntersection(selectedIntersection);
+				clearCanvas();
+				drawMap();
+			}
+		}
 	}
 
 	@FXML

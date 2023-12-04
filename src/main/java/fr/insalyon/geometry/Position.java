@@ -5,7 +5,6 @@ import java.util.Objects;
 /**
  * Represents a position in a Cartesian coordinate system. It is composed of two
  * coordinates: x and y.
- * 
  * Differs from GeoCoordinates as the coordinates are in a Cartesian coordinate
  * system and not in a spherical system.
  */
@@ -68,6 +67,15 @@ public class Position {
 		this.y = y;
 	}
 
+	/**
+	 * Gets the distance between the current position and the given position
+	 * @param other - the position to calculate the distance with
+	 * @return the distance between the current position and the given position
+	 */
+	public Float distanceTo(Position other) {
+		return (float) Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(x, y);
@@ -99,5 +107,14 @@ public class Position {
 	public Position copy() {
 		return new Position(x, y);
 	}
-	
+
+	public void substract(Position translationFactor) {
+		this.x -= translationFactor.x;
+		this.y -= translationFactor.y;
+	}
+
+	public void divide(double scaleFactor) {
+        this.x = (float) (this.x / scaleFactor);
+		this.y = (float) (this.y / scaleFactor);
+	}
 }

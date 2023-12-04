@@ -27,7 +27,9 @@
 			<children>
 				<Canvas fx:id="canvasMap" height="626.0"
 					onMouseDragged="#moveOnDrag" onMousePressed="#saveMousePosition"
-					onScroll="#zoomOnScroll" width="664.0" />
+					onMouseClicked="#selectIntersection"
+					onScroll="#zoomOnScroll" width="664.0"
+				/>
 			</children>
 		</AnchorPane>
 	</children>
