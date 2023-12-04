@@ -3,6 +3,7 @@ package fr.insalyon.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.insalyon.algorithm.CityMapMatrix;
@@ -10,10 +11,7 @@ import fr.insalyon.algorithm.TSP;
 import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
+import fr.insalyon.model.*;
 import fr.insalyon.observer.Observable;
 import fr.insalyon.observer.Observer;
 import fr.insalyon.xml.BadlyFormedXMLException;
@@ -57,8 +55,8 @@ public class CityMapController implements Observer {
 
 	private DataModel dataModel;
 	private CityMapMatrix cityMapMatrix;
+	static int WAIT_TIME = 10;
 	private TSP tsp = new TSP1();
-
 	private MainController parentController;
 
 	public void initialize(DataModel dataModel, MainController mainController) {
@@ -252,4 +250,13 @@ public class CityMapController implements Observer {
 			this.parentController.displayToolBarMessage("Map loaded successfully");
 		}
 	}
+
+	public void computeShortestPathTours() {
+		for (Tour tour: dataModel.getTours()) {
+			this.cityMapMatrix = new CityMapMatrix(dataModel.getMap(), tour.getDeliveries());
+			this.tsp.searchSolution(WAIT_TIME*1000, this.cityMapMatrix.getGraph());
+		}
+
+	}
+
 }

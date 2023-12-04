@@ -3,10 +3,8 @@ package fr.insalyon.algorithm;
 import fr.insalyon.model.Path;
 
 public class DeliveryGraph implements Graph {
-	// private static final int MAX_COST = 40;
-	// private static final int MIN_COST = 10;
 	int nbVertices;
-	Path[][] cost;
+	private Path[][] cost;
 
 	/**
 	 * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
@@ -20,6 +18,10 @@ public class DeliveryGraph implements Graph {
 	@Override
 	public int getNbVertices() {
 		return nbVertices;
+	}
+
+	public Path[][] getCost() {
+		return cost;
 	}
 
 	@Override
