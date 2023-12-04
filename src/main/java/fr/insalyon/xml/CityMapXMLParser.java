@@ -18,7 +18,7 @@ import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.*;
 
 /**
- * Parse a XML file containing a CityMap and construct the corresponding CityMap
+ * Parse an XML file containing a CityMap and construct the corresponding CityMap
  * object.<br/>
  * The XML file must be formatted as follows :
  * 
@@ -60,7 +60,7 @@ public class CityMapXMLParser {
 	 * @return cityMap the map stored in the XML document
 	 * @throws BadlyFormedXMLException if the XML document is not correctly formed
 	 *                                 (unknown tag, incoherent data, ...)
-	 * @throws XMLParserException      if an other error occurs during the parsing
+	 * @throws XMLParserException      if any other type of error occurs during the parsing
 	 *                                 (IOException, ...)
 	 */
 	public CityMap parse() throws BadlyFormedXMLException, XMLParserException {
