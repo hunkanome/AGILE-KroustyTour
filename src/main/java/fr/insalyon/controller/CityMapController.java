@@ -10,7 +10,11 @@ import fr.insalyon.algorithm.TSP;
 import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.*;
+import fr.insalyon.model.CityMap;
+import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Intersection;
+import fr.insalyon.model.Path;
+import fr.insalyon.model.Segment;
 import fr.insalyon.observer.Observable;
 import fr.insalyon.observer.Observer;
 import fr.insalyon.xml.BadlyFormedXMLException;
@@ -19,6 +23,7 @@ import fr.insalyon.xml.XMLParserException;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +38,9 @@ public class CityMapController implements Observer {
 
 	@FXML
 	private AnchorPane canvasContainer;
+	
+	@FXML
+	private Label selectedSegmentLabel;
 
 	/**
 	 * Used to keep track of the last click X coordinate to make dragging possible
