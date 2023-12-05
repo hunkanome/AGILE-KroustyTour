@@ -1,6 +1,5 @@
 package fr.insalyon.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.insalyon.geometry.GeoCoordinates;
@@ -12,6 +11,8 @@ import fr.insalyon.model.Segment;
 import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import fr.insalyon.view.TourTextualView;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
@@ -26,42 +27,42 @@ public class DetailsController {
 
 	public void initialize(DataModel dataModel) {
 		this.dataModel = dataModel;
-		this.addTour();
-		this.addTour();
+
+		// the cast is needed to avoid ambiguity with others method signature
+		dataModel.getTours().addListener((ListChangeListener<Tour>) this::onTourListChanged);
 	}
 	
-	private void addTour() {
-		TitledPane pane = new TitledPane();
-		pane.setText("New Tour");
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setFitToWidth(true);
-		pane.setContent(scrollPane);
-		TourTextualView view = new TourTextualView(pane, this.dataModel);
-		scrollPane.setContent(view);
-		accordion.getPanes().add(pane);
-		
-		// TODO : remove this to use the real things
-		Tour t = new Tour(null, null);
-		Intersection i1 = new Intersection(1l, new GeoCoordinates(0f, 0f), 0);
-		Intersection i2 = new Intersection(2l, new GeoCoordinates(1f, 1f), 1);
-		Intersection i3 = new Intersection(3l, new GeoCoordinates(1f, 1f), 2);
-		Path p = new Path();
-		p.appendSegment(new Segment(i1, i2, "Test", 0));
-		p.appendSegment(new Segment(i2, i3, "Test", 0));
-		p.setStart(i1);
-		p.setEnd(i3);
-		t.setPath(p);
+	@FXML
+	private void addDelivery() {
+		if (dataModel.getSelectedIntersection() != null) {
+			Delivery d = new Delivery(null, dataModel.getSelectedIntersection(), new TimeWindow(9));
+			dataModel.getSelectedTour().addDelivery(d);
+		}
+	}
 
-		Delivery d1 = new Delivery(null, i1, new TimeWindow(8));
-		Delivery d2 = new Delivery(null, i2, new TimeWindow(9));
-		Delivery d3 = new Delivery(null, i3, new TimeWindow(10));
-		List<Delivery> set = new ArrayList<>();
-		set.add(d1);
-		set.add(d2);
-		set.add(d3);
-		t.setDeliveries(set);
+	private void onTourListChanged(Change<? extends Tour> c) {
+		System.out.println(c);
+		while (c.next()) {
+			if (c.wasAdded()) { // Add a new TitledPane to the Accordion
+				Tour tour = c.getList().get(c.getFrom());
+				TitledPane pane = new TitledPane();
+				pane.setText("New Tour");
+				ScrollPane scrollPane = new ScrollPane();
+				scrollPane.setFitToWidth(true);
+				pane.setContent(scrollPane);
+				TourTextualView view = new TourTextualView(pane, dataModel);
+				scrollPane.setContent(view);
+				accordion.getPanes().add(pane);
+				view.setTour(tour);
 
-		view.setTour(t);
-	
+			} else if (c.wasRemoved()) { // Remove the corresponding TitledPane(s) from the Accordion
+				List<TitledPane> panes = accordion.getPanes();
+				if (c.getRemovedSize() == panes.size()) {
+					panes.clear();
+				} else {
+					panes.remove(c.getFrom());
+				}
+			}
+		}
 	}
 }

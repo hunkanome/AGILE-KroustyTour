@@ -282,7 +282,7 @@ public class CityMapController {
 
 	public void computeShortestPathTours() {
 		for (Tour tour: dataModel.getTours()) {
-			this.cityMapMatrix = new CityMapMatrix(dataModel.getCityMap(), tour.getDeliveries());
+			this.cityMapMatrix = new CityMapMatrix(dataModel.getCityMap(), tour.getDeliveriesList());
 			this.tsp.searchSolution(WAIT_TIME*1000, this.cityMapMatrix.getGraph());
 		}
 	}

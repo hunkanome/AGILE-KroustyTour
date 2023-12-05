@@ -4,6 +4,8 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
@@ -49,11 +51,16 @@ public class TourTextualView extends AnchorPane {
 
 	public void setTour(Tour tour) {
 		this.tour = tour;
+		this.tour.getDeliveriesList().addListener((ListChangeListener<Delivery>) this::onTourUpdate);
+		this.showTour();
+		this.dataModel.setSelectedTour(this.tour);
+	}
 
+	private void showTour() {
 		int i = 0;
-		for (Delivery d : tour.getDeliveries()) {
+		for (Delivery d : tour.getDeliveriesList()) {
 			double bottom = this.showDeliveries(d, "8h30", i++);
-			if (i < tour.getDeliveries().size()) {
+			if (i < tour.getDeliveriesList().size()) {
 				this.showTravelTime(bottom, "14 min");
 			}
 		}
@@ -85,7 +92,7 @@ public class TourTextualView extends AnchorPane {
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
 	}
-	
+
 	private void handleClick(MouseEvent event) {
 		if (this.parent.isExpanded()) {
 			this.dataModel.setSelectedTour(this.tour);
@@ -99,6 +106,11 @@ public class TourTextualView extends AnchorPane {
 			// TODO check that it works
 			this.parent.setExpanded(true);
 		}
+	}
+
+	private void onTourUpdate(Change<? extends Delivery> c) {
+		this.getChildren().clear();
+		this.showTour();
 	}
 
 }

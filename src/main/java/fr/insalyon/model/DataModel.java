@@ -3,8 +3,11 @@ package fr.insalyon.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Class used to store the data needed by the controllers It contains a city
@@ -18,7 +21,9 @@ public class DataModel {
 // TODO use javafx.beans observables for lists
 	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);
 
-	private List<Tour> tours;
+	private final ObservableList<Tour> tours = FXCollections
+			.observableArrayList(tour -> new Observable[] { tour.getDeliveriesList() });
+	// we also observe the delivery list of each tour
 
 	private List<Courier> couriers;
 
@@ -29,44 +34,12 @@ public class DataModel {
 	private final ObjectProperty<Delivery> selectedDelivery = new SimpleObjectProperty<>(null);
 
 	/**
-	 * Construct a new empty data model
+	 * Construct a new default data model.<br/>
+	 * All collections are empty except the courier list which has an element. 
 	 */
 	public DataModel() {
-	}
-
-	/**
-	 * Construct a new data model Initialize an empty list of tours and a list
-	 * containing one courier
-	 * 
-	 * @param cityMap The stored map
-	 * @see CityMap
-	 * @see Courier
-	 * @see Tour
-	 */
-	public DataModel(CityMap cityMap) {
-		this.cityMap.set(cityMap);
-		this.tours = new ArrayList<>();
 		this.couriers = new ArrayList<>(1);
 		this.couriers.add(new Courier(0));
-	}
-
-	/**
-	 * Construct a new data model Initialize an empty list of tours and a list of
-	 * nbCouriers couriers
-	 * 
-	 * @param map The stored map
-	 * @see CityMap
-	 * @see Courier
-	 * @see Tour
-	 */
-	public DataModel(CityMap cityMap, int nbCouriers) {
-		this.cityMap.set(cityMap);
-		this.tours = new ArrayList<>();
-		this.couriers = new ArrayList<>(nbCouriers);
-
-		for (int i = 0; i < nbCouriers; i++) {
-			this.couriers.add(new Courier(i));
-		}
 	}
 
 	/**
@@ -77,7 +50,7 @@ public class DataModel {
 	public ObjectProperty<CityMap> cityMapProperty() {
 		return this.cityMap;
 	}
-	
+
 	/**
 	 * Returns the CityMap object.
 	 *
@@ -93,16 +66,28 @@ public class DataModel {
 	 * @param map the CityMap to set
 	 */
 	public void setMap(CityMap map) {
-		// TODO reset the whole model ?
+		this.couriers.clear();
+		Courier courier = new Courier(0);
+		this.couriers.add(courier);
+		this.tours.clear();
+		Tour tour = new Tour(courier, map);
+		this.tours.add(tour);
+		this.selectedTour.set(tour);
+		this.selectedIntersection.set(null);
+		this.selectedDelivery.set(null);
 		cityMapProperty().set(map);
 	}
 
-	public List<Tour> getTours() {
+	public ObservableList<Tour> getTours() {
 		return tours;
 	}
 
-	public void setTours(List<Tour> tours) {
-		this.tours = tours;
+	public void addTour(Tour tour) {
+		tours.add(tour);
+	}
+
+	public void removeTour(Tour tour) {
+		tours.remove(tour);
 	}
 
 	public List<Courier> getCouriers() {
