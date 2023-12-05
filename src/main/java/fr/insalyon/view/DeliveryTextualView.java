@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -18,9 +19,12 @@ public class DeliveryTextualView extends AnchorPane {
 	private Delivery delivery;
 
 	private DataModel dataModel;
+	
+	private TitledPane parent;
 
-	public DeliveryTextualView(DataModel dataModel) {
+	public DeliveryTextualView(DataModel dataModel, TitledPane parent) {
 		this.dataModel = dataModel;
+		this.parent = parent;
 
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 
@@ -50,6 +54,7 @@ public class DeliveryTextualView extends AnchorPane {
 	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue, Delivery newValue) {
 		if (newValue == delivery) {
 			getStyleClass().add("selected");
+			parent.setExpanded(true);
 		} else {
 			getStyleClass().remove("selected");
 		}

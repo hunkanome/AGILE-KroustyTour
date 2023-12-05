@@ -39,7 +39,7 @@ public class CityMapController {
 
 	@FXML
 	private AnchorPane canvasContainer;
-	
+
 	@FXML
 	private Label selectedSegmentLabel;
 
@@ -87,18 +87,41 @@ public class CityMapController {
 		updateCanvasProperties();
 		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
-			
+
 			GraphicsContext gc = canvasMap.getGraphicsContext2D();
 			gc.setStroke(Color.BLUE);
 			dataModel.getCityMap().getIntersections()
-			.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
-				// Calculating better coordinates to display on map
-				Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
-				Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
-				drawLine(gc, origin, destination);
-			}));
-			if(dataModel.getSelectedIntersection() != null) {
-				drawPoint(gc, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()));
+					.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+						// Calculating better coordinates to display on map
+						Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
+						Position destination = transformer
+								.transformToPosition(segment.getDestination().getCoordinates());
+						drawLine(gc, origin, destination);
+					}));
+
+			// draw the selected intersection
+			if (dataModel.getSelectedIntersection() != null) {
+				drawPoint(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()),
+						Color.BLACK);
+			}
+			
+			// draw the warehouse
+			drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
+			
+			// TODO : draw all the tours
+
+			// draw all the deliveries
+			dataModel.getTours().forEach(tour -> {
+				tour.getDeliveriesList().forEach(delivery -> {
+					drawPoint(transformer.transformToPosition(delivery.getLocation().getCoordinates()), Color.BLACK);
+				});
+			});
+
+			// draw the selected delivery
+			if (dataModel.getSelectedDelivery() != null) {
+				drawPoint(
+						transformer.transformToPosition(dataModel.getSelectedDelivery().getLocation().getCoordinates()),
+						Color.RED);
 			}
 		}
 	}
@@ -122,7 +145,9 @@ public class CityMapController {
 		}
 	}
 
-	private void drawPoint(GraphicsContext gc, Position position) {
+	private void drawPoint(Position position, Color color) {
+		GraphicsContext gc = canvasMap.getGraphicsContext2D();
+		gc.setFill(color);
 		gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
 	}
 
@@ -161,7 +186,7 @@ public class CityMapController {
 			float distance;
 			float distanceMin = 15;
 
-			for(Intersection intersection : dataModel.getCityMap().getIntersections()) {
+			for (Intersection intersection : dataModel.getCityMap().getIntersections()) {
 				intersectionPosition = transformer.transformToPosition(intersection.getCoordinates());
 				distance = clickPosition.distanceTo(intersectionPosition);
 				if (distance < distanceMin) {
@@ -170,7 +195,8 @@ public class CityMapController {
 				}
 			}
 
-			if(selectedIntersection != null) {
+			if (selectedIntersection != null) {
+				// TODO : if a delivery is at this intersection, select it instead
 				this.dataModel.setSelectedIntersection(selectedIntersection);
 				drawMap();
 			}
@@ -281,12 +307,12 @@ public class CityMapController {
 	}
 
 	public void computeShortestPathTours() {
-		for (Tour tour: dataModel.getTours()) {
+		for (Tour tour : dataModel.getTours()) {
 			this.cityMapMatrix = new CityMapMatrix(dataModel.getCityMap(), tour.getDeliveriesList());
-			this.tsp.searchSolution(WAIT_TIME*1000, this.cityMapMatrix.getGraph());
+			this.tsp.searchSolution(WAIT_TIME * 1000, this.cityMapMatrix.getGraph());
 		}
 	}
-	
+
 	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
 		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
 				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
@@ -298,12 +324,14 @@ public class CityMapController {
 		drawMap();
 		this.parentController.displayToolBarMessage("Map loaded successfully");
 	}
-	
-	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue, Delivery newValue) {
+
+	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
+			Delivery newValue) {
 		// TODO show the delivery on the map
 		System.out.println("Changement de delivery");
+		drawMap();
 	}
-	
+
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
 		// TODO show the tour on the map
 		if (newValue == null) {
@@ -312,8 +340,9 @@ public class CityMapController {
 			System.out.println("Changement de tour");
 		}
 	}
-	
-	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue, Intersection newValue) {
+
+	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue,
+			Intersection newValue) {
 		drawMap();
 	}
 

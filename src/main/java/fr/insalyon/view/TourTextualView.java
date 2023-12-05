@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 public class TourTextualView extends AnchorPane {
+// TODO : add the warehouse start and end in the view
 
 	private static final double DELIVERY_VIEW_HEIGHT = 49;
 	private static final double DELIVERY_VIEW_VERTICAL_SPACE = 100;
@@ -67,7 +68,7 @@ public class TourTextualView extends AnchorPane {
 	}
 
 	private double showDeliveries(Delivery delivery, String hour, int index) {
-		DeliveryTextualView view = new DeliveryTextualView(this.dataModel);
+		DeliveryTextualView view = new DeliveryTextualView(this.dataModel, parent);
 		double topAnchor = ((DELIVERY_VIEW_VERTICAL_SPACE * index) + DELIVERY_VIEW_TOP_MARGIN);
 		AnchorPane.setTopAnchor(view, topAnchor);
 		AnchorPane.setLeftAnchor(view, DELIVERY_VIEW_LEFT_MARGIN);
