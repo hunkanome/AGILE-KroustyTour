@@ -53,6 +53,15 @@ public class MainController {
 	private void openMapFile() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose a CityMap XML file");
+
+		// Set the initial directory to the xml data directory
+		try {
+			File cwd = new File(System.getProperty("user.dir") + "/data/xml/");
+			fileChooser.setInitialDirectory(cwd);
+		} catch (Exception e) {
+			// Do nothing
+		}
+
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
 		if (selectedFile != null) {
