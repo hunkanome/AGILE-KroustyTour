@@ -55,12 +55,13 @@ public class MainController {
 		fileChooser.setTitle("Choose a CityMap XML file");
 
 		// Set the initial directory to the xml data directory
-		try {
-			File cwd = new File(System.getProperty("user.dir") + "/data/xml/");
-			fileChooser.setInitialDirectory(cwd);
-		} catch (Exception e) {
-			// Do nothing
+		//Set to user directory or go to default if cannot access
+		String userDirectoryString = System.getProperty("user.dir") + "/daqsdta/xml";
+		File userDirectory = new File(userDirectoryString);
+		if(!userDirectory.canRead()) {
+			userDirectory = null;
 		}
+		fileChooser.setInitialDirectory(userDirectory);
 
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
