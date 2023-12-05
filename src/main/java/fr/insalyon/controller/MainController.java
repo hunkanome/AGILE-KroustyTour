@@ -53,6 +53,16 @@ public class MainController {
 	private void openMapFile() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose a CityMap XML file");
+
+		// Set the initial directory to the xml data directory
+		//Set to user directory or go to default if cannot access
+		String userDirectoryString = System.getProperty("user.dir") + "/daqsdta/xml";
+		File userDirectory = new File(userDirectoryString);
+		if(!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		fileChooser.setInitialDirectory(userDirectory);
+
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
 		if (selectedFile != null) {
