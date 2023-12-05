@@ -2,12 +2,8 @@ package fr.insalyon.controller;
 
 import java.util.List;
 
-import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
-import fr.insalyon.model.Intersection;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
 import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import fr.insalyon.view.TourTextualView;
@@ -41,7 +37,6 @@ public class DetailsController {
 	}
 
 	private void onTourListChanged(Change<? extends Tour> c) {
-		System.out.println(c);
 		while (c.next()) {
 			if (c.wasAdded()) { // Add a new TitledPane to the Accordion
 				Tour tour = c.getList().get(c.getFrom());

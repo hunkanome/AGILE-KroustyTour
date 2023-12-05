@@ -18,13 +18,13 @@ import javafx.collections.ObservableList;
  * @see Courier
  */
 public class DataModel {
-// TODO use javafx.beans observables for lists
 	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);
 
 	private final ObservableList<Tour> tours = FXCollections
 			.observableArrayList(tour -> new Observable[] { tour.getDeliveriesList() });
 	// we also observe the delivery list of each tour
 
+// TODO use javafx.collections.ObservableList for this list too ?
 	private List<Courier> couriers;
 
 	private final ObjectProperty<Intersection> selectedIntersection = new SimpleObjectProperty<>(null);
