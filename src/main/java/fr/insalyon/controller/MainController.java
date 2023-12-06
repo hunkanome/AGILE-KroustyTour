@@ -56,7 +56,7 @@ public class MainController {
 
 		// Set the initial directory to the xml data directory
 		//Set to user directory or go to default if cannot access
-		String userDirectoryString = System.getProperty("user.dir") + "/daqsdta/xml";
+		String userDirectoryString = System.getProperty("user.home");
 		File userDirectory = new File(userDirectoryString);
 		if(!userDirectory.canRead()) {
 			userDirectory = null;
