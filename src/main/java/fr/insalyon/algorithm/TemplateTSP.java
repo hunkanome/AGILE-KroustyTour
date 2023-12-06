@@ -3,12 +3,14 @@ package fr.insalyon.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
+import fr.insalyon.model.Path;
 import fr.insalyon.model.TimeWindow;
 
 public abstract class TemplateTSP implements TSP {
 	private Integer[] bestSol;
-	protected DeliveryGraph g;
+	protected DeliveryGraph deliveryGraph;
 	private float bestSolCost;
 	private int timeLimit;
 	private long startTime;
@@ -24,7 +26,7 @@ public abstract class TemplateTSP implements TSP {
 		if (g.getNbVertices()<=0) return;
 		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
-		this.g = g;
+		this.deliveryGraph = g;
 		this.bestSol = new Integer[g.getNbVertices()];
 		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
@@ -39,7 +41,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the i-th vertex of the best solution computed so far
 	 */
 	public int getSolution(int i) {
-		if (this.g != null && i>=0 && i<g.getNbVertices())
+		if (this.deliveryGraph != null && i>=0 && i< deliveryGraph.getNbVertices())
 			return this.bestSol[i];
 		return -1;
 	}
@@ -48,7 +50,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the cost of the best solution computed so far
 	 */
 	public float getSolutionCost(){
-		if (this.g != null)
+		if (this.deliveryGraph != null)
 			return this.bestSolCost;
 		return -1;
 	}
@@ -86,11 +88,11 @@ public abstract class TemplateTSP implements TSP {
 
 		// Update best score if we have visited all the vertices
 		if (unvisited.isEmpty()){
-			if (g.isArc(currentVertex,0) // If we can go back to the warehouse
-				&& (branchCost+g.getCost(currentVertex,0) < bestSolCost) // If the cost is better than the best solution
+			if (deliveryGraph.isArc(currentVertex,0) // If we can go back to the warehouse
+				&& (branchCost+ deliveryGraph.getCost(currentVertex,0) < bestSolCost) // If the cost is better than the best solution
 			){
 				visited.toArray(bestSol);
-				bestSolCost = branchCost + g.getCost(currentVertex,0);
+				bestSolCost = branchCost + deliveryGraph.getCost(currentVertex,0);
 			}
 			return;
 		}
@@ -103,11 +105,11 @@ public abstract class TemplateTSP implements TSP {
 		// Checking if all the deliveries in the current time window have been visited
 		// If it is the case we update the current time window
 		TimeWindow finalCurrentTimeWindow1 = currentTimeWindow;
-		if (unvisited.stream().noneMatch(i -> g.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow1))) {
+		if (unvisited.stream().noneMatch(i -> deliveryGraph.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow1))) {
 			// Get the nearest nextTimeWindow
             TimeWindow nextWindow = unvisited
 					.stream()
-					.map(i -> g.getDelivery(i).getTimeWindow())
+					.map(i -> deliveryGraph.getDelivery(i).getTimeWindow())
                     .min(Comparator.comparing(TimeWindow::getStartHour))
                     .orElseThrow(IllegalStateException::new); // unvisited or subsequent streams cannot be empty
 			// Account for a difference between endHour of previous and startHour of next
@@ -119,15 +121,15 @@ public abstract class TemplateTSP implements TSP {
 		final TimeWindow finalCurrentTimeWindow = currentTimeWindow;
 		Collection<Integer> nextDeliveries = unvisited
 				.stream()
-				.filter(i -> g.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow))
+				.filter(i -> deliveryGraph.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow))
 				.toList();
 
 		// Explore the different path possible
 		for (Integer deliveryVertex : nextDeliveries) {
-            float newCurrentTimeWindowCost = currentTimeWindowCost + g.getCost(currentVertex, deliveryVertex);
-			float newBranchCost = branchCost + g.getCost(currentVertex, deliveryVertex);
+            float newCurrentTimeWindowCost = currentTimeWindowCost + deliveryGraph.getCost(currentVertex, deliveryVertex);
+			float newBranchCost = branchCost + deliveryGraph.getCost(currentVertex, deliveryVertex);
 			if (newCurrentTimeWindowCost < 5) {
-                newCurrentTimeWindowCost = 5 - g.getCost(currentVertex, deliveryVertex);
+                newCurrentTimeWindowCost = 5 - deliveryGraph.getCost(currentVertex, deliveryVertex);
                 newBranchCost = (float) (Math.ceil(branchCost/60) * 60 + currentTimeWindowCost);
 			}
             // If we are running out of time, we stop the branch
@@ -140,5 +142,15 @@ public abstract class TemplateTSP implements TSP {
 			visited.remove(deliveryVertex);
 			unvisited.add(deliveryVertex);
 		}
+	}
+
+	public List<Path> getSolutionPaths() {
+		ArrayList<Path> pathList = new ArrayList<>(this.bestSol.length-1);
+
+		for (int i=0; i<this.bestSol.length-1; i++) {
+			pathList.add(this.deliveryGraph.getCost()[i][i+1]);
+		}
+
+		return pathList;
 	}
 }
