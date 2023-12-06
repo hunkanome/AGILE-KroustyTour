@@ -13,10 +13,10 @@ public class AStar extends Dijkstra {
      * @param endNode another node (basically the end node of the shortest path we are computing)
      * @return a float representing a distance (computed using the geographic position of the two intersections)
      * @see Intersection
+     * @link https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude
      */
     @Override
     public float heuristic(Intersection currentNode, Intersection endNode) {
-        //https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude
         float lat1 = currentNode.getCoordinates().getLatitude();
         float lon1 = currentNode.getCoordinates().getLongitude();
         float lat2 = endNode.getCoordinates().getLatitude();

@@ -10,13 +10,13 @@ import java.util.ArrayList;
  */
 public class Path {
 
-    private Intersection start;
+    protected Intersection start;
 
-    private List<Segment> segments;
+    protected List<Segment> segments;
 
-    private Intersection end;
+    protected Intersection end;
 
-    private float length;
+    protected float length;
 
     /**
      * Default constructor
@@ -58,29 +58,17 @@ public class Path {
         return start;
     }
 
-    public void setStart(Intersection start) {
-        this.start = start;
-    }
-
     public List<Segment> getSegments() {
         return segments;
-    }
-
-    public void setSegments(List<Segment> segments) {
-        this.segments = segments;
     }
 
     public Intersection getEnd() {
         return end;
     }
 
-    public void setEnd(Intersection end) {
-        this.end = end;
+    public float getLength() {
+        return length;
     }
-
-    public float getLength() { return length; }
-
-    public void setLength(float length) { this.length = length; }
 
     /**
      * Append a segment at the end of the path

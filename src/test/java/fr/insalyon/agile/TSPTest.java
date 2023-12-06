@@ -7,9 +7,45 @@ import fr.insalyon.algorithm.TSP;
 import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+class MockPath extends Path {
+    void setLength(float length) {
+        this.length = length;
+    }
+}
+
 class TSPTest {
+    private static MockPath[][] costMatrix;
+
+    @BeforeAll
+    public static void setCostMatrix(){
+        // Create a test graph
+        costMatrix = new MockPath[4][4];
+        for (int i = 0; i < costMatrix.length; i++) {
+            for (int j = 0; j < costMatrix.length; j++) {
+                costMatrix[i][j] = new MockPath();
+            }
+        }
+
+        costMatrix[0][0].setLength(0);
+        costMatrix[0][1].setLength(100);
+        costMatrix[0][2].setLength(900);
+        costMatrix[0][3].setLength(900);
+        costMatrix[1][0].setLength(900);
+        costMatrix[1][1].setLength(0);
+        costMatrix[1][2].setLength(100);
+        costMatrix[1][3].setLength(900);
+        costMatrix[2][0].setLength(900);
+        costMatrix[2][1].setLength(900);
+        costMatrix[2][2].setLength(0);
+        costMatrix[2][3].setLength(100);
+        costMatrix[3][0].setLength(100);
+        costMatrix[3][1].setLength(900);
+        costMatrix[3][2].setLength(900);
+        costMatrix[3][3].setLength(0);
+    }
 
     @Test
     void testTSP0Elements() {
@@ -32,8 +68,8 @@ class TSPTest {
         TSP tsp = new TSP1();
 
         // Create a test graph
-        Path[][] costMatrix = new Path[1][1];
-        costMatrix[0][0] = new Path();
+        MockPath[][] costMatrix = new MockPath[1][1];
+        costMatrix[0][0] = new MockPath();
         costMatrix[0][0].setLength(0);
         Delivery[] deliveries = new Delivery[1];
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
@@ -54,30 +90,6 @@ class TSPTest {
     @Test
     void testTSPSameTimeWindow() {
         TSP tsp = new TSP1();
-
-        // Create a test graph
-        Path[][] costMatrix = new Path[4][4];
-        for (int i = 0; i < costMatrix.length; i++) {
-            for (int j = 0; j < costMatrix.length; j++) {
-                costMatrix[i][j] = new Path();
-            }
-        }
-        costMatrix[0][0].setLength(0);
-        costMatrix[0][1].setLength(100);
-        costMatrix[0][2].setLength(900);
-        costMatrix[0][3].setLength(900);
-        costMatrix[1][0].setLength(900);
-        costMatrix[1][1].setLength(0);
-        costMatrix[1][2].setLength(100);
-        costMatrix[1][3].setLength(900);
-        costMatrix[2][0].setLength(900);
-        costMatrix[2][1].setLength(900);
-        costMatrix[2][2].setLength(0);
-        costMatrix[2][3].setLength(100);
-        costMatrix[3][0].setLength(100);
-        costMatrix[3][1].setLength(900);
-        costMatrix[3][2].setLength(900);
-        costMatrix[3][3].setLength(0);
 
         Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
@@ -108,30 +120,6 @@ class TSPTest {
     @Test
     void testTSPDifferentTimeWindows() {
         TSP tsp = new TSP1();
-
-        // Create a test graph
-        Path[][] costMatrix = new Path[4][4];
-        for (int i = 0; i < costMatrix.length; i++) {
-            for (int j = 0; j < costMatrix.length; j++) {
-                costMatrix[i][j] = new Path();
-            }
-        }
-        costMatrix[0][0].setLength(0);
-        costMatrix[0][1].setLength(100);
-        costMatrix[0][2].setLength(900);
-        costMatrix[0][3].setLength(900);
-        costMatrix[1][0].setLength(900);
-        costMatrix[1][1].setLength(0);
-        costMatrix[1][2].setLength(100);
-        costMatrix[1][3].setLength(900);
-        costMatrix[2][0].setLength(900);
-        costMatrix[2][1].setLength(900);
-        costMatrix[2][2].setLength(0);
-        costMatrix[2][3].setLength(100);
-        costMatrix[3][0].setLength(100);
-        costMatrix[3][1].setLength(900);
-        costMatrix[3][2].setLength(900);
-        costMatrix[3][3].setLength(0);
 
         Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
@@ -165,30 +153,6 @@ class TSPTest {
     @Test
     void testTSPNonContiguousTimeWindows() {
         TSP tsp = new TSP1();
-
-        // Create a test graph
-        Path[][] costMatrix = new Path[4][4];
-        for (int i = 0; i < costMatrix.length; i++) {
-            for (int j = 0; j < costMatrix.length; j++) {
-                costMatrix[i][j] = new Path();
-            }
-        }
-        costMatrix[0][0].setLength(0);
-        costMatrix[0][1].setLength(100);
-        costMatrix[0][2].setLength(900);
-        costMatrix[0][3].setLength(900);
-        costMatrix[1][0].setLength(900);
-        costMatrix[1][1].setLength(0);
-        costMatrix[1][2].setLength(100);
-        costMatrix[1][3].setLength(900);
-        costMatrix[2][0].setLength(900);
-        costMatrix[2][1].setLength(900);
-        costMatrix[2][2].setLength(0);
-        costMatrix[2][3].setLength(100);
-        costMatrix[3][0].setLength(100);
-        costMatrix[3][1].setLength(900);
-        costMatrix[3][2].setLength(900);
-        costMatrix[3][3].setLength(0);
 
         Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
