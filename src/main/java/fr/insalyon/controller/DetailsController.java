@@ -7,7 +7,6 @@ import fr.insalyon.model.Delivery;
 import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import fr.insalyon.view.TourTextualView;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
@@ -25,7 +24,7 @@ public class DetailsController {
 		this.dataModel = dataModel;
 
 		// the cast is needed to avoid ambiguity with others method signature
-		dataModel.getTours().addListener((ListChangeListener<Tour>) this::onTourListChanged);
+		dataModel.getTours().addListener(this::onTourListChanged);
 	}
 	
 	@FXML

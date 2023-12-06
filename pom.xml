@@ -17,7 +17,7 @@
 		<skipTests>true</skipTests>
 	</properties>
 
-	<!-- JUnit configuration from :
+	<!-- JUnit's configuration from :
 	https://www.digitalocean.com/community/tutorials/junit-setup-maven -->
 
 	<dependencies>

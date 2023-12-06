@@ -4,7 +4,6 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -29,8 +28,8 @@ public class TourTextualView extends AnchorPane {
 
 	private Tour tour;
 
-	private TitledPane parent;
-	private DataModel dataModel;
+	private final TitledPane parent;
+	private final DataModel dataModel;
 
 	public TourTextualView(TitledPane parent, DataModel dataModel) {
 		this.parent = parent;
@@ -52,7 +51,7 @@ public class TourTextualView extends AnchorPane {
 
 	public void setTour(Tour tour) {
 		this.tour = tour;
-		this.tour.getDeliveriesList().addListener((ListChangeListener<Delivery>) this::onTourUpdate);
+		this.tour.getDeliveriesList().addListener(this::onTourUpdate);
 		this.showTour();
 		this.dataModel.setSelectedTour(this.tour);
 	}
