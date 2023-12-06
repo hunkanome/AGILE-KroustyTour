@@ -1,6 +1,7 @@
 fr.insalyon
 fr.insalyon.algorithm
 fr.insalyon.controller
+fr.insalyon.controller.command
 fr.insalyon.geometry
 fr.insalyon.model
 fr.insalyon.view
