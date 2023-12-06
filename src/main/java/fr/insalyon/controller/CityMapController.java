@@ -60,9 +60,7 @@ public class CityMapController {
 	private Position translationFactor = new Position(0f, 0f);
 	private CoordinateTransformer transformer;
 	private DataModel dataModel;
-	private CityMapMatrix cityMapMatrix;
-	static final int WAIT_TIME = 10;
-	private final TSP tsp = new TSP1();
+	
 	private MainController parentController;
 
 	public void initialize(DataModel dataModel, MainController mainController) {
@@ -327,12 +325,6 @@ public class CityMapController {
 		event.consume();
 	}
 
-	public void computeShortestPathTours() {
-		for (Tour tour : dataModel.getTours()) {
-			this.cityMapMatrix = new CityMapMatrix(dataModel.getCityMap(), tour.getDeliveriesList());
-			this.tsp.searchSolution(WAIT_TIME * 1000, this.cityMapMatrix.getGraph());
-		}
-	}
 
 	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
 		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),

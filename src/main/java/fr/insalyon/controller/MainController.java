@@ -34,7 +34,7 @@ public class MainController {
 	public void initialize(DataModel dataModel) throws IOException {
 		this.dataModel = dataModel;
 
-		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ControlPanel.fxml"));
+		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ActionPanel.fxml"));
 		Parent controlPanel = controlPanelLoader.load();
 		panelsContainer.getChildren().add(controlPanel);
 
