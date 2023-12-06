@@ -48,9 +48,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the cost of the best solution computed so far
 	 */
 	public float getSolutionCost(){
-		if (this.g != null)
-			return this.bestSolCost;
-		return -1;
+		return g != null ? this.bestSolCost : -1;
 	}
 
 	/**
