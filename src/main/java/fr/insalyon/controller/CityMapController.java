@@ -204,7 +204,15 @@ public class CityMapController {
 			}
 
 			if (selectedIntersection != null) {
-				// TODO : if a delivery is at this intersection, select it instead
+				for (Tour tour : dataModel.getTours()) {
+					for (Delivery delivery : tour.getDeliveriesList()) {
+						if (delivery.getLocation().equals(selectedIntersection)) {
+							this.dataModel.setSelectedDelivery(delivery);
+							drawCanvas();
+							return;
+						}
+					}
+				}
 				this.dataModel.setSelectedIntersection(selectedIntersection);
 				drawCanvas();
 			}
