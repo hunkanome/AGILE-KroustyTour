@@ -13,13 +13,13 @@ public interface TSP {
 	/**
 	 * @param i the index of the vertex in the solution
 	 * @return the ith visited vertex in the solution computed by <code>searchSolution</code> 
-	 * (-1 if <code>searcheSolution</code> has not been called yet, or if i &lt; 0 or i &ge; g.getNbSommets())
+	 * (-1 if <code>searchSolution</code> has not been called yet, or if i &lt; 0 or i &ge; g.getNbSommets())
 	 */
     int getSolution(int i);
 	
 	/** 
 	 * @return the total cost of the solution computed by <code>searchSolution</code> 
-	 * (-1 if <code>searcheSolution</code> has not been called yet).
+	 * (-1 if <code>searchSolution</code> has not been called yet).
 	 */
     float getSolutionCost();
 
