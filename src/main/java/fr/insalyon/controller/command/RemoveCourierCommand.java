@@ -9,18 +9,18 @@ public class RemoveCourierCommand implements Command {
 
     /**
      * Used when initializing the command
-     * @param dm the dataModel where the information is stored
+     * @param dataModel the dataModel where the information is stored
      */
-    public void removeCourier(DataModel dm) {
-        dataModel = dm;
+    public void removeCourier(DataModel dataModel) {
+        this.dataModel = dataModel;
     }
 
     @Override
     public void doCommand() {
-        for(Courier courier : dataModel.getCouriers().reversed()) {
+        for(Courier courier : this.dataModel.getCouriers().reversed()) {
             if (courier.isAvailable()) {
-                courierToRemove = courier;
-                dataModel.getCouriers().remove(courier);
+                this.courierToRemove = courier;
+                this.dataModel.getCouriers().remove(courier);
                 break;
             }
         }
@@ -28,8 +28,8 @@ public class RemoveCourierCommand implements Command {
 
     @Override
     public void undoCommand() {
-        if (courierToRemove != null && !dataModel.getCouriers().contains(courierToRemove)){
-            dataModel.getCouriers().add(courierToRemove);
+        if (this.courierToRemove != null && !this.dataModel.getCouriers().contains(this.courierToRemove)){
+            this.dataModel.getCouriers().add(this.courierToRemove);
         }
     }
 }
