@@ -98,4 +98,44 @@ public class CityMapMatrix {
         }
     }
 
+    /**
+     * Remove a delivery from the list and remove the related paths
+     * @param delivery The delivery to remove
+     * @see Delivery
+     */
+    public void removeDelivery(Delivery delivery) {
+        int deliveryIndex = this.deliveries.indexOf(delivery);
+
+        if (deliveryIndex == -1) {
+            return;
+        }
+
+        Path[][] newArrayPaths = new Path[deliveries.size()-1][deliveries.size()-1];
+
+        for (int i=0; i<this.deliveries.size(); i++) {
+
+            if (i == deliveryIndex) {
+                continue;
+            }
+
+            for (int j=0; j<this.deliveries.size(); j++) {
+
+                if (j == deliveryIndex) {
+                    continue;
+                }
+
+                if (i > deliveryIndex && j > deliveryIndex) {
+                    newArrayPaths[i-1][j-1] = this.graph.getCost()[i][j];
+                } else if (i > deliveryIndex) {
+                    newArrayPaths[i-1][j] = this.graph.getCost()[i][j];
+                } else if (j > deliveryIndex) {
+                    newArrayPaths[i][j-1] = this.graph.getCost()[i][j];
+                }
+            }
+        }
+
+        this.deliveries.remove(deliveryIndex);
+
+        this.graph = new DeliveryGraph(newArrayPaths, (Delivery[]) this.deliveries.toArray());
+    }
 }
