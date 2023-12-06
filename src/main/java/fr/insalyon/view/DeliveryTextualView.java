@@ -1,5 +1,8 @@
 package fr.insalyon.view;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import javafx.beans.value.ObservableValue;
@@ -12,9 +15,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 public class DeliveryTextualView extends AnchorPane {
-
+	
+	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+	
 	@FXML
-	private Label hourLabel;
+	private Label arrivalTimeLabel;
+	
+	@FXML
+	private Label departureTimeLabel;
 
 	private Delivery delivery;
 
@@ -39,10 +47,12 @@ public class DeliveryTextualView extends AnchorPane {
 		}
 	}
 
-	public void setContent(Delivery delivery, String hour) {
+	public void setContent(Delivery delivery, LocalTime arrivalTime) {
 		this.delivery = delivery;
-		if (this.hourLabel != null) {
-			this.hourLabel.setText(hour);
+		if (this.arrivalTimeLabel != null) {
+			this.arrivalTimeLabel.setText(dtf.format(arrivalTime));
+			LocalTime departureTime = arrivalTime.plus(Delivery.DURATION);
+			this.departureTimeLabel.setText(dtf.format(departureTime));
 		}
 	}
 
