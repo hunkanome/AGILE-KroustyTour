@@ -42,7 +42,7 @@ public class DetailsController {
 			if (c.wasAdded()) { // Add a new TitledPane to the Accordion
 				Tour tour = c.getList().get(c.getFrom());
 				TitledPane pane = new TitledPane();
-				pane.setText("New Tour");
+				pane.setText("Tour");
 				ScrollPane scrollPane = new ScrollPane();
 				scrollPane.setFitToWidth(true);
 				pane.setContent(scrollPane);

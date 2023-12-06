@@ -1,5 +1,7 @@
 package fr.insalyon.model;
 
+import java.time.Duration;
+
 /**
  * A delivery at an intersection handled by a courier during a time window
  * @see Intersection
@@ -7,7 +9,9 @@ package fr.insalyon.model;
  * @see TimeWindow
  */
 public class Delivery {
-    private Courier courier;
+    public static final Duration DURATION = Duration.ofMinutes(5);
+
+	private Courier courier;
 
     private Intersection location;
 
