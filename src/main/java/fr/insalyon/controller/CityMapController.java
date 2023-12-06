@@ -87,10 +87,10 @@ public class CityMapController {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
-			drawWarehouse();
 			// TODO : draw all the tours
 			drawAllDeliveries();
 			drawSelectedDelivery();
+			drawWarehouse();
 		}
 	}
 

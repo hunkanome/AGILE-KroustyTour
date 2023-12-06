@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
-	public static final int DELIVERY_TIME = 5;
+	public static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
 
 	private final int nbVertices;
 	private final Path[][] cost;

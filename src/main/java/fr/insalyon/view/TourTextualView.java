@@ -1,5 +1,8 @@
 package fr.insalyon.view;
 
+import java.time.Duration;
+import java.time.LocalTime;
+
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
@@ -59,24 +62,24 @@ public class TourTextualView extends AnchorPane {
 	private void showTour() {
 		int i = 0;
 		for (Delivery d : tour.getDeliveriesList()) {
-			double bottom = this.showDeliveries(d, "8h30", i++);
+			double bottom = this.showDelivery(d, LocalTime.of(8, 30), i++);
 			if (i < tour.getDeliveriesList().size()) {
-				this.showTravelTime(bottom, "14 min");
+				this.showTravelTime(bottom, Duration.ofMinutes(30));
 			}
 		}
 	}
 
-	private double showDeliveries(Delivery delivery, String hour, int index) {
+	private double showDelivery(Delivery delivery, LocalTime arrivalTime, int index) {
 		DeliveryTextualView view = new DeliveryTextualView(this.dataModel, parent);
 		double topAnchor = ((DELIVERY_VIEW_VERTICAL_SPACE * index) + DELIVERY_VIEW_TOP_MARGIN);
 		AnchorPane.setTopAnchor(view, topAnchor);
 		AnchorPane.setLeftAnchor(view, DELIVERY_VIEW_LEFT_MARGIN);
 		this.getChildren().add(view);
-		view.setContent(delivery, hour);
+		view.setContent(delivery, arrivalTime);
 		return topAnchor + DELIVERY_VIEW_HEIGHT;
 	}
 
-	private void showTravelTime(double top, String time) {
+	private void showTravelTime(double top, Duration duration) {
 		Line line = new Line();
 		line.setStartX(LINE_LEFT_MARGIN);
 		line.setEndX(LINE_LEFT_MARGIN);
@@ -87,10 +90,18 @@ public class TourTextualView extends AnchorPane {
 		this.getChildren().add(line);
 
 		double middle = (top + bottom) / 2d;
-		Label timeLabel = new Label(time);
+		String durationFormatted = String.format("Travel time : %02d min", duration.toMinutesPart());
+		Label timeLabel = new Label(durationFormatted);
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
+		
+		if (true) { // TODO : s'il y a un temps d'attente
+			Label waitingTimeLabel = new Label("Waiting time : 2 min");
+			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
+			waitingTimeLabel.setLayoutY(middle + 10);
+			this.getChildren().add(waitingTimeLabel);
+		}
 	}
 
 	private void handleClick(MouseEvent event) {
