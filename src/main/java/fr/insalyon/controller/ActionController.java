@@ -2,10 +2,16 @@ package fr.insalyon.controller;
 
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Delivery;
+import fr.insalyon.model.TimeWindow;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 
 public class ActionController {
 
+	@FXML
+	private ComboBox<TimeWindow> timeWindowChooser;
+	
 	private DataModel dataModel;
 
 	private MainController parentController;
@@ -23,6 +29,8 @@ public class ActionController {
 		this.parentController = mainController;
 		this.dataModel = dataModel;
 		this.commandList = commandList;
+		
+		this.timeWindowChooser.setItems(TimeWindow.getTimeWindows());
 	}
 
 	@FXML
@@ -42,6 +50,11 @@ public class ActionController {
 	
 	@FXML
 	private void removeSelectedDelivery() {
+		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
+		if (selectedDelivery == null) {
+			return;
+		}
+		
 		System.out.println("suppression delivery");
 	}
 }

@@ -31,5 +31,5 @@
 		onAction="#removeSelectedDelivery" prefHeight="25.0" prefWidth="166.0"
 		text="Remove the delivery" />
 	<ComboBox layoutX="42.0" layoutY="185.0" prefHeight="25.0"
-		prefWidth="166.0" />
+		prefWidth="166.0" promptText="Select a time window" fx:id="timeWindowChooser"/>
 </AnchorPane>

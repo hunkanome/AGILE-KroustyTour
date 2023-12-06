@@ -34,9 +34,11 @@ public class MainController {
 	public void initialize(DataModel dataModel) throws IOException {
 		this.dataModel = dataModel;
 
-		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ActionPanel.fxml"));
-		Parent controlPanel = controlPanelLoader.load();
-		panelsContainer.getChildren().add(controlPanel);
+		FXMLLoader actionPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ActionPanel.fxml"));
+		Parent actionPanel = actionPanelLoader.load();
+		ActionController actionController = actionPanelLoader.getController();
+		actionController.initialize(dataModel, this, null); // TODO add the command list (needs to be created somewhere
+		panelsContainer.getChildren().add(actionPanel);
 
 		FXMLLoader cityMapPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("CityMapPanel.fxml"));
 		Parent cityMapPanel = cityMapPanelLoader.load();

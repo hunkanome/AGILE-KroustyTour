@@ -29,7 +29,7 @@ public class DetailsController {
 	@FXML
 	private void addDelivery() {
 		if (dataModel.getSelectedIntersection() != null) {
-			Delivery d = new Delivery(null, dataModel.getSelectedIntersection(), new TimeWindow(9));
+			Delivery d = new Delivery(null, dataModel.getSelectedIntersection(), TimeWindow.getTimeWindow(9));
 			// TODO : choose the tour to use either from the details Pane, or from the controls Pane (actually : may crash)
 			dataModel.getSelectedTour().addDelivery(d);
 			dataModel.setSelectedDelivery(d);
