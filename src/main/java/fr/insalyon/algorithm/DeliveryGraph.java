@@ -103,25 +103,6 @@ public class DeliveryGraph implements Graph {
 	}
 
 	/**
-	 * @param current the current time window
-	 * @return the next time window after the current one
-	 */
-	public TimeWindow getNextTimeWindow(TimeWindow current) {
-		TimeWindow next;
-		try {
-			next = new TimeWindow(current.getStartHour() + 1);
-			for (Delivery delivery : this.deliveries) {
-				if (next == delivery.getTimeWindow() || delivery.getTimeWindow().isAfter(next)) {
-					return next;
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			next = null;
-		}
-		return next;
-	}
-
-	/**
 	 * Debugging method printing the cost graph (with times in minutes)
 	 */
 	public void printTimeCostGraph() {
