@@ -23,7 +23,6 @@ public class DetailsController {
 	public void initialize(DataModel dataModel) {
 		this.dataModel = dataModel;
 
-		// the cast is needed to avoid ambiguity with others method signature
 		dataModel.getTours().addListener(this::onTourListChanged);
 	}
 	
