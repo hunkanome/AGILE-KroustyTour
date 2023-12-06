@@ -3,24 +3,30 @@ package fr.insalyon.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 
-import fr.insalyon.model.Path;
 import fr.insalyon.model.TimeWindow;
 
 public abstract class TemplateTSP implements TSP {
+
 	private Integer[] bestSol;
+
 	protected DeliveryGraph deliveryGraph;
+
 	private float bestSolCost;
+
 	private int timeLimit;
+
 	private long startTime;
+
+	public Integer[] getBestSol() {
+		return bestSol;
+	}
 
 	/**
 	 * Method that launches the resolution of the TSP
 	 * @param timeLimit maximal time limit of the resolution in milliseconds
 	 * @param g the graph on which the TSP should be resolved
 	 */
-
 	public void searchSolution(int timeLimit, DeliveryGraph g){
 		if (timeLimit <= 0) return;
 		if (g.getNbVertices()<=0) return;
@@ -142,15 +148,5 @@ public abstract class TemplateTSP implements TSP {
 			visited.remove(deliveryVertex);
 			unvisited.add(deliveryVertex);
 		}
-	}
-
-	public List<Path> getSolutionPaths() {
-		ArrayList<Path> pathList = new ArrayList<>(this.bestSol.length-1);
-
-		for (int i=0; i<this.bestSol.length-1; i++) {
-			pathList.add(this.deliveryGraph.getCost()[i][i+1]);
-		}
-
-		return pathList;
 	}
 }
