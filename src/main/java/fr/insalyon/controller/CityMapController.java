@@ -58,13 +58,11 @@ public class CityMapController {
 
 	private Position prevTranslationFactor = new Position(0f, 0f);
 	private Position translationFactor = new Position(0f, 0f);
-
 	private CoordinateTransformer transformer;
-
 	private DataModel dataModel;
 	private CityMapMatrix cityMapMatrix;
 	static final int WAIT_TIME = 10;
-	private TSP tsp = new TSP1();
+	private final TSP tsp = new TSP1();
 	private MainController parentController;
 
 	public void initialize(DataModel dataModel, MainController mainController) {

@@ -8,7 +8,7 @@ import java.util.Objects;
  * @see Courier
  */
 public class TimeWindow {
-    private int startHour;
+    private final int startHour;
 
     private static final int[] possibleTimeWindows = {8, 9, 10, 11};
 

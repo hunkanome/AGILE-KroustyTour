@@ -48,9 +48,7 @@ class CoordinateTransformerTest {
 		GeoCoordinates sePoint = new GeoCoordinates(0f, 10f);
 		CoordinateTransformer transformer = new CoordinateTransformer(nwPoint, sePoint, 100f, 100f);
 		GeoCoordinates coord = new GeoCoordinates(11f, 0f);
-		Exception e = assertThrows(IllegalArgumentException.class, () -> {
-			transformer.transformToPosition(coord);
-		});
+		Exception e = assertThrows(IllegalArgumentException.class, () -> transformer.transformToPosition(coord));
 
 		String expectedMessage = "The coordinate is out of bound";
 		String actualMessage = e.getMessage();

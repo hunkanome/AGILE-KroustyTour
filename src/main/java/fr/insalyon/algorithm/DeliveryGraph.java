@@ -69,7 +69,7 @@ public class DeliveryGraph implements Graph {
 	/**
 	 * @param i the origin vertex
 	 * @param j the destination vertex
-	 * @return true if there is an edge between i and j
+	 * @return true if there is an edge (i, j)
 	 */
 	@Override
 	public boolean isArc(int i, int j) {

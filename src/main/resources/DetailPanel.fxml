@@ -10,24 +10,22 @@
 <AnchorPane prefHeight="675.0" prefWidth="315.0"
 	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="fr.insalyon.controller.DetailsController">
-	<children>
-		<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
-			minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Détails"
-			textAlignment="CENTER" wrapText="false">
-			<font>
-				<Font size="18.0" />
-			</font>
-			<textFill>
-				<Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-			</textFill>
-		</Label>
-		<Accordion fx:id="accordion" layoutY="48.0"
-			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
-			<panes>
-			</panes>
-		</Accordion>
-		<Button layoutX="239.0" layoutY="15.0" mnemonicParsing="false"
-			onAction="#addDelivery" text="add delivery" />
-	</children>
+	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
+		minWidth="60.0" style="&#10;" text="Détails"
+		textAlignment="CENTER">
+		<font>
+			<Font size="18.0" />
+		</font>
+		<textFill>
+			<Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
+		</textFill>
+	</Label>
+	<Accordion fx:id="accordion" layoutY="48.0"
+		AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+		AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+		<panes>
+		</panes>
+	</Accordion>
+	<Button layoutX="239.0" layoutY="15.0" mnemonicParsing="false"
+		onAction="#addDelivery" text="add delivery" />
 </AnchorPane>

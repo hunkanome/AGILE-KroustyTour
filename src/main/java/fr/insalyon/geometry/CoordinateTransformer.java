@@ -12,23 +12,23 @@ package fr.insalyon.geometry;
  */
 public class CoordinateTransformer {
 
-	private GeoCoordinates northWestMostPoint;
+	private final GeoCoordinates northWestMostPoint;
 
-	private GeoCoordinates southEastMostPoint;
+	private final GeoCoordinates southEastMostPoint;
 
-	private Float targetWidth;
+	private final Float targetWidth;
 
-	private Float targetHeight;
+	private final Float targetHeight;
 
 	/**
 	 * Creates a CoordinateTransformer configured with the border of the map
 	 * (North-West most and South-East most points) and with the size of the image
 	 * target.
 	 * 
-	 * @param northWestMostPoint
-	 * @param southEastMostPoint
-	 * @param targetWidth
-	 * @param targetHeight
+	 * @param northWestMostPoint - the North-West most point of the map
+	 * @param southEastMostPoint - the South-East most point of the map
+	 * @param targetWidth 	  - the width of the image target
+	 * @param targetHeight 	  - the height of the image target
 	 */
 	public CoordinateTransformer(GeoCoordinates northWestMostPoint, GeoCoordinates southEastMostPoint,
 			Float targetWidth, Float targetHeight) {
