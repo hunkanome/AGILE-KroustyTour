@@ -79,50 +79,20 @@ public class CityMapController {
 			transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
 					dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
 					(float) canvasMap.getHeight());
-			drawMap();
+			drawCanvas();
 		}
 	}
 
-	private void drawMap() {
+	private void drawCanvas() {
 		updateCanvasProperties();
 		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
-
-			GraphicsContext gc = canvasMap.getGraphicsContext2D();
-			gc.setStroke(Color.BLUE);
-			dataModel.getCityMap().getIntersections()
-					.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
-						// Calculating better coordinates to display on map
-						Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
-						Position destination = transformer
-								.transformToPosition(segment.getDestination().getCoordinates());
-						drawLine(gc, origin, destination);
-					}));
-
-			// draw the selected intersection
-			if (dataModel.getSelectedIntersection() != null) {
-				drawPoint(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()),
-						Color.BLACK);
-			}
-			
-			// draw the warehouse
-			drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
-			
+			drawCityMap();
+			drawSelectedIntersection();
+			drawWarehouse();
 			// TODO : draw all the tours
-
-			// draw all the deliveries
-			dataModel.getTours().forEach(tour -> {
-				tour.getDeliveriesList().forEach(delivery -> {
-					drawPoint(transformer.transformToPosition(delivery.getLocation().getCoordinates()), Color.BLACK);
-				});
-			});
-
-			// draw the selected delivery
-			if (dataModel.getSelectedDelivery() != null) {
-				drawPoint(
-						transformer.transformToPosition(dataModel.getSelectedDelivery().getLocation().getCoordinates()),
-						Color.RED);
-			}
+			drawAllDeliveries();
+			drawSelectedDelivery();
 		}
 	}
 
@@ -142,6 +112,50 @@ public class CityMapController {
 			gc.scale(1 / this.prevScaleFactor, 1 / this.prevScaleFactor);
 			gc.scale(this.scaleFactor, this.scaleFactor);
 			this.prevScaleFactor = this.scaleFactor;
+		}
+	}
+
+	private void clearCanvas() {
+		GraphicsContext gc = canvasMap.getGraphicsContext2D();
+		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
+		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
+	}
+
+	private void drawCityMap() {
+		GraphicsContext gc = canvasMap.getGraphicsContext2D();
+		gc.setStroke(Color.BLUE);
+		dataModel.getCityMap().getIntersections()
+				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+					// Calculating better coordinates to display on map
+					Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
+					Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
+					drawLine(gc, origin, destination);
+				}));
+	}
+
+	private void drawSelectedIntersection() {
+		if (dataModel.getSelectedIntersection() != null) {
+			drawPoint(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()),
+					Color.BLACK);
+		}
+	}
+
+	private void drawWarehouse() {
+		drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
+	}
+
+	private void drawAllDeliveries() {
+		dataModel.getTours()
+				.forEach(tour -> tour.getDeliveriesList()
+						.forEach(delivery -> drawPoint(
+								transformer.transformToPosition(delivery.getLocation().getCoordinates()),
+								Color.BLACK)));
+	}
+
+	private void drawSelectedDelivery() {
+		if (dataModel.getSelectedDelivery() != null) {
+			drawPoint(transformer.transformToPosition(dataModel.getSelectedDelivery().getLocation().getCoordinates()),
+					Color.RED);
 		}
 	}
 
@@ -169,12 +183,6 @@ public class CityMapController {
 		gc.strokeLine(x1, y1, x2, y2);
 	}
 
-	private void clearCanvas() {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
-		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
-	}
-
 	@FXML
 	private void selectIntersection(MouseEvent event) {
 		if (dataModel.getCityMap() != null) {
@@ -198,7 +206,7 @@ public class CityMapController {
 			if (selectedIntersection != null) {
 				// TODO : if a delivery is at this intersection, select it instead
 				this.dataModel.setSelectedIntersection(selectedIntersection);
-				drawMap();
+				drawCanvas();
 			}
 		}
 	}
@@ -214,7 +222,7 @@ public class CityMapController {
 		double zoomFactor = event.getDeltaY() > 0 ? 1.03 : 0.97;
 		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor *= zoomFactor;
-		drawMap();
+		drawCanvas();
 	}
 
 	@FXML
@@ -224,7 +232,7 @@ public class CityMapController {
 		float yFactor = (float) ((event.getY() - lastClickY) / this.scaleFactor);
 		this.translationFactor.setX(this.translationFactor.getX() + xFactor);
 		this.translationFactor.setY(this.translationFactor.getY() + yFactor);
-		drawMap();
+		drawCanvas();
 		lastClickX = event.getX();
 		lastClickY = event.getY();
 	}
@@ -321,7 +329,7 @@ public class CityMapController {
 		this.scaleFactor = 1;
 		this.prevTranslationFactor = this.translationFactor.copy();
 		this.translationFactor = new Position(0f, 0f);
-		drawMap();
+		drawCanvas();
 		this.parentController.displayToolBarMessage("Map loaded successfully");
 	}
 
@@ -329,7 +337,7 @@ public class CityMapController {
 			Delivery newValue) {
 		// TODO show the delivery on the map
 		System.out.println("Changement de delivery");
-		drawMap();
+		drawCanvas();
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
@@ -343,7 +351,7 @@ public class CityMapController {
 
 	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue,
 			Intersection newValue) {
-		drawMap();
+		drawCanvas();
 	}
 
 }
