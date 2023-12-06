@@ -45,9 +45,9 @@ public class CityMapMatrix {
             }
             i++;
         }
-        Delivery[] deliv = new Delivery[deliveries.size()];
-        deliveries.toArray(deliv);
-        this.graph = new DeliveryGraph(arrayPaths, deliv);
+        Delivery[] newDeliveries = new Delivery[deliveries.size()];
+        deliveries.toArray(newDeliveries);
+        this.graph = new DeliveryGraph(arrayPaths, newDeliveries);
     }
 
     public DeliveryGraph getGraph() {
@@ -72,8 +72,9 @@ public class CityMapMatrix {
     }
 
     /**
-     * Add an intersection to the list and calculates the shortest path between this intersection and all the others
+     * Add a delivery to the list and calculates the shortest path between this delivery intersection and all the others
      * @param newDelivery The new intersection to add
+     * @see Delivery
      * @see Intersection
      */
     public void addDelivery(Delivery newDelivery) {
@@ -83,9 +84,9 @@ public class CityMapMatrix {
         this.deliveries.add(newDelivery);
 
         // increase the size of the array
-        Delivery[] deliv = new Delivery[deliveries.size()];
-        this.deliveries.toArray(deliv);
-        this.graph = new DeliveryGraph(Arrays.copyOf(this.graph.getCost(), size), deliv);
+        Delivery[] newDeliveries = new Delivery[deliveries.size()];
+        this.deliveries.toArray(newDeliveries);
+        this.graph = new DeliveryGraph(Arrays.copyOf(this.graph.getCost(), size), newDeliveries);
         this.graph.getCost()[size - 1] = new Path[size];
         for (i = 0; i < size - 1; i++) {
             this.graph.getCost()[i] = Arrays.copyOf(this.graph.getCost()[i], size);
@@ -102,6 +103,7 @@ public class CityMapMatrix {
      * Remove a delivery from the list and remove the related paths
      * @param delivery The delivery to remove
      * @see Delivery
+     * @see Intersection
      */
     public void removeDelivery(Delivery delivery) {
         int deliveryIndex = this.deliveries.indexOf(delivery);
@@ -136,6 +138,6 @@ public class CityMapMatrix {
 
         this.deliveries.remove(deliveryIndex);
 
-        this.graph = new DeliveryGraph(newArrayPaths, (Delivery[]) this.deliveries.toArray());
+        this.graph = new DeliveryGraph(newArrayPaths, this.deliveries.toArray(new Delivery[0]));
     }
 }
