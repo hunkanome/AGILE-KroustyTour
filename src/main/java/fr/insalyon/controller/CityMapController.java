@@ -5,9 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import fr.insalyon.algorithm.CityMapMatrix;
-import fr.insalyon.algorithm.TSP;
-import fr.insalyon.algorithm.TSP1;
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
 import fr.insalyon.model.CityMap;
@@ -33,7 +31,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-public class CityMapController {
+public class CityMapController implements Controller {
 	@FXML
 	private Canvas canvasMap;
 
@@ -42,7 +40,11 @@ public class CityMapController {
 
 	@FXML
 	private Label selectedSegmentLabel;
-
+	
+	private DataModel dataModel;
+	
+	private MainController parentController;
+	
 	/**
 	 * Used to keep track of the last click X coordinate to make dragging possible
 	 */
@@ -59,22 +61,21 @@ public class CityMapController {
 	private Position prevTranslationFactor = new Position(0f, 0f);
 	private Position translationFactor = new Position(0f, 0f);
 	private CoordinateTransformer transformer;
-	private DataModel dataModel;
-	
-	private MainController parentController;
 
-	public void initialize(DataModel dataModel, MainController mainController) {
-		this.parentController = mainController;
+	@Override
+	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
+		this.parentController = parentController;
+
 		this.dataModel.cityMapProperty().addListener(this::onCityMapUpdate);
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
 
 		if (this.dataModel.getCityMap() != null) {
-			transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
-					dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
-					(float) canvasMap.getHeight());
+			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
+					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
+					(float) this.canvasMap.getHeight());
 			drawCanvas();
 		}
 	}

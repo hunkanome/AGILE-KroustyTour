@@ -1,6 +1,7 @@
 package fr.insalyon;
 
 import fr.insalyon.controller.MainController;
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +15,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		DataModel data = new DataModel();
+		CommandList commandList = new CommandList();
 		
 		FXMLLoader rootLoader = new FXMLLoader(getClass().getClassLoader().getResource("Main.fxml"));
 		Parent root = rootLoader.load();
 		MainController mainController = rootLoader.getController();
-		mainController.initialize(data);		
+		mainController.initialize(data, null, commandList);		
 
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add("style.css");

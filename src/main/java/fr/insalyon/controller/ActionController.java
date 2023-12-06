@@ -7,29 +7,20 @@ import fr.insalyon.model.TimeWindow;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
-public class ActionController {
+public class ActionController implements Controller {
 
 	@FXML
 	private ComboBox<TimeWindow> timeWindowChooser;
 	
 	private DataModel dataModel;
-
-	private MainController parentController;
-
-	private CommandList commandList;
-
+	
 	/**
-	 * Initialize the controller variables
-	 * 
-	 * @param dataModel      the controller data
-	 * @param mainController the parent controller
-	 * @param commandList    the command history
+	 * Initialize the view by filling the time window chooser with the time windows
 	 */
-	public void initialize(DataModel dataModel, MainController mainController, CommandList commandList) {
-		this.parentController = mainController;
+	@Override
+	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
-		this.commandList = commandList;
-		
+	
 		this.timeWindowChooser.setItems(TimeWindow.getTimeWindows());
 	}
 

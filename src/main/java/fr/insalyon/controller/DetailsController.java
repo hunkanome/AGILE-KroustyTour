@@ -2,6 +2,7 @@ package fr.insalyon.controller;
 
 import java.util.List;
 
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.TimeWindow;
@@ -13,24 +14,26 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 
-public class DetailsController {
-
-	private DataModel dataModel;
+public class DetailsController implements Controller {
 
 	@FXML
 	private Accordion accordion;
-
-	public void initialize(DataModel dataModel) {
-		this.dataModel = dataModel;
-
-		dataModel.getTours().addListener(this::onTourListChanged);
-	}
 	
+	private DataModel dataModel;
+	
+	@Override
+	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
+		this.dataModel = dataModel;
+		
+		this.dataModel.getTours().addListener(this::onTourListChanged);
+	}
+
 	@FXML
 	private void addDelivery() {
 		if (dataModel.getSelectedIntersection() != null) {
 			Delivery d = new Delivery(null, dataModel.getSelectedIntersection(), TimeWindow.getTimeWindow(9));
-			// TODO : choose the tour to use either from the details Pane, or from the controls Pane (actually : may crash)
+			// TODO : choose the tour to use either from the details Pane, or from the
+			// controls Pane (actually : may crash)
 			dataModel.getSelectedTour().addDelivery(d);
 			dataModel.setSelectedDelivery(d);
 			dataModel.setSelectedIntersection(null);
