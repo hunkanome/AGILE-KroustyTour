@@ -7,27 +7,29 @@ import fr.insalyon.model.DataModel;
  *
  */
 public class AddCourierCommand implements Command {
+
     DataModel dataModel = null;
+
     Courier courierToAdd = null;
 
     /**
      * Used when initializing the command
-     * @param dm the dataModel where the information is stored
-     * @param c the courier to add
+     * @param dataModel the dataModel where the information is stored
+     * @param courier the courier to add
      */
-    public void addCourier(DataModel dm, Courier c) {
-        dataModel = dm;
-        courierToAdd = c;
+    public void addCourier(DataModel dataModel, Courier courier) {
+        this.dataModel = dataModel;
+        this.courierToAdd = courier;
     }
 
     @Override
     public void doCommand() {
-        if (!dataModel.getCouriers().contains(courierToAdd))
-            dataModel.getCouriers().add(courierToAdd);
+        if (!this.dataModel.getCouriers().contains(this.courierToAdd))
+            this.dataModel.getCouriers().add(this.courierToAdd);
     }
 
     @Override
     public void undoCommand() {
-        dataModel.getCouriers().remove(courierToAdd);
+        this.dataModel.getCouriers().remove(this.courierToAdd);
     }
 }
