@@ -14,9 +14,8 @@ class AddCourierCommandTest {
         // Normal usage
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
-        AddCourierCommand command = new AddCourierCommand();
+        AddCourierCommand command = new AddCourierCommand(dataModel, courier);
 
-        command.addCourier(dataModel, courier);
         assertFalse(dataModel.getCouriers().contains(courier));
         command.doCommand();
         assertTrue(dataModel.getCouriers().contains(courier));
@@ -27,12 +26,11 @@ class AddCourierCommandTest {
         // Add courier shall not be added if it is already present
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
-        AddCourierCommand command = new AddCourierCommand();
+        AddCourierCommand command = new AddCourierCommand(dataModel, courier);
 
         dataModel.getCouriers().add(courier);
         int lengthBefore = dataModel.getCouriers().size();
 
-        command.addCourier(dataModel, courier);
         command.doCommand();
 
         assertEquals(lengthBefore, dataModel.getCouriers().size());
@@ -42,9 +40,8 @@ class AddCourierCommandTest {
     void testUndoAddCourierSuccess() {
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
-        AddCourierCommand command = new AddCourierCommand();
+        AddCourierCommand command = new AddCourierCommand(dataModel, courier);
 
-        command.addCourier(dataModel, courier);
         command.doCommand();
         assertTrue(dataModel.getCouriers().contains(courier));
 
@@ -57,11 +54,10 @@ class AddCourierCommandTest {
         // If the courier to remove is not present then nothing should happen
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
-        AddCourierCommand command = new AddCourierCommand();
+        AddCourierCommand command = new AddCourierCommand(dataModel, courier);
 
         int lengthBefore = dataModel.getCouriers().size();
 
-        command.addCourier(dataModel, courier);
         command.undoCommand();
 
         assertEquals(lengthBefore, dataModel.getCouriers().size());

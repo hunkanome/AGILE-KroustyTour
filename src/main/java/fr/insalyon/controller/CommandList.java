@@ -24,6 +24,14 @@ public class CommandList {
         this.lastCommand = -1;
     }
 
+    public List<Command> getHistory() {
+        return history;
+    }
+
+    public int getLastCommand() {
+        return lastCommand;
+    }
+
     /**
      * Execute a command and add it to the history
      * @param command the command to execute

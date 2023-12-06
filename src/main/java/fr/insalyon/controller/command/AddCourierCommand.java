@@ -8,16 +8,16 @@ import fr.insalyon.model.DataModel;
  */
 public class AddCourierCommand implements Command {
 
-    DataModel dataModel = null;
+    DataModel dataModel;
 
-    Courier courierToAdd = null;
+    Courier courierToAdd;
 
     /**
      * Used when initializing the command
      * @param dataModel the dataModel where the information is stored
      * @param courier the courier to add
      */
-    public void addCourier(DataModel dataModel, Courier courier) {
+    public AddCourierCommand(DataModel dataModel, Courier courier) {
         this.dataModel = dataModel;
         this.courierToAdd = courier;
     }

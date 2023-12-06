@@ -4,14 +4,16 @@ import fr.insalyon.model.Courier;
 import fr.insalyon.model.DataModel;
 
 public class RemoveCourierCommand implements Command {
-    private DataModel dataModel = null;
+
+    private final DataModel dataModel;
+
     private Courier courierToRemove = null;
 
     /**
      * Used when initializing the command
      * @param dataModel the dataModel where the information is stored
      */
-    public void removeCourier(DataModel dataModel) {
+    public RemoveCourierCommand(DataModel dataModel) {
         this.dataModel = dataModel;
     }
 
