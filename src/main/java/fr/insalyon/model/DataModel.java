@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
 /**
  * Class used to store the data needed by the controllers It contains a city
  * map, a list of tours and a list of couriers.
- * 
+ *
  * @see CityMap
  * @see Tour
  * @see Courier
@@ -35,11 +35,11 @@ public class DataModel {
 
 	/**
 	 * Construct a new default data model.<br/>
-	 * All collections are empty except the courier list which has an element. 
+	 * All collections are empty except the courier list which has an element.
 	 */
 	public DataModel() {
 		this.couriers = new ArrayList<>(1);
-		this.couriers.add(new Courier(0));
+		this.couriers.add(new Courier());
 	}
 
 	/**
@@ -62,12 +62,12 @@ public class DataModel {
 
 	/**
 	 * Sets the CityMap for the DataModel.
-	 * 
+	 *
 	 * @param map the CityMap to set
 	 */
 	public void setMap(CityMap map) {
 		this.couriers.clear();
-		Courier courier = new Courier(0);
+		Courier courier = new Courier();
 		this.couriers.add(courier);
 		this.tours.clear();
 		Tour tour = new Tour(courier, map);
@@ -100,7 +100,7 @@ public class DataModel {
 
 	/**
 	 * Get an available couriers
-	 * 
+	 *
 	 * @return a courier if one is available, null otherwise
 	 * @see Courier
 	 */
@@ -133,7 +133,7 @@ public class DataModel {
 
 	/**
 	 * Sets the selected intersection.
-	 * 
+	 *
 	 * @param intersection the intersection to be set as selected
 	 */
 	public final void setSelectedIntersection(Intersection intersection) {
@@ -160,7 +160,7 @@ public class DataModel {
 
 	/**
 	 * Sets the selected tour.
-	 * 
+	 *
 	 * @param tour the tour to be set as selected
 	 */
 	public final void setSelectedTour(Tour tour) {
@@ -187,7 +187,7 @@ public class DataModel {
 
 	/**
 	 * Sets the selected delivery.
-	 * 
+	 *
 	 * @param delivery the delivery to be set as selected
 	 */
 	public final void setSelectedDelivery(Delivery delivery) {
