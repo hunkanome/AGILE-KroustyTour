@@ -46,6 +46,8 @@ public class MainController {
 
 		FXMLLoader detailPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("DetailPanel.fxml"));
 		Parent detailPanel = detailPanelLoader.load();
+		DetailsController detailsController = detailPanelLoader.getController();
+		detailsController.initialize(dataModel);
 		panelsContainer.getChildren().add(detailPanel);
 	}
 

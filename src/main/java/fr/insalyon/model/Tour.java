@@ -1,7 +1,7 @@
 package fr.insalyon.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * A sequence of deliveries located on a single path and handled by a courier.
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Tour {
 
-    private List<Delivery> deliveries;
+    private final ObservableList<Delivery> deliveriesList = FXCollections.observableArrayList();
 
     private Courier courier;
 
@@ -30,16 +30,16 @@ public class Tour {
     public Tour(Courier courier, CityMap map) {
         this.courier = courier;
         this.map = map;
-        this.deliveries = new ArrayList<>();
-        this.path = new Path(map.getWarehouse(), null);
+//        this.path = new Path(map.getWarehouse(), null); // TODO change this to null and verify that it works
     }
 
-    public List<Delivery> getDeliveries() {
-        return deliveries;
-    }
-
-    public void setDeliveries(List<Delivery> deliveries) {
-        this.deliveries = deliveries;
+    public ObservableList<Delivery> getDeliveriesList() {
+		return deliveriesList;
+	}
+    
+    public void addDelivery(Delivery delivery) {
+    	// TODO : recalculate the path and reorder the deliveries
+    	this.deliveriesList.add(delivery);
     }
 
     public Courier getCourier() {

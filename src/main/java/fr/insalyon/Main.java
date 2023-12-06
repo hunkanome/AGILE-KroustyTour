@@ -21,6 +21,7 @@ public class Main extends Application {
 		mainController.initialize(data);		
 
 		Scene scene = new Scene(root);
+		scene.getStylesheets().add("style.css");
 
 		// Set the application icon
 		primaryStage.getIcons().add(new Image("file:images/logo.png"));
