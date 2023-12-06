@@ -26,6 +26,7 @@ public class Main extends Application {
 		// Set the application icon
 		primaryStage.getIcons().add(new Image("file:images/logo.png"));
 		primaryStage.setTitle("KroustyTour");
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
