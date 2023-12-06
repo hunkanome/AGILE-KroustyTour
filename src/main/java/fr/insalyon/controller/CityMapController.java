@@ -204,19 +204,26 @@ public class CityMapController {
 			}
 
 			if (selectedIntersection != null) {
-				for (Tour tour : dataModel.getTours()) {
-					for (Delivery delivery : tour.getDeliveriesList()) {
-						if (delivery.getLocation().equals(selectedIntersection)) {
-							this.dataModel.setSelectedDelivery(delivery);
-							drawCanvas();
-							return;
-						}
-					}
+				Delivery selectedDelivery = getDeliveryAt(selectedIntersection);
+				if (selectedDelivery == null) {
+					this.dataModel.setSelectedIntersection(selectedIntersection);
+				} else {
+					this.dataModel.setSelectedDelivery(selectedDelivery);
 				}
-				this.dataModel.setSelectedIntersection(selectedIntersection);
 				drawCanvas();
 			}
 		}
+	}
+	
+	private Delivery getDeliveryAt(Intersection selectedIntersection) {
+		for (Tour tour : dataModel.getTours()) {
+			for (Delivery delivery : tour.getDeliveriesList()) {
+				if (delivery.getLocation().equals(selectedIntersection)) {
+					return delivery;
+				}
+			}
+		}
+		return null;
 	}
 
 	@FXML
