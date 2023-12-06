@@ -3,9 +3,7 @@ package fr.insalyon.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 
-import fr.insalyon.model.Path;
 import fr.insalyon.model.TimeWindow;
 
 public abstract class TemplateTSP implements TSP {
@@ -148,15 +146,5 @@ public abstract class TemplateTSP implements TSP {
 			visited.remove(deliveryVertex);
 			unvisited.add(deliveryVertex);
 		}
-	}
-
-	public List<Path> getSolutionPaths() {
-		ArrayList<Path> pathList = new ArrayList<>(this.bestSol.length-1);
-
-		for (int i=0; i<this.bestSol.length-1; i++) {
-			pathList.add(this.deliveryGraph.getCost()[i][i+1]);
-		}
-
-		return pathList;
 	}
 }
