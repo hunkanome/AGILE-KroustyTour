@@ -1,7 +1,5 @@
 package fr.insalyon.controller.command;
 
-import fr.insalyon.controller.command.Command;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +36,16 @@ public class CommandList {
      * @see Command
      */
     public void execute(Command command) {
+        while (this.lastCommand < this.history.size() - 1) {
+            this.history.remove(this.history.size() - 1);
+        }
+
         this.history.add(command);
+        command.doCommand();
         this.lastCommand++;
 
         // if a command was executed after an undo, remove the undone commands from history
-        while (this.lastCommand <= this.history.size() - 1) {
-            this.history.remove(this.history.size() - 1);
-        }
+
     }
 
     /**
@@ -52,7 +53,7 @@ public class CommandList {
      * @see Command
      */
     public void undo() {
-        if (this.lastCommand >= -1) {
+        if (this.lastCommand > -1) {
             this.history.get(this.lastCommand).undoCommand();
             lastCommand--;
         }
@@ -63,7 +64,7 @@ public class CommandList {
      * @see Command
      */
     public void redo() {
-        if (this.lastCommand < this.history.size()) {
+        if (this.lastCommand < this.history.size() && !this.history.isEmpty()) {
             this.lastCommand++;
             this.history.get(this.lastCommand).doCommand();
         }
