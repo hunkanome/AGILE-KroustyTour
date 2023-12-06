@@ -2,22 +2,20 @@ package fr.insalyon.controller.command;
 
 import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.algorithm.TSP1;
-import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.Tour;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddDeliveryCommand implements Command {
 
-    private CityMapMatrix cityMapMatrix;
+    private final CityMapMatrix cityMapMatrix;
 
-    private Delivery delivery;
+    private final Delivery delivery;
 
-    private Tour tour;
+    private final Tour tour;
 
     public AddDeliveryCommand(CityMapMatrix cityMapMatrix, Tour tour, Delivery delivery) {
         this.cityMapMatrix = cityMapMatrix;
@@ -28,7 +26,16 @@ public class AddDeliveryCommand implements Command {
     @Override
     public void doCommand() {
         this.cityMapMatrix.addDelivery(this.delivery);
+        updateTour();
+    }
 
+    @Override
+    public void undoCommand() {
+        this.cityMapMatrix.removeDelivery(this.delivery);
+        updateTour();
+    }
+
+    private void updateTour() {
         TSP1 tsp1 = new TSP1();
         tsp1.searchSolution(5000, cityMapMatrix.getGraph());
         Integer[] solution = tsp1.getBestSol();
@@ -43,10 +50,5 @@ public class AddDeliveryCommand implements Command {
 
         this.tour.setPathList(paths);
         this.tour.getDeliveriesList().addAll(deliveries);
-    }
-
-    @Override
-    public void undoCommand() {
-
     }
 }
