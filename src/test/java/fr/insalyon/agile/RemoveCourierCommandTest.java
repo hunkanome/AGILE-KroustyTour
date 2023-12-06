@@ -15,8 +15,7 @@ class RemoveCourierCommandTest {
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
         dataModel.getCouriers().add(courier);
-        RemoveCourierCommand command = new RemoveCourierCommand();
-        command.removeCourier(dataModel);
+        RemoveCourierCommand command = new RemoveCourierCommand(dataModel);
 
         command.doCommand();
 
@@ -28,8 +27,7 @@ class RemoveCourierCommandTest {
         // When there is nothing to remove it doesn't do anything
         DataModel dataModel = new DataModel();
         dataModel.getCouriers().getFirst().setAvailable(false);
-        RemoveCourierCommand command = new RemoveCourierCommand();
-        command.removeCourier(dataModel);
+        RemoveCourierCommand command = new RemoveCourierCommand(dataModel);
         int lengthBefore = dataModel.getCouriers().size();
 
         command.doCommand();
@@ -43,8 +41,7 @@ class RemoveCourierCommandTest {
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
         dataModel.getCouriers().add(courier);
-        RemoveCourierCommand command = new RemoveCourierCommand();
-        command.removeCourier(dataModel);
+        RemoveCourierCommand command = new RemoveCourierCommand(dataModel);
 
         command.doCommand();
         command.undoCommand();
@@ -57,8 +54,7 @@ class RemoveCourierCommandTest {
         // Undoing a removal that did nothing should do nothing
         DataModel dataModel = new DataModel();
         dataModel.getCouriers().getFirst().setAvailable(false);
-        RemoveCourierCommand command = new RemoveCourierCommand();
-        command.removeCourier(dataModel);
+        RemoveCourierCommand command = new RemoveCourierCommand(dataModel);
         int lengthBefore = dataModel.getCouriers().size();
 
         command.doCommand();
