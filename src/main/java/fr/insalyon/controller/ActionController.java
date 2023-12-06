@@ -4,6 +4,7 @@ import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
 
 public class ActionController {
+	
     private DataModel dataModel;
 
     private MainController parentController;

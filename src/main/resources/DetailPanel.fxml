@@ -11,7 +11,7 @@
 	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="fr.insalyon.controller.DetailsController">
 	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
-		minWidth="60.0" style="&#10;" text="Détails"
+		minWidth="60.0" style="&#10;" text="Informations"
 		textAlignment="CENTER">
 		<font>
 			<Font size="18.0" />
