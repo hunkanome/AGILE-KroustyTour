@@ -38,10 +38,10 @@ public class Tour {
     public ObservableList<Delivery> getDeliveriesList() {
 		return deliveriesList;
 	}
-    
+
     public void addDelivery(Delivery delivery) {
-    	// TODO : recalculate the path and reorder the deliveries
-    	this.deliveriesList.add(delivery);
+        // TODO : recalculate the path and reorder the deliveries
+        this.deliveriesList.add(delivery);
     }
 
     public Courier getCourier() {
