@@ -8,32 +8,17 @@ public class ActionController {
 
     private MainController parentController;
 
-    public void initialize(DataModel dataModel, MainController mainController) {
+    private CommandList commandList;
+
+    /**
+     * Initialize the controller variables
+     * @param dataModel the controller data
+     * @param mainController the parent controller
+     * @param commandList the command history
+     */
+    public void initialize(DataModel dataModel, MainController mainController, CommandList commandList) {
         this.parentController = mainController;
         this.dataModel = dataModel;
-    }
-
-    /**
-     * Add couriers to the list
-     * @param nbCouriers the number of couriers to add
-     */
-    public void addCouriers(int nbCouriers) {
-        for (int i=0; i<nbCouriers; i++) {
-            dataModel.getCouriers().add(new Courier());
-        }
-    }
-
-    /**
-     * Remove an available courier from the list if possible
-     * @return true if a courier was removed, false otherwise
-     */
-    public boolean removeACourier() {
-        for(Courier courier : dataModel.getCouriers()) {
-            if (courier.isAvailable()) {
-                dataModel.getCouriers().remove(courier);
-                return true;
-            }
-        }
-        return false;
+        this.commandList = commandList;
     }
 }
