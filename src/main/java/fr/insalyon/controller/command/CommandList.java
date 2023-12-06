@@ -1,4 +1,4 @@
-package fr.insalyon.controller;
+package fr.insalyon.controller.command;
 
 import fr.insalyon.controller.command.Command;
 

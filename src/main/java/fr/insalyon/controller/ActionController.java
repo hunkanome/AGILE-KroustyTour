@@ -1,6 +1,6 @@
 package fr.insalyon.controller;
 
-import fr.insalyon.model.Courier;
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
 
 public class ActionController {

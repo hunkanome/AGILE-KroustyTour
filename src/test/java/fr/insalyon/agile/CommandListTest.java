@@ -1,6 +1,6 @@
 package fr.insalyon.agile;
 
-import fr.insalyon.controller.CommandList;
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.controller.command.AddCourierCommand;
 import fr.insalyon.controller.command.RemoveCourierCommand;
 import fr.insalyon.model.Courier;
