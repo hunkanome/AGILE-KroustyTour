@@ -47,8 +47,7 @@ public class TourTextualView extends AnchorPane {
 		try {
 			loader.load();
 		} catch (Exception e) {
-			// TODO improve this error view
-			loader.setRoot(new Pane(new Label("An error occurred while loading the view.")));
+			this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 		}
 	}
 
@@ -95,7 +94,7 @@ public class TourTextualView extends AnchorPane {
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
-		
+
 		if (true) { // TODO : s'il y a un temps d'attente
 			Label waitingTimeLabel = new Label("Waiting time : 2 min");
 			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);

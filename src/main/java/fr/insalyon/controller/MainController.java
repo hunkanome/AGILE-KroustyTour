@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -49,13 +50,13 @@ public class MainController implements Controller {
 				loadPanel(panelPath);
 			}
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			panelsContainer.getChildren().clear();
+			panelsContainer.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 		}
 	}
 	
-	private void loadPanel(String path) throws IOException {
+	private void loadPanel(String path) throws IOException, IllegalStateException {
 		FXMLLoader panelLoader = new FXMLLoader(getClass().getClassLoader().getResource(path));
 		Parent panel = panelLoader.load();
 		Controller controller = panelLoader.getController();
