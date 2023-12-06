@@ -91,11 +91,18 @@ public class TourTextualView extends AnchorPane {
 		this.getChildren().add(line);
 
 		double middle = (top + bottom) / 2d;
-		String durationFormatted = String.format("%02d min", duration.toMinutesPart());
+		String durationFormatted = String.format("Travel time : %02d min", duration.toMinutesPart());
 		Label timeLabel = new Label(durationFormatted);
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
+		
+		if (true) { // TODO : s'il y a un temps d'attente
+			Label waitingTimeLabel = new Label("Waiting time : 2 min");
+			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
+			waitingTimeLabel.setLayoutY(middle + 10);
+			this.getChildren().add(waitingTimeLabel);
+		}
 	}
 
 	private void handleClick(MouseEvent event) {
