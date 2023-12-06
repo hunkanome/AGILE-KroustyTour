@@ -1,5 +1,8 @@
 package fr.insalyon.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -16,9 +19,9 @@ public class Tour {
 
     private Courier courier;
 
-    private CityMap map;
+    private CityMap cityMap;
 
-    private Path path;
+    private List<Path> pathList = new ArrayList<>();
 
     /**
      * Construct a new tour with no deliveries
@@ -29,8 +32,7 @@ public class Tour {
      */
     public Tour(Courier courier, CityMap map) {
         this.courier = courier;
-        this.map = map;
-//        this.path = new Path(map.getWarehouse(), null); // TODO change this to null and verify that it works
+        this.cityMap = map;
     }
 
     public ObservableList<Delivery> getDeliveriesList() {
@@ -50,19 +52,19 @@ public class Tour {
         this.courier = courier;
     }
 
-    public CityMap getMap() {
-        return map;
+    public CityMap getCityMap() {
+        return cityMap;
     }
 
-    public void setMap(CityMap map) {
-        this.map = map;
+    public void setCityMap(CityMap cityMap) {
+        this.cityMap = cityMap;
     }
 
-    public Path getPath() {
-        return path;
+    public List<Path> getPathList() {
+        return pathList;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
+    public void setPathList(List<Path> pathList) {
+        this.pathList = pathList;
     }
 }
