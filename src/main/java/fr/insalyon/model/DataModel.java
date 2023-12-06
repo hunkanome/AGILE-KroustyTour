@@ -39,7 +39,7 @@ public class DataModel {
 	 */
 	public DataModel() {
 		this.couriers = new ArrayList<>(1);
-		this.couriers.add(new Courier(0));
+		this.couriers.add(new Courier());
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DataModel {
 	 */
 	public void setMap(CityMap map) {
 		this.couriers.clear();
-		Courier courier = new Courier(0);
+		Courier courier = new Courier();
 		this.couriers.add(courier);
 		this.tours.clear();
 		Tour tour = new Tour(courier, map);
