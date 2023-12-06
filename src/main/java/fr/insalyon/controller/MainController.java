@@ -56,8 +56,7 @@ public class MainController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose a CityMap XML file");
 
-		// Set the initial directory to the xml data directory
-		//Set to user directory or go to default if cannot access
+		// Set default to user home directory
 		String userDirectoryString = System.getProperty("user.home");
 		File userDirectory = new File(userDirectoryString);
 		if(!userDirectory.canRead()) {
@@ -83,7 +82,7 @@ public class MainController {
 	}
 
 	/**
-	 * Displays the given exception's message in the tool bar.<br/>
+	 * Displays the given exception's message in the toolbar.<br/>
 	 * The message is removed after a delay
 	 * 
 	 * @param e - the exception to display
@@ -93,7 +92,7 @@ public class MainController {
 	}
 
 	/**
-	 * Displays the given message in the tool bar.<br/>
+	 * Displays the given message in the toolbar.<br/>
 	 * The message is removed after a delay
 	 * 
 	 * @param message - the message to display

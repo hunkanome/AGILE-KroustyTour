@@ -18,9 +18,9 @@ public class DeliveryTextualView extends AnchorPane {
 
 	private Delivery delivery;
 
-	private DataModel dataModel;
+	private final DataModel dataModel;
 	
-	private TitledPane parent;
+	private final TitledPane parent;
 
 	public DeliveryTextualView(DataModel dataModel, TitledPane parent) {
 		this.dataModel = dataModel;

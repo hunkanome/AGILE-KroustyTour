@@ -4,7 +4,6 @@ import java.util.Objects;
 
 /**
  * Represents geographical coordinates with latitude and longitude values.
- * 
  * Differs from Position as the coordinates are in a spherical coordinate system
  * and not in a Cartesian system.
  */
