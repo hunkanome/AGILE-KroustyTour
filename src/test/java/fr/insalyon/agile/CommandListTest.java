@@ -24,9 +24,11 @@ public class CommandListTest {
 
         commandList.execute(new AddCourierCommand(dataModel, courier));
         Assertions.assertEquals(0, commandList.getLastCommand());
+        Assertions.assertEquals(1, commandList.getHistory().size());
 
         commandList.execute(new RemoveCourierCommand(dataModel));
         Assertions.assertEquals(1, commandList.getLastCommand());
+        Assertions.assertEquals(2, commandList.getHistory().size());
 
         commandList.undo();
         Assertions.assertEquals(0, commandList.getLastCommand());
