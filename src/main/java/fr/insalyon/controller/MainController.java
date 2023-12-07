@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.xml.BadlyFormedXMLException;
@@ -16,11 +17,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-public class MainController {
-	
+public class MainController implements Controller {
+
 	private static final int MESSAGE_DISPLAY_TIME = 5 * 1000;
 
 	@FXML
@@ -28,27 +30,38 @@ public class MainController {
 
 	@FXML
 	private Label toolBarMessage;
-
+	
 	private DataModel dataModel;
+	
+	private CommandList commandList; // TODO use this from the menu bar
 
-	public void initialize(DataModel dataModel) throws IOException {
+	/**
+	 * In this implementation, the parent controller is ignored, as it is supposed to be this controller
+	 */
+	@Override
+	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
+		this.commandList = commandList;
+		
+		try {
+			String[] panelPaths = {"ActionPanel.fxml", "CityMapPanel.fxml", "DetailPanel.fxml"};
 
-		FXMLLoader controlPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("ActionPanel.fxml"));
-		Parent controlPanel = controlPanelLoader.load();
-		panelsContainer.getChildren().add(controlPanel);
-
-		FXMLLoader cityMapPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("CityMapPanel.fxml"));
-		Parent cityMapPanel = cityMapPanelLoader.load();
-		CityMapController cityMapController = cityMapPanelLoader.getController();
-		cityMapController.initialize(dataModel, this);
-		panelsContainer.getChildren().add(cityMapPanel);
-
-		FXMLLoader detailPanelLoader = new FXMLLoader(getClass().getClassLoader().getResource("DetailPanel.fxml"));
-		Parent detailPanel = detailPanelLoader.load();
-		DetailsController detailsController = detailPanelLoader.getController();
-		detailsController.initialize(dataModel);
-		panelsContainer.getChildren().add(detailPanel);
+			for (String panelPath : panelPaths) {
+				loadPanel(panelPath);
+			}
+			
+		} catch (Exception e) {
+			panelsContainer.getChildren().clear();
+			panelsContainer.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
+		}
+	}
+	
+	private void loadPanel(String path) throws IOException, IllegalStateException {
+		FXMLLoader panelLoader = new FXMLLoader(getClass().getClassLoader().getResource(path));
+		Parent panel = panelLoader.load();
+		Controller controller = panelLoader.getController();
+		controller.initialize(dataModel, this, commandList);
+		panelsContainer.getChildren().add(panel);
 	}
 
 	@FXML
@@ -59,7 +72,7 @@ public class MainController {
 		// Set default to user home directory
 		String userDirectoryString = System.getProperty("user.home");
 		File userDirectory = new File(userDirectoryString);
-		if(!userDirectory.canRead()) {
+		if (!userDirectory.canRead()) {
 			userDirectory = null;
 		}
 		fileChooser.setInitialDirectory(userDirectory);
@@ -72,12 +85,12 @@ public class MainController {
 				inputStream = new FileInputStream(selectedFile);
 				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
 				CityMap map = parser.parse();
-				dataModel.setMap(map);
+				this.dataModel.setMap(map);
 			} catch (FileNotFoundException e) {
 				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
 			} catch (BadlyFormedXMLException | XMLParserException e) {
 				this.displayToolBarMessage(e);
-			} 
+			}
 		}
 	}
 
@@ -110,7 +123,7 @@ public class MainController {
 			Platform.runLater(() -> toolBarMessage.setText(""));
 		}).start();
 	}
-	
+
 	/**
 	 * Quit the application
 	 */

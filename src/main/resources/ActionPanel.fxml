@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="675.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER">
+<AnchorPane prefHeight="675.0" prefWidth="250.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="fr.insalyon.controller.ActionController">
+	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
+		style="&#10;" text="Actions" textAlignment="CENTER">
 		<font>
 			<Font size="18.0" />
 		</font>
@@ -14,4 +19,17 @@
 			<Color red="0.624" green="0.624" blue="0.624" fx:id="x8" />
 		</textFill>
 	</Label>
+	<Button layoutX="42.0" layoutY="72.0" mnemonicParsing="false"
+		onAction="#addCourier" prefHeight="25.0" prefWidth="166.0"
+		text="Add a courier" />
+	<Button layoutX="42.0" layoutY="118.0" mnemonicParsing="false"
+		onAction="#removeSelectedCourier" text="Remove the selected courier" />
+	<Button layoutX="42.0" layoutY="228.0" mnemonicParsing="false"
+		onAction="#addDelivery" prefHeight="25.0" prefWidth="166.0"
+		text="Add a delivery" />
+	<Button layoutX="42.0" layoutY="270.0" mnemonicParsing="false"
+		onAction="#removeSelectedDelivery" prefHeight="25.0" prefWidth="166.0"
+		text="Remove the delivery" />
+	<ComboBox layoutX="42.0" layoutY="185.0" prefHeight="25.0"
+		prefWidth="166.0" promptText="Select a time window" fx:id="timeWindowChooser"/>
 </AnchorPane>

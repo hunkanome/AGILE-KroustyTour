@@ -75,7 +75,7 @@ class TSPTest {
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         deliveries[0] = new Delivery(new Courier(),
                 new Intersection(0L, coordinates, 0),
-                new TimeWindow(8));
+                TimeWindow.getTimeWindow(8));
         DeliveryGraph g = new DeliveryGraph(costMatrix, deliveries);
 
         // Search for a solution
@@ -98,7 +98,7 @@ class TSPTest {
         Intersection intersection3 = new Intersection(2L, coordinates, 2);
         Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
-        TimeWindow tw8 = new TimeWindow(8);
+        TimeWindow tw8 = TimeWindow.getTimeWindow(8);
 
         Delivery[] deliveries = new Delivery[4];
         deliveries[0] = new Delivery(courier, intersection1, tw8);
@@ -128,9 +128,9 @@ class TSPTest {
         Intersection intersection3 = new Intersection(2L, coordinates, 2);
         Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
-        TimeWindow tw8 = new TimeWindow(8);
-        TimeWindow tw9 = new TimeWindow(9);
-        TimeWindow tw10 = new TimeWindow(10);
+        TimeWindow tw8 = TimeWindow.getTimeWindow(8);
+        TimeWindow tw9 = TimeWindow.getTimeWindow(9);
+        TimeWindow tw10 = TimeWindow.getTimeWindow(10);
 
 
         Delivery[] deliveries = new Delivery[4];
@@ -161,8 +161,8 @@ class TSPTest {
         Intersection intersection3 = new Intersection(2L, coordinates, 2);
         Intersection intersection4 = new Intersection(3L, coordinates, 3);
 
-        TimeWindow tw8 = new TimeWindow(8);
-        TimeWindow tw10 = new TimeWindow(10);
+        TimeWindow tw8 = TimeWindow.getTimeWindow(8);
+        TimeWindow tw10 = TimeWindow.getTimeWindow(10);
 
         Delivery[] deliveries = new Delivery[4];
         deliveries[0] = new Delivery(courier, intersection1, tw8);
