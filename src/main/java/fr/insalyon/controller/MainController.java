@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
+import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
@@ -51,6 +53,9 @@ public class MainController implements Controller {
 			}
 			
 		} catch (Exception e) {
+			Logger logger = Logger.getLogger(getClass().getName());
+			logger.severe("An error occurred while loading the view.");
+			logger.severe(e.getMessage());
 			panelsContainer.getChildren().clear();
 			panelsContainer.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 		}
@@ -85,7 +90,8 @@ public class MainController implements Controller {
 				inputStream = new FileInputStream(selectedFile);
 				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
 				CityMap map = parser.parse();
-				this.dataModel.setMap(map);
+				CityMapMatrix mapMatrix = new CityMapMatrix(map);
+				this.dataModel.setMapMatrix(mapMatrix);
 			} catch (FileNotFoundException e) {
 				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
 			} catch (BadlyFormedXMLException | XMLParserException e) {

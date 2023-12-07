@@ -19,6 +19,12 @@ public class CityMapMatrix {
     private final CityMap map;
     private final List<Delivery> deliveries;
 
+    public CityMapMatrix(CityMap map) {
+    	this.map = map;
+    	this.deliveries = new ArrayList<>();
+        this.graph = new DeliveryGraph(new Path[0][0], new Delivery[0]);
+    }
+
     /**
      * Construct a new matrix of shortest path between passed locations
      * @param map the map which intersections and segments are used to compute all shortest paths
@@ -56,6 +62,10 @@ public class CityMapMatrix {
 
     public void setGraph(DeliveryGraph graph) {
         this.graph = graph;
+    }
+
+    public CityMap getCityMap() {
+    	return this.map;
     }
 
     /**

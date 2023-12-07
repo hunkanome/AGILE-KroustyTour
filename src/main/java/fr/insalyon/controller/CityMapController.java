@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
@@ -67,14 +68,14 @@ public class CityMapController implements Controller {
 		this.dataModel = dataModel;
 		this.parentController = parentController;
 
-		this.dataModel.cityMapProperty().addListener(this::onCityMapUpdate);
+		this.dataModel.cityMapMatrixProperty().addListener(this::onCityMapUpdate);
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
 
-		if (this.dataModel.getCityMap() != null) {
-			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
-					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
+		if (this.dataModel.getCityMapMatrix() != null && this.dataModel.getCityMapMatrix().getCityMap() != null) {
+			transformer = new CoordinateTransformer(this.dataModel.getCityMapMatrix().getCityMap().getNorthWestMostCoordinates(),
+					this.dataModel.getCityMapMatrix().getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
 					(float) this.canvasMap.getHeight());
 			drawCanvas();
 		}
@@ -82,7 +83,7 @@ public class CityMapController implements Controller {
 
 	private void drawCanvas() {
 		updateCanvasProperties();
-		if (this.dataModel.getCityMap() != null) {
+		if (this.dataModel.getCityMapMatrix().getCityMap() != null) {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
@@ -121,7 +122,7 @@ public class CityMapController implements Controller {
 	private void drawCityMap() {
 		GraphicsContext gc = canvasMap.getGraphicsContext2D();
 		gc.setStroke(Color.BLUE);
-		dataModel.getCityMap().getIntersections()
+		dataModel.getCityMapMatrix().getCityMap().getIntersections()
 				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
 					// Calculating better coordinates to display on map
 					Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
@@ -138,7 +139,7 @@ public class CityMapController implements Controller {
 	}
 
 	private void drawWarehouse() {
-		drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
+		drawPoint(transformer.transformToPosition(dataModel.getCityMapMatrix().getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
 	}
 
 	private void drawAllDeliveries() {
@@ -182,7 +183,7 @@ public class CityMapController implements Controller {
 
 	@FXML
 	private void selectIntersection(MouseEvent event) {
-		if (dataModel.getCityMap() != null) {
+		if (dataModel.getCityMapMatrix().getCityMap() != null) {
 			Position clickPosition = new Position((float) event.getX(), (float) event.getY());
 			clickPosition.divide(this.scaleFactor);
 			clickPosition.substract(this.translationFactor);
@@ -191,7 +192,7 @@ public class CityMapController implements Controller {
 			float distance;
 			float distanceMin = 15;
 
-			for (Intersection intersection : dataModel.getCityMap().getIntersections()) {
+			for (Intersection intersection : dataModel.getCityMapMatrix().getCityMap().getIntersections()) {
 				intersectionPosition = transformer.transformToPosition(intersection.getCoordinates());
 				distance = clickPosition.distanceTo(intersectionPosition);
 				if (distance < distanceMin) {
@@ -266,7 +267,8 @@ public class CityMapController implements Controller {
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
-				dataModel.setMap(newMap);
+				CityMapMatrix newMapMatrix = new CityMapMatrix(newMap);
+				dataModel.setMapMatrix(newMapMatrix);
 				return true;
 			} catch (BadlyFormedXMLException | XMLParserException e) {
 				this.parentController.displayToolBarMessage(e);
@@ -327,9 +329,9 @@ public class CityMapController implements Controller {
 	}
 
 
-	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
-		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
-				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+	private void onCityMapUpdate(ObservableValue<? extends CityMapMatrix> observable, CityMapMatrix oldValue, CityMapMatrix newValue) {
+		transformer = new CoordinateTransformer(dataModel.getCityMapMatrix().getCityMap().getNorthWestMostCoordinates(),
+				dataModel.getCityMapMatrix().getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
 				(float) canvasMap.getHeight());
 		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor = 1;
@@ -342,16 +344,16 @@ public class CityMapController implements Controller {
 	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
 			Delivery newValue) {
 		// TODO show the delivery on the map
-		System.out.println("Changement de delivery");
+		System.out.println("Change of delivery");
 		drawCanvas();
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
 		// TODO show the tour on the map
 		if (newValue == null) {
-			System.out.println("plus de tour");
+			System.out.println("No more tour");
 		} else {
-			System.out.println("Changement de tour");
+			System.out.println("Change of tour");
 		}
 	}
 

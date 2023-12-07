@@ -3,6 +3,7 @@ package fr.insalyon.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insalyon.algorithm.CityMapMatrix;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -19,7 +20,7 @@ public class Tour {
 
     private Courier courier;
 
-    private CityMap cityMap;
+    private CityMapMatrix cityMapMatrix;
 
     private List<Path> pathList = new ArrayList<>();
 
@@ -28,11 +29,11 @@ public class Tour {
      * Instantiate an empty list of deliveries and the path with an empty list of segments
      * The start intersection is the warehouse, the end intersection is set at null
      * @param courier The courier who handles the deliveries of the tour
-     * @param map The map where the deliveries are located
+     * @param mapMatrix The map where the deliveries are located
      */
-    public Tour(Courier courier, CityMap map) {
+    public Tour(Courier courier, CityMapMatrix mapMatrix) {
         this.courier = courier;
-        this.cityMap = map;
+        this.cityMapMatrix = mapMatrix;
     }
 
     public ObservableList<Delivery> getDeliveriesList() {
@@ -52,12 +53,12 @@ public class Tour {
         this.courier = courier;
     }
 
-    public CityMap getCityMap() {
-        return cityMap;
+    public CityMapMatrix getCityMapMatrix() {
+        return cityMapMatrix;
     }
 
-    public void setCityMap(CityMap cityMap) {
-        this.cityMap = cityMap;
+    public void setCityMap(CityMapMatrix cityMapMatrix) {
+        this.cityMapMatrix = cityMapMatrix;
     }
 
     public List<Path> getPathList() {

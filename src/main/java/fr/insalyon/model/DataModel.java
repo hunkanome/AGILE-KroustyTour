@@ -3,6 +3,7 @@ package fr.insalyon.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insalyon.algorithm.CityMapMatrix;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,12 +14,12 @@ import javafx.collections.ObservableList;
  * Class used to store the data needed by the controllers It contains a city
  * map, a list of tours and a list of couriers.
  *
- * @see CityMap
+ * @see CityMapMatrix
  * @see Tour
  * @see Courier
  */
 public class DataModel {
-	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<CityMapMatrix> cityMapMatrix = new SimpleObjectProperty<>(null);
 
 	private final ObservableList<Tour> tours = FXCollections
 			.observableArrayList(tour -> new Observable[] { tour.getDeliveriesList() });
@@ -43,39 +44,39 @@ public class DataModel {
 	}
 
 	/**
-	 * Returns the property representing the city map.
+	 * Returns the property representing the city map matrix.
 	 *
-	 * @return the property representing the city map
+	 * @return the property representing the city map matrix
 	 */
-	public ObjectProperty<CityMap> cityMapProperty() {
-		return this.cityMap;
+	public ObjectProperty<CityMapMatrix> cityMapMatrixProperty() {
+		return this.cityMapMatrix;
 	}
 
 	/**
-	 * Returns the CityMap object.
+	 * Returns the CityMapMatrix object.
 	 *
-	 * @return the CityMap object.
+	 * @return the CityMapMatrix object.
 	 */
-	public CityMap getCityMap() {
-		return cityMapProperty().get();
+	public CityMapMatrix getCityMapMatrix() {
+		return cityMapMatrixProperty().get();
 	}
 
 	/**
-	 * Sets the CityMap for the DataModel.
+	 * Sets the CityMapMatrix for the DataModel.
 	 *
-	 * @param map the CityMap to set
+	 * @param mapMatrix the CityMap to set
 	 */
-	public void setMap(CityMap map) {
+	public void setMapMatrix(CityMapMatrix mapMatrix) {
 		this.couriers.clear();
 		Courier courier = new Courier();
 		this.couriers.add(courier);
 		this.tours.clear();
-		Tour tour = new Tour(courier, map);
+		Tour tour = new Tour(courier, mapMatrix);
 		this.tours.add(tour);
 		this.selectedTour.set(tour);
 		this.selectedIntersection.set(null);
 		this.selectedDelivery.set(null);
-		cityMapProperty().set(map);
+		cityMapMatrixProperty().set(mapMatrix);
 	}
 
 	public ObservableList<Tour> getTours() {
