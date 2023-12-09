@@ -43,9 +43,10 @@ public class AddDeliveryCommand implements Command {
         List<Delivery> deliveries = new ArrayList<>(solution.length-1);
         List<Path> paths = new ArrayList<>(solution.length-1);
 
-        for (int i=0; i<solution.length; i++) {
+        deliveries.add(this.cityMapMatrix.getGraph().getDelivery(0));
+        for (int i=1; i<solution.length; i++) {
             deliveries.add(this.cityMapMatrix.getGraph().getDelivery(i));
-            paths.add(this.cityMapMatrix.getGraph().getCost()[i][i+1]);
+            paths.add(this.cityMapMatrix.getGraph().getCost()[i-1][i]);
         }
 
         this.tour.setPathList(paths);

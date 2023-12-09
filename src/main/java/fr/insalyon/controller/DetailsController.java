@@ -1,7 +1,5 @@
 package fr.insalyon.controller;
 
-import java.util.List;
-
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
@@ -13,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+
+import java.util.List;
 
 public class DetailsController implements Controller {
 

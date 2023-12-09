@@ -1,8 +1,5 @@
 package fr.insalyon.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.insalyon.algorithm.CityMapMatrix;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
@@ -19,14 +16,11 @@ import javafx.collections.ObservableList;
  * @see Courier
  */
 public class DataModel {
-	private final ObjectProperty<CityMapMatrix> cityMapMatrix = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);
 
 	private final ObservableList<Tour> tours = FXCollections
 			.observableArrayList(tour -> new Observable[] { tour.getDeliveriesList() });
 	// we also observe the delivery list of each tour
-
-// TODO use javafx.collections.ObservableList for this list too ?
-	private List<Courier> couriers;
 
 	private final ObjectProperty<Intersection> selectedIntersection = new SimpleObjectProperty<>(null);
 
@@ -39,44 +33,42 @@ public class DataModel {
 	 * All collections are empty except the courier list which has an element.
 	 */
 	public DataModel() {
-		this.couriers = new ArrayList<>(1);
-		this.couriers.add(new Courier());
+		// Initialization is already specified
 	}
 
 	/**
-	 * Returns the property representing the city map matrix.
+	 * Returns the property representing the city map.
 	 *
 	 * @return the property representing the city map matrix
 	 */
-	public ObjectProperty<CityMapMatrix> cityMapMatrixProperty() {
-		return this.cityMapMatrix;
+	public ObjectProperty<CityMap> cityMapProperty() {
+		return this.cityMap;
 	}
 
 	/**
-	 * Returns the CityMapMatrix object.
+	 * Returns the CityMap object.
 	 *
-	 * @return the CityMapMatrix object.
+	 * @return the CityMap object.
 	 */
-	public CityMapMatrix getCityMapMatrix() {
-		return cityMapMatrixProperty().get();
+	public CityMap getCityMap() {
+		return cityMapProperty().get();
 	}
 
 	/**
 	 * Sets the CityMapMatrix for the DataModel.
 	 *
-	 * @param mapMatrix the CityMap to set
+	 * @param map the CityMap to set
 	 */
-	public void setMapMatrix(CityMapMatrix mapMatrix) {
-		this.couriers.clear();
+	public void setMap(CityMap map) {
 		Courier courier = new Courier();
-		this.couriers.add(courier);
 		this.tours.clear();
-		Tour tour = new Tour(courier, mapMatrix);
+		CityMapMatrix cityMapMatrix = new CityMapMatrix(map);
+		Tour tour = new Tour(courier, cityMapMatrix);
 		this.tours.add(tour);
 		this.selectedTour.set(tour);
 		this.selectedIntersection.set(null);
 		this.selectedDelivery.set(null);
-		cityMapMatrixProperty().set(mapMatrix);
+		cityMapProperty().set(map);
 	}
 
 	public ObservableList<Tour> getTours() {
@@ -89,29 +81,6 @@ public class DataModel {
 
 	public void removeTour(Tour tour) {
 		tours.remove(tour);
-	}
-
-	public List<Courier> getCouriers() {
-		return couriers;
-	}
-
-	public void setCouriers(List<Courier> couriers) {
-		this.couriers = couriers;
-	}
-
-	/**
-	 * Get an available couriers
-	 *
-	 * @return a courier if one is available, null otherwise
-	 * @see Courier
-	 */
-	public Courier getAvailableCourier() {
-		for (Courier courier : couriers) {
-			if (courier.isAvailable()) {
-				return courier;
-			}
-		}
-		return null;
 	}
 
 	/**

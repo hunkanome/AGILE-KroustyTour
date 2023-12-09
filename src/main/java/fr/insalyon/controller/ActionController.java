@@ -1,13 +1,13 @@
 package fr.insalyon.controller;
 
-import fr.insalyon.controller.command.AddCourierCommand;
 import fr.insalyon.controller.command.AddDeliveryCommand;
+import fr.insalyon.controller.command.AddTourCommand;
 import fr.insalyon.controller.command.CommandList;
-import fr.insalyon.controller.command.RemoveCourierCommand;
-import fr.insalyon.model.Courier;
+import fr.insalyon.controller.command.RemoveTourCommand;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.TimeWindow;
+import fr.insalyon.model.Tour;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
@@ -31,18 +31,30 @@ public class ActionController implements Controller {
 	}
 
 	@FXML
-	private void addCourier() {
-		commandList.execute(new AddCourierCommand(dataModel, new Courier()));
+	private void addTour() {
+		commandList.execute(new AddTourCommand(dataModel, new Tour()));
 	}
 
 	@FXML
-	private void removeSelectedCourier() {
-		commandList.execute(new RemoveCourierCommand(dataModel));
+	private void removeSelectedTour() {
+		if (dataModel == null){
+			return;
+		}
+		if (dataModel.getSelectedTour() == null){
+			return;
+		}
+		commandList.execute(new RemoveTourCommand(dataModel, dataModel.getSelectedTour()));
 		dataModel.setSelectedTour(null);
 	}
 
 	@FXML
 	private void addDelivery() {
+		if (dataModel == null){
+			return;
+		}
+		if (dataModel.getSelectedTour() == null) {
+			return;
+		}
 		commandList.execute(new AddDeliveryCommand(
 			dataModel.getSelectedTour().getCityMapMatrix(),
 			dataModel.getSelectedTour(),
@@ -57,10 +69,12 @@ public class ActionController implements Controller {
 	@FXML
 	private void removeSelectedDelivery() {
 		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
+		if (dataModel.getSelectedTour() == null){
+			return;
+		}
 		if (selectedDelivery == null) {
 			return;
 		}
-		
-		System.out.println("suppression delivery");
+		dataModel.getSelectedTour().getDeliveriesList().remove(dataModel.getSelectedDelivery());
 	}
 }

@@ -1,11 +1,11 @@
 package fr.insalyon.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.insalyon.algorithm.CityMapMatrix;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A sequence of deliveries located on a single path and handled by a courier.
@@ -23,6 +23,14 @@ public class Tour {
     private CityMapMatrix cityMapMatrix;
 
     private List<Path> pathList = new ArrayList<>();
+
+    public Tour() {
+    }
+
+    public Tour(CityMapMatrix cityMapMatrix){
+        this.cityMapMatrix = cityMapMatrix;
+        this.courier = new Courier();
+    }
 
     /**
      * Construct a new tour with no deliveries
@@ -47,10 +55,6 @@ public class Tour {
 
     public Courier getCourier() {
         return courier;
-    }
-
-    public void setCourier(Courier courier) {
-        this.courier = courier;
     }
 
     public CityMapMatrix getCityMapMatrix() {

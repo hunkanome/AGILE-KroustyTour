@@ -1,12 +1,5 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
@@ -22,6 +15,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class MainController implements Controller {
 
@@ -90,8 +89,7 @@ public class MainController implements Controller {
 				inputStream = new FileInputStream(selectedFile);
 				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
 				CityMap map = parser.parse();
-				CityMapMatrix mapMatrix = new CityMapMatrix(map);
-				this.dataModel.setMapMatrix(mapMatrix);
+				this.dataModel.setMap(map);
 			} catch (FileNotFoundException e) {
 				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
 			} catch (BadlyFormedXMLException | XMLParserException e) {

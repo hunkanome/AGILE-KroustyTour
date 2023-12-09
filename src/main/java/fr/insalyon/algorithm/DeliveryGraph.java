@@ -4,9 +4,6 @@ import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Path;
 import fr.insalyon.model.TimeWindow;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class DeliveryGraph implements Graph {
 	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
 	public static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
@@ -100,20 +97,5 @@ public class DeliveryGraph implements Graph {
 			}
 		}
 		return earliest;
-	}
-
-	/**
-	 * Debugging method printing the cost graph (with times in minutes)
-	 */
-	public void printTimeCostGraph() {
-		Logger logger = Logger.getLogger(getClass().getName());
-		logger.info("Time cost graph:\n");
-		for (int i = 0; i < this.cost.length; i++) {
-			for (int j = 0; j < this.cost.length; j++) {
-				logger.log(Level.INFO ,"{0} ", getCost(i, j));
-			}
-			logger.info("\n");
-		}
-		logger.info("\n");
 	}
 }

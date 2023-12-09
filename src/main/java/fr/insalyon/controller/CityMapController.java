@@ -1,21 +1,9 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
-
-import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.Intersection;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
-import fr.insalyon.model.Tour;
+import fr.insalyon.model.*;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.xml.XMLParserException;
@@ -24,13 +12,14 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class CityMapController implements Controller {
 	@FXML
@@ -68,14 +57,14 @@ public class CityMapController implements Controller {
 		this.dataModel = dataModel;
 		this.parentController = parentController;
 
-		this.dataModel.cityMapMatrixProperty().addListener(this::onCityMapUpdate);
+		this.dataModel.cityMapProperty().addListener(this::onCityMapUpdate);
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
 
-		if (this.dataModel.getCityMapMatrix() != null && this.dataModel.getCityMapMatrix().getCityMap() != null) {
-			transformer = new CoordinateTransformer(this.dataModel.getCityMapMatrix().getCityMap().getNorthWestMostCoordinates(),
-					this.dataModel.getCityMapMatrix().getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
+		if (this.dataModel.getCityMap() != null) {
+			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
+					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
 					(float) this.canvasMap.getHeight());
 			drawCanvas();
 		}
@@ -83,7 +72,7 @@ public class CityMapController implements Controller {
 
 	private void drawCanvas() {
 		updateCanvasProperties();
-		if (this.dataModel.getCityMapMatrix().getCityMap() != null) {
+		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
@@ -122,7 +111,7 @@ public class CityMapController implements Controller {
 	private void drawCityMap() {
 		GraphicsContext gc = canvasMap.getGraphicsContext2D();
 		gc.setStroke(Color.BLUE);
-		dataModel.getCityMapMatrix().getCityMap().getIntersections()
+		dataModel.getCityMap().getIntersections()
 				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
 					// Calculating better coordinates to display on map
 					Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
@@ -139,7 +128,7 @@ public class CityMapController implements Controller {
 	}
 
 	private void drawWarehouse() {
-		drawPoint(transformer.transformToPosition(dataModel.getCityMapMatrix().getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
+		drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
 	}
 
 	private void drawAllDeliveries() {
@@ -183,7 +172,7 @@ public class CityMapController implements Controller {
 
 	@FXML
 	private void selectIntersection(MouseEvent event) {
-		if (dataModel.getCityMapMatrix().getCityMap() != null) {
+		if (dataModel.getCityMap() != null) {
 			Position clickPosition = new Position((float) event.getX(), (float) event.getY());
 			clickPosition.divide(this.scaleFactor);
 			clickPosition.substract(this.translationFactor);
@@ -192,7 +181,7 @@ public class CityMapController implements Controller {
 			float distance;
 			float distanceMin = 15;
 
-			for (Intersection intersection : dataModel.getCityMapMatrix().getCityMap().getIntersections()) {
+			for (Intersection intersection : dataModel.getCityMap().getIntersections()) {
 				intersectionPosition = transformer.transformToPosition(intersection.getCoordinates());
 				distance = clickPosition.distanceTo(intersectionPosition);
 				if (distance < distanceMin) {
@@ -267,8 +256,7 @@ public class CityMapController implements Controller {
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
-				CityMapMatrix newMapMatrix = new CityMapMatrix(newMap);
-				dataModel.setMapMatrix(newMapMatrix);
+				dataModel.setMap(newMap);
 				return true;
 			} catch (BadlyFormedXMLException | XMLParserException e) {
 				this.parentController.displayToolBarMessage(e);
@@ -329,9 +317,9 @@ public class CityMapController implements Controller {
 	}
 
 
-	private void onCityMapUpdate(ObservableValue<? extends CityMapMatrix> observable, CityMapMatrix oldValue, CityMapMatrix newValue) {
-		transformer = new CoordinateTransformer(dataModel.getCityMapMatrix().getCityMap().getNorthWestMostCoordinates(),
-				dataModel.getCityMapMatrix().getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
+	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
+		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
+				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
 				(float) canvasMap.getHeight());
 		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor = 1;
