@@ -31,26 +31,27 @@ public class MainController implements Controller {
 
 	@FXML
 	private Label toolBarMessage;
-	
+
 	private DataModel dataModel;
-	
+
 	private CommandList commandList; // TODO use this from the menu bar
 
 	/**
-	 * In this implementation, the parent controller is ignored, as it is supposed to be this controller
+	 * In this implementation, the parent controller is ignored, as it is supposed
+	 * to be this controller
 	 */
 	@Override
 	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
 		this.commandList = commandList;
-		
+
 		try {
-			String[] panelPaths = {"ActionPanel.fxml", "CityMapPanel.fxml", "DetailPanel.fxml"};
+			String[] panelPaths = { "ActionPanel.fxml", "CityMapPanel.fxml", "DetailPanel.fxml" };
 
 			for (String panelPath : panelPaths) {
 				loadPanel(panelPath);
 			}
-			
+
 		} catch (Exception e) {
 			Logger logger = Logger.getLogger(getClass().getName());
 			logger.severe("An error occurred while loading the view.");
@@ -59,43 +60,13 @@ public class MainController implements Controller {
 			panelsContainer.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 		}
 	}
-	
+
 	private void loadPanel(String path) throws IOException, IllegalStateException {
 		FXMLLoader panelLoader = new FXMLLoader(getClass().getClassLoader().getResource(path));
 		Parent panel = panelLoader.load();
 		Controller controller = panelLoader.getController();
 		controller.initialize(dataModel, this, commandList);
 		panelsContainer.getChildren().add(panel);
-	}
-
-	@FXML
-	private void openMapFile() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose a CityMap XML file");
-
-		// Set default to user home directory
-		String userDirectoryString = System.getProperty("user.home");
-		File userDirectory = new File(userDirectoryString);
-		if (!userDirectory.canRead()) {
-			userDirectory = null;
-		}
-		fileChooser.setInitialDirectory(userDirectory);
-
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
-		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
-		if (selectedFile != null) {
-			FileInputStream inputStream;
-			try {
-				inputStream = new FileInputStream(selectedFile);
-				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
-				CityMap map = parser.parse();
-				this.dataModel.setMap(map);
-			} catch (FileNotFoundException e) {
-				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
-			} catch (BadlyFormedXMLException | XMLParserException e) {
-				this.displayToolBarMessage(e);
-			}
-		}
 	}
 
 	/**
@@ -128,11 +99,49 @@ public class MainController implements Controller {
 		}).start();
 	}
 
-	/**
-	 * Quit the application
-	 */
-	public void quitApplication() {
+	@FXML
+	private void quitApplication() {
 		System.exit(0);
+	}
+
+	@FXML
+	private void openMapFile() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose a CityMap XML file");
+
+		// Set default to user home directory
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		fileChooser.setInitialDirectory(userDirectory);
+
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
+		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
+		if (selectedFile != null) {
+			FileInputStream inputStream;
+			try {
+				inputStream = new FileInputStream(selectedFile);
+				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
+				CityMap map = parser.parse();
+				this.dataModel.setMap(map);
+			} catch (FileNotFoundException e) {
+				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
+			} catch (BadlyFormedXMLException | XMLParserException e) {
+				this.displayToolBarMessage(e);
+			}
+		}
+	}
+
+	@FXML
+	private void redoCommande() {
+		this.commandList.redo();
+	}
+
+	@FXML
+	private void undoCommande() {
+		this.commandList.undo();
 	}
 
 }
