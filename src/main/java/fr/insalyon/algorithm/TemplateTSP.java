@@ -1,16 +1,14 @@
 package fr.insalyon.algorithm;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-
 import fr.insalyon.model.TimeWindow;
+
+import java.util.*;
 
 public abstract class TemplateTSP implements TSP {
 
 	private Integer[] bestSol;
 
-	protected DeliveryGraph deliveryGraph;
+	protected Graph graph;
 
 	private float bestSolCost;
 
@@ -25,21 +23,29 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Method that launches the resolution of the TSP
 	 * @param timeLimit maximal time limit of the resolution in milliseconds
-	 * @param g the graph on which the TSP should be resolved
+	 * @param graph the graph on which the TSP should be resolved
+	 * @param deliveriesByTimeWindow the list of index of deliveries to be visited, grouped by time window
 	 */
-	public void searchSolution(int timeLimit, DeliveryGraph g){
-		if (timeLimit <= 0) return;
-		if (g.getNbVertices()<=0) return;
+	public void searchSolution(int timeLimit, Graph graph, Map<TimeWindow, List<Integer>> deliveriesByTimeWindow){
+		if (timeLimit <= 0 || graph.getNbVertices() <= 0) {
+			return;
+		}
 		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
-		this.deliveryGraph = g;
-		this.bestSol = new Integer[g.getNbVertices()];
-		Collection<Integer> unvisited = new ArrayList<>(g.getNbVertices()-1);
-		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
-		Collection<Integer> visited = new ArrayList<>(g.getNbVertices());
-		visited.add(0); // The first visited vertex is 0
+		this.graph = graph;
+		this.bestSol = new Integer[graph.getNbVertices()];
 		this.bestSolCost = Float.MAX_VALUE;
-		branchAndBound(0, unvisited, visited, 0, 0, g.getStartTimeWindow());
+
+		Collection<Integer> visited = new ArrayList<>(graph.getNbVertices());
+		visited.add(0); // The first visited vertex is 0, corresponding to the warehouse
+
+		TimeWindow firstTimeWindow = deliveriesByTimeWindow
+				.keySet()
+				.stream()
+				.min(Comparator.comparing(TimeWindow::getStartHour))
+				.orElseThrow(IllegalStateException::new);
+
+		branchAndBound(0, deliveriesByTimeWindow, visited, 0, 0, firstTimeWindow);
 	}
 
 	/**
@@ -47,7 +53,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the i-th vertex of the best solution computed so far
 	 */
 	public int getSolution(int i) {
-		if (this.deliveryGraph != null && i>=0 && i< deliveryGraph.getNbVertices())
+		if (this.graph != null && i>=0 && i< graph.getNbVertices())
 			return this.bestSol[i];
 		return -1;
 	}
@@ -56,7 +62,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return the cost of the best solution computed so far
 	 */
 	public float getSolutionCost(){
-		return this.deliveryGraph != null ? this.bestSolCost : -1;
+		return this.graph != null ? this.bestSolCost : -1;
 	}
 
 	/**
@@ -71,7 +77,7 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Branch and bound algorithm for solving the TSP in <code>g</code>. Includes consideration of time windows.
 	 * @param currentVertex the last visited vertex
-	 * @param unvisited the set of vertex that have not yet been visited
+	 * @param unvisitedByTimeWindow the set of vertex that have not yet been visited
 	 * @param visited the sequence of vertices that have been already visited (including currentVertex)
 	 * @param branchCost the cost of the path corresponding to <code>visited</code>
 	 * @param currentTimeWindowCost the time spent in the current time window
@@ -79,7 +85,7 @@ public abstract class TemplateTSP implements TSP {
 	 */
 	private void branchAndBound(
 			int currentVertex,
-			Collection<Integer> unvisited,
+			Map<TimeWindow, List<Integer>> unvisitedByTimeWindow,
 			Collection<Integer> visited,
 			float branchCost,
 			float currentTimeWindowCost,
@@ -90,50 +96,43 @@ public abstract class TemplateTSP implements TSP {
 			return;
 		}
 
-		// Update best score if we have visited all the vertices
-		if (unvisited.isEmpty()){
-			if (deliveryGraph.isArc(currentVertex,0) // If we can go back to the warehouse
-				&& (branchCost+ deliveryGraph.getCost(currentVertex,0) < bestSolCost) // If the cost is better than the best solution
-			){
-				visited.toArray(bestSol);
-				bestSolCost = branchCost + deliveryGraph.getCost(currentVertex,0);
-			}
-			return;
-		}
-
 		// Do not explore branch if it cannot improve cost
-		if (branchCost + bound(currentVertex,unvisited) >= bestSolCost){
+		if (branchCost + bound(currentVertex,unvisitedByTimeWindow.values().stream().flatMap(Collection::stream).toList()) >= bestSolCost){
 			return;
 		}
 
 		// Checking if all the deliveries in the current time window have been visited
 		// If it is the case we update the current time window
-		TimeWindow finalCurrentTimeWindow1 = currentTimeWindow;
-		if (unvisited.stream().noneMatch(i -> deliveryGraph.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow1))) {
+		if (unvisitedByTimeWindow.get(currentTimeWindow) == null || unvisitedByTimeWindow.get(currentTimeWindow).isEmpty()) {
+			unvisitedByTimeWindow.remove(currentTimeWindow);
+			if (unvisitedByTimeWindow.isEmpty()) {// If we have entirely explored all the TimeWindow
+				if (graph.isArc(currentVertex, 0) // If we can go back to the warehouse
+						&& (branchCost + graph.getCost(currentVertex, 0) < bestSolCost) // If the cost is better than the best solution
+				) {
+					visited.toArray(bestSol);
+					bestSolCost = branchCost + graph.getCost(currentVertex, 0);
+				}
+				return;
+			}
+
 			// Get the nearest nextTimeWindow
-            TimeWindow nextWindow = unvisited
+			TimeWindow nextWindow = unvisitedByTimeWindow
+					.keySet()
 					.stream()
-					.map(i -> deliveryGraph.getDelivery(i).getTimeWindow())
-                    .min(Comparator.comparing(TimeWindow::getStartHour))
-                    .orElseThrow(IllegalStateException::new); // unvisited or subsequent streams cannot be empty
-			// Account for a difference between endHour of previous and startHour of next
+					.min(Comparator.comparing(TimeWindow::getStartHour))
+					.orElseThrow(IllegalStateException::new);
+
 			currentTimeWindowCost -= (nextWindow.getStartHour() - currentTimeWindow.getStartHour())*60;
-			// Update the current time window
+
 			currentTimeWindow = nextWindow;
 		}
 
-		final TimeWindow finalCurrentTimeWindow = currentTimeWindow;
-		Collection<Integer> nextDeliveries = unvisited
-				.stream()
-				.filter(i -> deliveryGraph.getDelivery(i).getTimeWindow().equals(finalCurrentTimeWindow))
-				.toList();
-
 		// Explore the different path possible
-		for (Integer deliveryVertex : nextDeliveries) {
-            float newCurrentTimeWindowCost = currentTimeWindowCost + deliveryGraph.getCost(currentVertex, deliveryVertex);
-			float newBranchCost = branchCost + deliveryGraph.getCost(currentVertex, deliveryVertex);
+		for (Integer deliveryVertex : unvisitedByTimeWindow.get(currentTimeWindow)) {
+            float newCurrentTimeWindowCost = currentTimeWindowCost + graph.getCost(currentVertex, deliveryVertex);
+			float newBranchCost = branchCost + graph.getCost(currentVertex, deliveryVertex);
 			if (newCurrentTimeWindowCost < 5) {
-                newCurrentTimeWindowCost = 5 - deliveryGraph.getCost(currentVertex, deliveryVertex);
+                newCurrentTimeWindowCost = 5 - graph.getCost(currentVertex, deliveryVertex);
                 newBranchCost = (float) (Math.ceil(branchCost/60) * 60 + currentTimeWindowCost);
 			}
             // If we are running out of time, we stop the branch
@@ -141,10 +140,10 @@ public abstract class TemplateTSP implements TSP {
                 return;
             }
 			visited.add(deliveryVertex);
-			unvisited.remove(deliveryVertex);
-			branchAndBound(deliveryVertex, unvisited, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);
+			unvisitedByTimeWindow.get(currentTimeWindow).remove(deliveryVertex);
+			branchAndBound(deliveryVertex, unvisitedByTimeWindow, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);
 			visited.remove(deliveryVertex);
-			unvisited.add(deliveryVertex);
+			unvisitedByTimeWindow.get(currentTimeWindow).add(deliveryVertex);
 		}
 	}
 }

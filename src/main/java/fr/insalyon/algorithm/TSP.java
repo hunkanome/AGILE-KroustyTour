@@ -1,5 +1,10 @@
 package fr.insalyon.algorithm;
 
+import fr.insalyon.model.TimeWindow;
+
+import java.util.List;
+import java.util.Map;
+
 public interface TSP {
 	/**
 	 * Search for the shortest cost hamiltonian circuit in <code>g</code> within <code>timeLimit</code> milliseconds
@@ -8,7 +13,7 @@ public interface TSP {
 	 * @param timeLimit maximal time allowed to find a solution
 	 * @param g the DeliveryGraph in which a TSP tour must be computed
 	 */
-    void searchSolution(int timeLimit, DeliveryGraph g);
+    void searchSolution(int timeLimit, Graph g, Map<TimeWindow, List<Integer>> deliveriesByTimeWindow);
 	
 	/**
 	 * @param i the index of the vertex in the solution

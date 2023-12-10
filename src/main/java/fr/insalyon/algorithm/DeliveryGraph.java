@@ -1,35 +1,70 @@
 package fr.insalyon.algorithm;
 
+import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Path;
-import fr.insalyon.model.TimeWindow;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
+ * It is internally represented with an adjacency matrix.
+ * @see Graph
+ */
 public class DeliveryGraph implements Graph {
-	private static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
-	public static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
+	protected static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
+	protected static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
+	protected Path[][] paths;
 
-	private final int nbVertices;
-	private final Path[][] cost;
-	private final Delivery[] deliveries;
+	public DeliveryGraph(){
+		this.paths = new Path[0][0];
+	}
+
+	public DeliveryGraph(List<Delivery> deliveries, CityMap map, ShortestPathAlgorithm shortestPathAlgorithm){
+		this.paths = new Path[deliveries.size()][deliveries.size()];
+		int i = 0;
+		for (Delivery startIntersection : deliveries) {
+			int j = 0;
+			for (Delivery endIntersection : deliveries) {
+				if (startIntersection != endIntersection) {
+					// Dijkstra
+					paths[i][j] = shortestPathAlgorithm.shortestPath(map, startIntersection.getLocation(), endIntersection.getLocation());
+					paths[j][i] = shortestPathAlgorithm.shortestPath(map, endIntersection.getLocation(), startIntersection.getLocation());
+				} else {
+					paths[i][j] = new Path(startIntersection.getLocation(), startIntersection.getLocation(), new ArrayList<>());
+				}
+				j++;
+			}
+			i++;
+		}
+	}
 
 	/**
 	 * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-	 * @param cost matrix of path from each delivery to each delivery
+	 * @param paths matrix of path from each delivery to each delivery
 	 */
-	public DeliveryGraph(Path[][] cost, Delivery[] deliveries){
-		this.nbVertices = cost.length;
-		this.cost = cost;
-		this.deliveries = deliveries;
+	public DeliveryGraph(Path[][] paths){
+		this.paths = paths;
 	}
 
 	@Override
 	public int getNbVertices() {
-		return this.nbVertices;
+		return this.paths.length;
 	}
 
+	/**
+	 * Gives the shortest path
+	 * @param i the origin vertex
+	 * @param j the destination vertex
+	 * @return a <code>Path</code> object representing the shortest path from i to j
+	 */
 	@Override
-	public Path[][] getCost() {
-		return this.cost;
+	public Path getShortestPath(int i, int j) {
+		if (i<0 || i > this.getNbVertices() || j<0 || j > this.getNbVertices() || i == j) {
+			return null;
+		}
+		return this.paths[i][j];
 	}
 
 	/**
@@ -40,27 +75,16 @@ public class DeliveryGraph implements Graph {
 	@Override
 	public float getCost(int i, int j) {
 		float value;
-		if (i < 0 || i >= this.nbVertices || j < 0 || j >= this.nbVertices) {
+		if (i < 0 || i >= this.getNbVertices() || j < 0 || j >= this.getNbVertices()) {
 			value = -1;
 		} else if (i == j) {
 			value = 0;
 		} else if(j==0) {
-			value = this.cost[i][j].getLength() / AVG_SPEED;
+			value = this.paths[i][j].getLength() / AVG_SPEED;
 		} else {
-			value = this.cost[i][j].getLength() / AVG_SPEED + DELIVERY_TIME;
+			value = this.paths[i][j].getLength() / AVG_SPEED + DELIVERY_TIME;
 		}
 		return value;
-	}
-
-	/**
-	 * @param i the index of an intersection (vertex)
-	 * @return the delivery associated with the intersection
-	 */
-	public Delivery getDelivery(int i) {
-		if (i < 0 || i >= this.nbVertices) {
-			throw new IndexOutOfBoundsException("The index " + i + " is out of bounds");
-		}
-		return this.deliveries[i];
 	}
 
 	/**
@@ -71,31 +95,5 @@ public class DeliveryGraph implements Graph {
 	@Override
 	public boolean isArc(int i, int j) {
 		return getCost(i,j) != -1;
-	}
-
-	/**
-	 * @param i the index of an intersection (vertex)s
-	 * @return the time window associated with the delivery at the intersection
-	 */
-	public TimeWindow getDeliveryTimeWindow(int i) {
-		if (i < 0 || i >= this.nbVertices)
-			return null;
-		return this.deliveries[i].getTimeWindow();
-	}
-
-	/**
-	 * @return the time window of the earliest delivery
-	 */
-	public TimeWindow getStartTimeWindow() {
-		if(this.nbVertices == 0) {
-			return null;
-		}
-		TimeWindow earliest = this.deliveries[0].getTimeWindow();
-		for (Delivery delivery : this.deliveries) {
-			if (delivery.getTimeWindow().isBefore(earliest)) {
-				earliest = delivery.getTimeWindow();
-			}
-		}
-		return earliest;
 	}
 }

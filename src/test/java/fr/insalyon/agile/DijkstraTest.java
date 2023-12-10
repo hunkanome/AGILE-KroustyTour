@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
@@ -18,7 +17,6 @@ class DijkstraTest {
     static private final ArrayList<Intersection> listIntersections = new ArrayList<>();
     static private final CityMap map = new CityMap();
     static private final ArrayList<Intersection> listDeliveries = new ArrayList<>();
-    static private CityMapMatrix mapMatrix;
 
     @Test
     void testCityMapCreation() {

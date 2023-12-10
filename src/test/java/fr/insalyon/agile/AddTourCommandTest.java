@@ -1,6 +1,5 @@
 package fr.insalyon.agile;
 
-import fr.insalyon.algorithm.CityMapMatrix;
 import fr.insalyon.controller.command.AddTourCommand;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
@@ -17,7 +16,7 @@ class AddTourCommandTest {
     @BeforeEach
     void setUp() {
         dataModel = new DataModel();
-        tour = new Tour(new CityMapMatrix(dataModel.getCityMap()));
+        tour = new Tour();
         command = new AddTourCommand(dataModel, tour);
     }
 

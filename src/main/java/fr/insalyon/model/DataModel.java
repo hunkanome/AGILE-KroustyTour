@@ -1,6 +1,5 @@
 package fr.insalyon.model;
 
-import fr.insalyon.algorithm.CityMapMatrix;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -11,7 +10,6 @@ import javafx.collections.ObservableList;
  * Class used to store the data needed by the controllers It contains a city
  * map, a list of tours and a list of couriers.
  *
- * @see CityMapMatrix
  * @see Tour
  * @see Courier
  */
@@ -55,15 +53,13 @@ public class DataModel {
 	}
 
 	/**
-	 * Sets the CityMapMatrix for the DataModel.
+	 * Sets the CityMap for the DataModel.
 	 *
 	 * @param map the CityMap to set
 	 */
 	public void setMap(CityMap map) {
-		Courier courier = new Courier();
 		this.tours.clear();
-		CityMapMatrix cityMapMatrix = new CityMapMatrix(map);
-		Tour tour = new Tour(courier, cityMapMatrix);
+		Tour tour = new Tour();
 		this.tours.add(tour);
 		this.selectedTour.set(tour);
 		this.selectedIntersection.set(null);

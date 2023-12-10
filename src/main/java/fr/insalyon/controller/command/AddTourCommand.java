@@ -8,9 +8,9 @@ import fr.insalyon.model.Tour;
  */
 public class AddTourCommand implements Command {
 
-    DataModel dataModel;
+    private final DataModel dataModel;
 
-    Tour tourToAdd;
+    private final Tour tourToAdd;
 
     /**
      * Used when initializing the command
