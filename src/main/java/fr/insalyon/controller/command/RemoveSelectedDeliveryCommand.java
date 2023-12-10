@@ -22,10 +22,12 @@ public class RemoveSelectedDeliveryCommand implements Command {
     @Override
     public void doCommand() {
         this.tour.removeDelivery(this.delivery, this.dataModel.getCityMap(), new AStar());
+        this.dataModel.setSelectedDelivery(null);
     }
 
     @Override
     public void undoCommand() {
         this.tour.addDelivery(this.delivery, dataModel.getCityMap(), new AStar());
+        this.dataModel.setSelectedDelivery(delivery);
     }
 }

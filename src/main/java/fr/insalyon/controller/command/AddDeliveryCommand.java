@@ -21,10 +21,13 @@ public class AddDeliveryCommand implements Command {
     @Override
     public void doCommand() {
         this.tour.addDelivery(this.delivery, dataModel.getCityMap(), new AStar());
+        this.dataModel.setSelectedIntersection(null);
+        this.dataModel.setSelectedDelivery(delivery);
     }
 
     @Override
     public void undoCommand() {
         this.tour.removeDelivery(this.delivery, dataModel.getCityMap(), new AStar());
+        this.dataModel.setSelectedDelivery(null);
     }
 }

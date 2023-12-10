@@ -1,6 +1,7 @@
 package fr.insalyon.controller.command;
 
 import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 
 public class RemoveSelectedTourCommand implements Command {
@@ -22,6 +23,11 @@ public class RemoveSelectedTourCommand implements Command {
     public void doCommand() {
         if (this.tourToRemove != null && this.dataModel.getTours().contains(this.tourToRemove)) {
             this.dataModel.removeTour(this.tourToRemove);
+            this.dataModel.setSelectedTour(null);
+            Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
+            if (this.tourToRemove.getDeliveriesList().contains(selectedDelivery)) {
+            	this.dataModel.setSelectedDelivery(null);
+            }
         }
     }
 
@@ -29,6 +35,7 @@ public class RemoveSelectedTourCommand implements Command {
     public void undoCommand() {
         if (this.tourToRemove != null && !this.dataModel.getTours().contains(this.tourToRemove)){
             this.dataModel.addTour(this.tourToRemove);
+            this.dataModel.setSelectedTour(this.tourToRemove);
         }
     }
 }

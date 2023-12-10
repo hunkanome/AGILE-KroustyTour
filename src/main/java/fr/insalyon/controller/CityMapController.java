@@ -90,6 +90,7 @@ public class CityMapController implements Controller {
 			drawCityMap();
 			drawSelectedIntersection();
 			drawTours();
+			// TODO : enhance the selected tour display
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
@@ -117,7 +118,7 @@ public class CityMapController implements Controller {
 
 	private void clearCanvas() {
 		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		int offset = 30; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
+		int offset = 30; // the cleaned zone is a bit bigger than the canvas size to avoid artifacts
 		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
 	}
 
@@ -356,8 +357,6 @@ public class CityMapController implements Controller {
 
 	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
 			Delivery newValue) {
-		// TODO show the delivery on the map
-		System.out.println("Change of delivery");
 		drawCanvas();
 	}
 
@@ -368,6 +367,7 @@ public class CityMapController implements Controller {
 		} else {
 			System.out.println("Change of tour");
 		}
+		drawCanvas();
 	}
 
 	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue,
