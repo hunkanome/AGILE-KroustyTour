@@ -27,7 +27,7 @@ class TSPTest {
     @BeforeAll
     public static void setCostMatrix(){
         // Create a test graph
-        costMatrix = new MockPath[4][4];
+        costMatrix = new MockPath[5][5];
         for (int i = 0; i < costMatrix.length; i++) {
             for (int j = 0; j < costMatrix.length; j++) {
                 costMatrix[i][j] = new MockPath();
@@ -57,7 +57,7 @@ class TSPTest {
         TSP tsp = new TSP1();
 
         // Create a test graph
-        DeliveryGraph g = new DeliveryGraph(costMatrix);
+        DeliveryGraph g = new DeliveryGraph();
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
 
         // Search for a solution
@@ -86,7 +86,7 @@ class TSPTest {
         for (Delivery d : deliveries) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .add(deliveries.indexOf(d)+1);
         }
         DeliveryGraph graph = new DeliveryGraph(costMatrix);
 
@@ -124,7 +124,7 @@ class TSPTest {
         for (Delivery d : deliveries) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .add(deliveries.indexOf(d)+1);
         }
 
         tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
@@ -164,7 +164,7 @@ class TSPTest {
         for (Delivery d : deliveries) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .add(deliveries.indexOf(d)+1);
         }
 
         tsp.searchSolution(10000, g, deliveriesByTimeWindow);
@@ -202,7 +202,7 @@ class TSPTest {
         for (Delivery d : deliveries) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .add(deliveries.indexOf(d)+1);
         }
 
         tsp.searchSolution(10000, g, deliveriesByTimeWindow);
