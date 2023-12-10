@@ -39,13 +39,7 @@ public abstract class TemplateTSP implements TSP {
 		Collection<Integer> visited = new ArrayList<>(graph.getNbVertices());
 		visited.add(0); // The first visited vertex is 0, corresponding to the warehouse
 
-		TimeWindow firstTimeWindow = deliveriesByTimeWindow
-				.keySet()
-				.stream()
-				.min(Comparator.comparing(TimeWindow::getStartHour))
-				.orElseThrow(IllegalStateException::new);
-
-		branchAndBound(0, deliveriesByTimeWindow, visited, 0, 0, firstTimeWindow);
+		branchAndBound(0, deliveriesByTimeWindow, visited, 0, 0, TimeWindow.getTimeWindow(8));
 	}
 
 	/**
@@ -107,10 +101,10 @@ public abstract class TemplateTSP implements TSP {
 			unvisitedByTimeWindow.remove(currentTimeWindow);
 			if (unvisitedByTimeWindow.isEmpty()) {// If we have entirely explored all the TimeWindow
 				if (graph.isArc(currentVertex, 0) // If we can go back to the warehouse
-						&& (branchCost + graph.getCost(currentVertex, 0) < bestSolCost) // If the cost is better than the best solution
+						&& (branchCost + this.graph.getCost(currentVertex, 0) < this.bestSolCost) // If the cost is better than the best solution
 				) {
-					visited.toArray(bestSol);
-					bestSolCost = branchCost + graph.getCost(currentVertex, 0);
+					visited.toArray(this.bestSol);
+					this.bestSolCost = branchCost + this.graph.getCost(currentVertex, 0);
 				}
 				return;
 			}
@@ -127,8 +121,9 @@ public abstract class TemplateTSP implements TSP {
 			currentTimeWindow = nextWindow;
 		}
 
-		// Explore the different path possible
-		for (Integer deliveryVertex : unvisitedByTimeWindow.get(currentTimeWindow)) {
+		List<Integer> unvisited = unvisitedByTimeWindow.get(currentTimeWindow).stream().toList();
+		// Explore the different paths possible
+		for (Integer deliveryVertex : unvisited) {
             float newCurrentTimeWindowCost = currentTimeWindowCost + graph.getCost(currentVertex, deliveryVertex);
 			float newBranchCost = branchCost + graph.getCost(currentVertex, deliveryVertex);
 			if (newCurrentTimeWindowCost < 5) {
@@ -143,6 +138,7 @@ public abstract class TemplateTSP implements TSP {
 			unvisitedByTimeWindow.get(currentTimeWindow).remove(deliveryVertex);
 			branchAndBound(deliveryVertex, unvisitedByTimeWindow, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);
 			visited.remove(deliveryVertex);
+			unvisitedByTimeWindow.computeIfAbsent(currentTimeWindow, k -> new ArrayList<>()).add(deliveryVertex);
 			unvisitedByTimeWindow.get(currentTimeWindow).add(deliveryVertex);
 		}
 	}
