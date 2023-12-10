@@ -49,6 +49,7 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage("No tour selected");
 			return;
 		}
 		Command command = new RemoveSelectedTourCommand(this.dataModel, selectedTour);
@@ -63,14 +64,17 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage("No tour selected");
 			return;
 		}
 		Intersection selectedIntersection = this.dataModel.getSelectedIntersection();
 		if (selectedIntersection == null) {
+			this.parentController.displayToolBarMessage("No intersection selected");
 			return;
 		}
 		TimeWindow selectedTimeWindow = this.timeWindowChooser.getValue();
 		if (selectedTimeWindow == null) {
+			this.parentController.displayToolBarMessage("No time window selected");
 			return;
 		}
 		Delivery newDelivery = new Delivery(selectedTour.getCourier(), selectedIntersection, selectedTimeWindow);
@@ -86,10 +90,12 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage("No tour selected");
 			return;
 		}
 		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
 		if (selectedDelivery == null) {
+			this.parentController.displayToolBarMessage("No delivery selected");
 			return;
 		}
 		Command command = new RemoveSelectedDeliveryCommand(this.dataModel);
