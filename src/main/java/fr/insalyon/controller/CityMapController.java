@@ -1,11 +1,8 @@
 package fr.insalyon.controller;
 
-
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.List;
 
 import fr.insalyon.controller.command.CommandList;
@@ -26,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +32,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 public class CityMapController implements Controller {
 	@FXML
@@ -78,8 +78,8 @@ public class CityMapController implements Controller {
 
 		if (this.dataModel.getCityMap() != null) {
 			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
-					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasMap.getWidth(),
-					(float) this.canvasMap.getHeight());
+					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasContainer.getWidth(),
+					(float) this.canvasContainer.getHeight());
 			drawCanvas();
 		}
 	}
@@ -117,34 +117,46 @@ public class CityMapController implements Controller {
 	}
 
 	private void clearCanvas() {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
-		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
+		this.canvasContainer.getChildren().clear();
 	}
 
 	private void drawCityMap() {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		gc.setStroke(Color.BLUE);
 		dataModel.getCityMap().getIntersections()
 				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
 					// Calculating better coordinates to display on map
 					Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 					Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
-					drawLine(gc, origin, destination);
+
+					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
+					line.setStroke(Color.BLUE);
+					line.setUserData(segment);
+					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
+					canvasContainer.getChildren().add(line);
 				}));
 	}
 
 	private void drawWarehouse() {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
 		Image img  = new Image("file:images/warehouse.png");
-		gc.drawImage(img, transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getX()-10, transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getY()-10, 25, 25);
+
+		ImageView imageView = new ImageView(img);
+		imageView.setX(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getX()-12);
+		imageView.setY(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getY()-12);
+		imageView.setFitHeight(25);
+		imageView.setFitWidth(25);
+		this.canvasContainer.getChildren().add(imageView);
 	}
 
 	private void drawSelectedIntersection() {
+		System.out.println("drawSelectedIntersection");
 		if (dataModel.getSelectedIntersection() != null) {
-			GraphicsContext gc = canvasMap.getGraphicsContext2D();
 			Image img  = new Image("file:images/pointGPS.png");
-			gc.drawImage(img, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getX()-12, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getY()-25, 25, 25);
+
+			ImageView imageView = new ImageView(img);
+			imageView.setX(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getX()-12);
+			imageView.setY(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getY()-25);
+			imageView.setFitHeight(25);
+			imageView.setFitWidth(25);
+			this.canvasContainer.getChildren().add(imageView);
 		}
 	}
 	private void drawAllDeliveries() {
@@ -152,7 +164,9 @@ public class CityMapController implements Controller {
 				.forEach(tour -> tour.getDeliveriesList()
 						.forEach(delivery -> drawPoint(
 								transformer.transformToPosition(delivery.getLocation().getCoordinates()),
-								Color.BLACK)));
+								Color.BLACK)
+						)
+				);
 	}
 
 	private void drawSelectedDelivery() {
@@ -163,27 +177,24 @@ public class CityMapController implements Controller {
 	}
 
 	private void drawPoint(Position position, Color color) {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		gc.setFill(color);
-		gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
+		Circle point = new Circle(4, color);
+		point.setCenterX(position.getX());
+		point.setCenterY(position.getY());
+
+		this.canvasContainer.getChildren().add(point);
 	}
 
 	private void drawPath(Path path) {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		gc.setStroke(Color.RED);
 		for (Segment segment : path.getSegments()) {
 			Position origin = transformer.transformToPosition(segment.getOrigin().getCoordinates());
 			Position destination = transformer.transformToPosition(segment.getDestination().getCoordinates());
-			drawLine(gc, origin, destination);
+
+			Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
+			line.setStroke(Color.RED);
+			line.setUserData(segment);
+			line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
+			canvasContainer.getChildren().add(line);
 		}
-	}
-
-	private void drawLine(GraphicsContext gc, Position origin, Position destination) {
-		this.drawLine(gc, origin.getX(), origin.getY(), destination.getX(), destination.getY());
-	}
-
-	private void drawLine(GraphicsContext gc, double x1, double y1, double x2, double y2) {
-		gc.strokeLine(x1, y1, x2, y2);
 	}
 
 	@FXML
@@ -335,8 +346,8 @@ public class CityMapController implements Controller {
 
 	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
 		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
-				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasMap.getWidth(),
-				(float) canvasMap.getHeight());
+				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasContainer.getWidth(),
+				(float) canvasContainer.getHeight());
 		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor = 1;
 		this.prevTranslationFactor = this.translationFactor.copy();
