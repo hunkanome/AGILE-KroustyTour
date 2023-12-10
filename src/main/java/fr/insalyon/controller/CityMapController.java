@@ -1,8 +1,11 @@
 package fr.insalyon.controller;
 
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.List;
 
 import fr.insalyon.controller.command.CommandList;
@@ -30,6 +33,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 public class CityMapController implements Controller {
 	@FXML
@@ -130,17 +134,19 @@ public class CityMapController implements Controller {
 				}));
 	}
 
+	private void drawWarehouse() {
+		GraphicsContext gc = canvasMap.getGraphicsContext2D();
+		Image img  = new Image("file:images/warehouse.png");
+		gc.drawImage(img, transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getX()-10, transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()).getY()-10, 25, 25);
+	}
+
 	private void drawSelectedIntersection() {
 		if (dataModel.getSelectedIntersection() != null) {
-			drawPoint(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()),
-					Color.BLACK);
+			GraphicsContext gc = canvasMap.getGraphicsContext2D();
+			Image img  = new Image("file:images/pointGPS.png");
+			gc.drawImage(img, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getX()-12, transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()).getY()-25, 25, 25);
 		}
 	}
-
-	private void drawWarehouse() {
-		drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
-	}
-
 	private void drawAllDeliveries() {
 		dataModel.getTours()
 				.forEach(tour -> tour.getDeliveriesList()
