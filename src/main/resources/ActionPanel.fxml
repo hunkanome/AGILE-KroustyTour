@@ -23,7 +23,8 @@
 		onAction="#addTour" prefHeight="25.0" prefWidth="166.0"
 		text="Add a tour" />
 	<Button layoutX="42.0" layoutY="118.0" mnemonicParsing="false"
-		onAction="#removeSelectedTour" text="Remove the selected tour" />
+		onAction="#removeSelectedTour" prefHeight="25.0" prefWidth="166.0"
+		text="Remove the selected tour" />
 	<Button layoutX="42.0" layoutY="228.0" mnemonicParsing="false"
 		onAction="#addDelivery" prefHeight="25.0" prefWidth="166.0"
 		text="Add a delivery" />
@@ -31,5 +32,6 @@
 		onAction="#removeSelectedDelivery" prefHeight="25.0" prefWidth="166.0"
 		text="Remove the delivery" />
 	<ComboBox layoutX="42.0" layoutY="185.0" prefHeight="25.0"
-		prefWidth="166.0" promptText="Select a time window" fx:id="timeWindowChooser"/>
+		prefWidth="166.0" promptText="Select a time window"
+		fx:id="timeWindowChooser" />
 </AnchorPane>

@@ -2,10 +2,12 @@ package fr.insalyon.controller;
 
 import fr.insalyon.controller.command.AddDeliveryCommand;
 import fr.insalyon.controller.command.AddTourCommand;
+import fr.insalyon.controller.command.Command;
 import fr.insalyon.controller.command.CommandList;
-import fr.insalyon.controller.command.RemoveTourCommand;
+import fr.insalyon.controller.command.RemoveSelectedTourCommand;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
+import fr.insalyon.model.Intersection;
 import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import javafx.fxml.FXML;
@@ -35,7 +37,8 @@ public class ActionController implements Controller {
 		if (dataModel == null || dataModel.getCityMap() == null) {
 			return;
 		}
-		commandList.execute(new AddTourCommand(dataModel, new Tour()));
+		Command command = new AddTourCommand(dataModel, new Tour());
+		commandList.execute(command);
 	}
 
 	@FXML
@@ -43,11 +46,12 @@ public class ActionController implements Controller {
 		if (dataModel == null) {
 			return;
 		}
-		if (dataModel.getSelectedTour() == null) {
+		Tour selectedTour = dataModel.getSelectedTour();
+		if (selectedTour == null) {
 			return;
 		}
-		commandList.execute(new RemoveTourCommand(dataModel, dataModel.getSelectedTour()));
-		dataModel.setSelectedTour(null);
+		Command command = new RemoveSelectedTourCommand(dataModel, selectedTour);
+		commandList.execute(command);
 	}
 
 	@FXML
@@ -59,17 +63,28 @@ public class ActionController implements Controller {
 		if (selectedTour == null) {
 			return;
 		}
-		commandList.execute(new AddDeliveryCommand(selectedTour.getCityMapMatrix(), selectedTour,
-				new Delivery(dataModel.getSelectedTour().getCourier(), dataModel.getSelectedIntersection(),
-						timeWindowChooser.getValue())));
+		Intersection selectedIntersection = dataModel.getSelectedIntersection();
+		if (selectedIntersection == null) {
+			return;
+		}
+		TimeWindow selectedTimeWindow = timeWindowChooser.getValue();
+		if (selectedTimeWindow == null) {
+			return;
+		}
+
+		Delivery delivery = new Delivery(selectedTour.getCourier(), selectedIntersection, selectedTimeWindow);
+		Command command = new AddDeliveryCommand(selectedTour.getCityMapMatrix(), selectedTour, delivery);
+		commandList.execute(command);
+		dataModel.setSelectedIntersection(null);
+		dataModel.setSelectedDelivery(delivery);
 	}
 
 	@FXML
 	private void removeSelectedDelivery() {
-		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
-		if (dataModel.getSelectedTour() == null) {
+		if (dataModel == null || dataModel.getSelectedTour() == null) {
 			return;
 		}
+		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
 		if (selectedDelivery == null) {
 			return;
 		}

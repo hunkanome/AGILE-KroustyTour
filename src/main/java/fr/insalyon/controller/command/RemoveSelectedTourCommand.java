@@ -3,7 +3,7 @@ package fr.insalyon.controller.command;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
 
-public class RemoveTourCommand implements Command {
+public class RemoveSelectedTourCommand implements Command {
 
     private final DataModel dataModel;
 
@@ -13,7 +13,7 @@ public class RemoveTourCommand implements Command {
      * Used when initializing the command
      * @param dataModel the dataModel where the information is stored
      */
-    public RemoveTourCommand(DataModel dataModel, Tour tour) {
+    public RemoveSelectedTourCommand(DataModel dataModel, Tour tour) {
         this.dataModel = dataModel;
         this.tourToRemove = tour;
     }

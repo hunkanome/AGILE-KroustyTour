@@ -1,6 +1,6 @@
 package fr.insalyon.agile;
 
-import fr.insalyon.controller.command.RemoveTourCommand;
+import fr.insalyon.controller.command.RemoveSelectedTourCommand;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class RemoveTourCommandTest {
     DataModel dataModel;
     Tour tour;
-    RemoveTourCommand command;
+    RemoveSelectedTourCommand command;
     
     @BeforeEach
     void setUp() {
         dataModel = new DataModel();
         tour = new Tour();
         dataModel.addTour(tour);
-        command = new RemoveTourCommand(dataModel, tour);
+        command = new RemoveSelectedTourCommand(dataModel, tour);
     }
 
     @Test

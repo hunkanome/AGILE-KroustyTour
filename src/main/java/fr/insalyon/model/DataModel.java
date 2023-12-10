@@ -80,6 +80,9 @@ public class DataModel {
 	}
 
 	public void removeTour(Tour tour) {
+		if (tour == getSelectedTour()) {
+			setSelectedTour(null);
+		}
 		tours.remove(tour);
 	}
 

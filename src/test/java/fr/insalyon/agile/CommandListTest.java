@@ -2,7 +2,7 @@ package fr.insalyon.agile;
 
 import fr.insalyon.controller.command.AddTourCommand;
 import fr.insalyon.controller.command.CommandList;
-import fr.insalyon.controller.command.RemoveTourCommand;
+import fr.insalyon.controller.command.RemoveSelectedTourCommand;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class CommandListTest {
         Assertions.assertEquals(1, commandList.getHistory().size());
 
         dataModel.setSelectedTour(tour);
-        commandList.execute(new RemoveTourCommand(dataModel, dataModel.getSelectedTour()));
+        commandList.execute(new RemoveSelectedTourCommand(dataModel, dataModel.getSelectedTour()));
         Assertions.assertEquals(1, commandList.getLastCommand());
         Assertions.assertEquals(2, commandList.getHistory().size());
 
