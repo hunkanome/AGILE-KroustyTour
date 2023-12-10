@@ -18,6 +18,8 @@ public class ActionController implements Controller {
 
 	private CommandList commandList;
 
+	private MainController parentController;
+
 	/**
 	 * Initialize the view by filling the time window chooser with the time windows
 	 */
@@ -25,6 +27,8 @@ public class ActionController implements Controller {
 	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
 		this.commandList = commandList;
+		this.parentController = parentController;
+		
 		this.timeWindowChooser.setItems(TimeWindow.getTimeWindows());
 	}
 
@@ -35,6 +39,7 @@ public class ActionController implements Controller {
 		}
 		Command command = new AddTourCommand(dataModel, new Tour());
 		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Tour added");
 	}
 
 	@FXML
@@ -48,6 +53,7 @@ public class ActionController implements Controller {
 		}
 		Command command = new RemoveSelectedTourCommand(this.dataModel, selectedTour);
 		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Tour removed");
 	}
 
 	@FXML
@@ -67,13 +73,10 @@ public class ActionController implements Controller {
 		if (selectedTimeWindow == null) {
 			return;
 		}
-		Delivery newDelivery = new Delivery(
-				selectedTour.getCourier(),
-				selectedIntersection,
-				selectedTimeWindow
-		);
+		Delivery newDelivery = new Delivery(selectedTour.getCourier(), selectedIntersection, selectedTimeWindow);
 		Command command = new AddDeliveryCommand(this.dataModel, newDelivery);
 		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Delivery added");
 	}
 
 	@FXML
@@ -91,6 +94,7 @@ public class ActionController implements Controller {
 		}
 		Command command = new RemoveSelectedDeliveryCommand(this.dataModel);
 		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Delivery removed");
 
 	}
 }
