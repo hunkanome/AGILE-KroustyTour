@@ -139,7 +139,6 @@ public abstract class TemplateTSP implements TSP {
 			branchAndBound(deliveryVertex, unvisitedByTimeWindow, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);
 			visited.remove(deliveryVertex);
 			unvisitedByTimeWindow.computeIfAbsent(currentTimeWindow, k -> new ArrayList<>()).add(deliveryVertex);
-			unvisitedByTimeWindow.get(currentTimeWindow).add(deliveryVertex);
 		}
 	}
 }
