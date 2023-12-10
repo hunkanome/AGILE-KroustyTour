@@ -2,6 +2,7 @@ package fr.insalyon.controller;
 
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
+import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.geometry.Position;
 import fr.insalyon.model.*;
 import fr.insalyon.xml.BadlyFormedXMLException;
@@ -30,11 +31,11 @@ public class CityMapController implements Controller {
 
 	@FXML
 	private Label selectedSegmentLabel;
-	
+
 	private DataModel dataModel;
-	
+
 	private MainController parentController;
-	
+
 	/**
 	 * Used to keep track of the last click X coordinate to make dragging possible
 	 */
@@ -76,7 +77,7 @@ public class CityMapController implements Controller {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
-			// TODO : draw all the tours
+			drawTours();
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
@@ -104,7 +105,7 @@ public class CityMapController implements Controller {
 
 	private void clearCanvas() {
 		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-		int offset = 10; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
+		int offset = 30; // the cleaned zoned is a bit bigger than the canvas size to avoid artifacts
 		gc.clearRect(-offset, -offset, canvasMap.getWidth() + offset * 2, canvasMap.getHeight() + offset * 2);
 	}
 
@@ -122,28 +123,41 @@ public class CityMapController implements Controller {
 
 	private void drawSelectedIntersection() {
 		if (dataModel.getSelectedIntersection() != null) {
-			drawPoint(transformer.transformToPosition(dataModel.getSelectedIntersection().getCoordinates()),
-					Color.BLACK);
+			GeoCoordinates coords = dataModel.getSelectedIntersection().getCoordinates();
+			Position position = transformer.transformToPosition(coords);
+			drawPoint(position, Color.BLACK);
 		}
 	}
 
-	private void drawWarehouse() {
-		drawPoint(transformer.transformToPosition(dataModel.getCityMap().getWarehouse().getCoordinates()), Color.GREEN);
+	private void drawTours() {
+		for (Tour tour : dataModel.getTours()) {
+			for (Path path : tour.getPathList()) {
+				drawPath(path);
+			}
+		}
 	}
 
 	private void drawAllDeliveries() {
-		dataModel.getTours()
-				.forEach(tour -> tour.getDeliveriesList()
-						.forEach(delivery -> drawPoint(
-								transformer.transformToPosition(delivery.getLocation().getCoordinates()),
-								Color.BLACK)));
+		for (Tour tour : dataModel.getTours()) {
+			for (Delivery delivery : tour.getDeliveriesList()) {
+				Position position = transformer.transformToPosition(delivery.getLocation().getCoordinates());
+				drawPoint(position, Color.BLACK);
+			}
+		}
 	}
 
 	private void drawSelectedDelivery() {
 		if (dataModel.getSelectedDelivery() != null) {
-			drawPoint(transformer.transformToPosition(dataModel.getSelectedDelivery().getLocation().getCoordinates()),
-					Color.RED);
+			GeoCoordinates coords = dataModel.getSelectedDelivery().getLocation().getCoordinates();
+			Position position = transformer.transformToPosition(coords);
+			drawPoint(position, Color.RED);
 		}
+	}
+	
+	private void drawWarehouse() {
+		GeoCoordinates coords = dataModel.getCityMap().getWarehouse().getCoordinates();
+		Position position = transformer.transformToPosition(coords);
+		drawPoint(position, Color.GREEN);
 	}
 
 	private void drawPoint(Position position, Color color) {
@@ -201,7 +215,7 @@ public class CityMapController implements Controller {
 			}
 		}
 	}
-	
+
 	private Delivery getDeliveryAt(Intersection selectedIntersection) {
 		for (Tour tour : dataModel.getTours()) {
 			for (Delivery delivery : tour.getDeliveriesList()) {
@@ -315,7 +329,6 @@ public class CityMapController implements Controller {
 		}
 		event.consume();
 	}
-
 
 	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
 		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
