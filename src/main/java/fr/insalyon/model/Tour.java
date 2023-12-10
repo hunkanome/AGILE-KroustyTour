@@ -25,6 +25,7 @@ public class Tour {
     private List<Path> pathList = new ArrayList<>();
 
     public Tour() {
+        this.courier = new Courier();
     }
 
     public Tour(CityMapMatrix cityMapMatrix){
