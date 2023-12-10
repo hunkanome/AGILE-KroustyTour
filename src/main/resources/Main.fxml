@@ -9,29 +9,36 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insalyon.controller.MainController">
+<VBox prefHeight="700.0" prefWidth="1227.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="fr.insalyon.controller.MainController">
 	<MenuBar>
 		<Menu mnemonicParsing="false" text="File">
-			<MenuItem mnemonicParsing="false" onAction="#openMapFile" text="Open map" />
+			<MenuItem mnemonicParsing="false" onAction="#openMapFile"
+				text="Open map" />
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem mnemonicParsing="false" text="Export tours" />
 			<MenuItem mnemonicParsing="false" text="Import tours" />
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
+			<MenuItem mnemonicParsing="false"
+				onAction="#quitApplication" text="Quit" />
 		</Menu>
 		<Menu mnemonicParsing="false" text="Edit">
 			<MenuItem mnemonicParsing="false" text="Undo" />
 			<MenuItem mnemonicParsing="false" text="Redo" />
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Remove all deliveries" />
+			<MenuItem mnemonicParsing="false"
+				text="Remove all deliveries" />
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
 			<MenuItem mnemonicParsing="false" text="About" />
 		</Menu>
 	</MenuBar>
-	<HBox fx:id="panelsContainer" prefHeight="647.0" prefWidth="1085.0">
+	<HBox fx:id="panelsContainer" prefHeight="647.0"
+		prefWidth="1085.0">
 	</HBox>
 	<ToolBar prefHeight="40.0" prefWidth="200.0">
-		<Label fx:id="toolBarMessage" prefHeight="17.0" prefWidth="857.0"/>
+		<Label fx:id="toolBarMessage" prefHeight="17.0"
+			prefWidth="857.0" />
 	</ToolBar>
 </VBox>

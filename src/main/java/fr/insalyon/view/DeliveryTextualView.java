@@ -15,19 +15,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 public class DeliveryTextualView extends AnchorPane {
-	
+
 	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-	
+
 	@FXML
 	private Label arrivalTimeLabel;
-	
+
 	@FXML
 	private Label departureTimeLabel;
 
 	private Delivery delivery;
 
 	private final DataModel dataModel;
-	
+
 	private final TitledPane parent;
 
 	public DeliveryTextualView(DataModel dataModel, TitledPane parent) {
@@ -42,8 +42,7 @@ public class DeliveryTextualView extends AnchorPane {
 		try {
 			loader.load();
 		} catch (Exception e) {
-			// TODO improve this error view
-			loader.setRoot(new Pane(new Label("An error occurred while loading the view.")));
+			this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 		}
 	}
 
@@ -61,7 +60,8 @@ public class DeliveryTextualView extends AnchorPane {
 		this.dataModel.setSelectedDelivery(delivery);
 	}
 
-	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue, Delivery newValue) {
+	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
+			Delivery newValue) {
 		if (newValue == delivery) {
 			getStyleClass().add("selected");
 			parent.setExpanded(true);
