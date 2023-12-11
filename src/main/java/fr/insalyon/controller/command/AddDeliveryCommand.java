@@ -18,6 +18,9 @@ public class AddDeliveryCommand implements Command {
         this.delivery = delivery;
     }
 
+    /**
+     * Add the delivery to the tour and recalculate the graph
+     */
     @Override
     public void doCommand() {
         this.tour.addDelivery(this.delivery, dataModel.getCityMap(), new AStar());
@@ -25,6 +28,9 @@ public class AddDeliveryCommand implements Command {
         this.dataModel.setSelectedDelivery(delivery);
     }
 
+    /**
+     * Undoes the addition of the delivery and recalculate the graph
+     */
     @Override
     public void undoCommand() {
         this.tour.removeDelivery(this.delivery, dataModel.getCityMap(), new AStar());

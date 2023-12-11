@@ -1,8 +1,5 @@
 package fr.insalyon.view;
 
-import java.time.Duration;
-import java.time.LocalTime;
-
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.TimeWindow;
@@ -16,6 +13,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+
+import java.time.Duration;
+import java.time.LocalTime;
 
 public class TourTextualView extends AnchorPane {
 // TODO : add the warehouse start and end in the view

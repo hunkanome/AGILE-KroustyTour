@@ -21,6 +21,12 @@ public class DeliveryGraph implements Graph {
 		this.paths = new Path[0][0];
 	}
 
+	/**
+	 * Create a complete directed graph such that each edge has a weight
+	 * @param deliveries the list of deliveries, the first element should be the warehouse
+	 * @param map the city map
+	 * @param shortestPathAlgorithm the algorithm used to compute the shortest path
+	 */
 	public DeliveryGraph(List<Delivery> deliveries, CityMap map, ShortestPathAlgorithm shortestPathAlgorithm){
 		this.paths = new Path[deliveries.size()][deliveries.size()];
 		int i = 0;
@@ -48,13 +54,16 @@ public class DeliveryGraph implements Graph {
 		this.paths = paths;
 	}
 
+	/**
+	 * @return the number of vertices of the graph
+	 */
 	@Override
 	public int getNbVertices() {
 		return this.paths.length;
 	}
 
 	/**
-	 * Gives the shortest path
+	 * Gives the shortest path between vertex i and vertex j
 	 * @param i the origin vertex
 	 * @param j the destination vertex
 	 * @return a <code>Path</code> object representing the shortest path from i to j
@@ -68,6 +77,7 @@ public class DeliveryGraph implements Graph {
 	}
 
 	/**
+	 * Gives the cost of the shortest between vertices i and j
 	 * @param i the origin vertex
 	 * @param j the destination vertex
 	 * @return the cost of the edge (i,j), if it exists, or -1 if it does not exist
@@ -88,6 +98,7 @@ public class DeliveryGraph implements Graph {
 	}
 
 	/**
+	 * Checks if a path exists between vertices i and j
 	 * @param i the origin vertex
 	 * @param j the destination vertex
 	 * @return true if there is an edge (i, j)

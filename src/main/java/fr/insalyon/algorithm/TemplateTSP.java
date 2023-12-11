@@ -54,13 +54,6 @@ public abstract class TemplateTSP implements TSP {
 	}
 
 	/**
-	 * @return the cost of the best solution computed so far
-	 */
-	public float getSolutionCost(){
-		return this.graph != null ? this.bestSolCost : -1;
-	}
-
-	/**
 	 * Method that must be defined in TemplateTSP subclasses
 	 * @param currentVertex vertex where we are located
 	 * @param unvisited vertices left to be explored

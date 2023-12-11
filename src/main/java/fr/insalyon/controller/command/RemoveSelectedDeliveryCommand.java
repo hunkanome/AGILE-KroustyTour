@@ -19,12 +19,18 @@ public class RemoveSelectedDeliveryCommand implements Command {
         this.delivery = dataModel.getSelectedDelivery();
     }
 
+    /**
+     * Remove the delivery from the tour and recalculate the graph
+     */
     @Override
     public void doCommand() {
         this.tour.removeDelivery(this.delivery, this.dataModel.getCityMap(), new AStar());
         this.dataModel.setSelectedDelivery(null);
     }
 
+    /**
+     * Undoes the removal of the delivery from the tour and recalculates the graph
+     */
     @Override
     public void undoCommand() {
         this.tour.addDelivery(this.delivery, dataModel.getCityMap(), new AStar());

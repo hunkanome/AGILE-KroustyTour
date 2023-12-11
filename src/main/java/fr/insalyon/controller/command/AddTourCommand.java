@@ -15,7 +15,6 @@ public class AddTourCommand implements Command {
 
 	/**
 	 * Used when initializing the command
-	 * 
 	 * @param dataModel the dataModel where the information is stored
 	 * @param tour      the tour to add
 	 */
@@ -24,6 +23,9 @@ public class AddTourCommand implements Command {
 		this.tourToAdd = tour;
 	}
 
+	/*
+	 * Adds the tour to the DataModel
+	 */
 	@Override
 	public void doCommand() {
 		if (!this.dataModel.getTours().contains(this.tourToAdd)) {
@@ -32,6 +34,9 @@ public class AddTourCommand implements Command {
 		}
 	}
 
+	/*
+	 * Removes the added tour from the DataModel
+	 */
 	@Override
     public void undoCommand() {
         if (this.dataModel.getTours().contains(tourToAdd)) {

@@ -1,6 +1,7 @@
 package fr.insalyon.agile;
 
 import fr.insalyon.algorithm.DeliveryGraph;
+import fr.insalyon.algorithm.Graph;
 import fr.insalyon.algorithm.TSP;
 import fr.insalyon.algorithm.TSP1;
 import fr.insalyon.geometry.GeoCoordinates;
@@ -57,11 +58,11 @@ class TSPTest {
         TSP tsp = new TSP1();
 
         // Create a test graph
-        DeliveryGraph g = new DeliveryGraph();
+        Graph graph = new DeliveryGraph();
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
 
         // Search for a solution
-        tsp.searchSolution(10000, g, deliveriesByTimeWindow);
+        tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
 
         // Print the solution
         assertEquals(-1, tsp.getSolution(0));
@@ -83,10 +84,10 @@ class TSPTest {
                 new Intersection(0L, coordinates, 0),
                 TimeWindow.getTimeWindow(8)));
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
-        for (Delivery d : deliveries) {
+        for (Delivery delivery : deliveries) {
             deliveriesByTimeWindow
-                    .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .computeIfAbsent(delivery.getTimeWindow(), k -> new ArrayList<>())
+                    .add(deliveries.indexOf(delivery));
         }
         DeliveryGraph graph = new DeliveryGraph(costMatrix);
 
@@ -156,7 +157,7 @@ class TSPTest {
         deliveries.add(new Delivery(courier, intersection3, tw10));
         deliveries.add(new Delivery(courier, intersection4, tw10));
 
-        DeliveryGraph g = new DeliveryGraph(costMatrix);
+        Graph graph = new DeliveryGraph(costMatrix);
 
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
         for (Delivery d : deliveries) {
@@ -165,7 +166,7 @@ class TSPTest {
                     .add(deliveries.indexOf(d));
         }
 
-        tsp.searchSolution(10000, g, deliveriesByTimeWindow);
+        tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
 
         // Test the solution
         for (int i = 0; i < costMatrix.length; i++) {
@@ -194,7 +195,7 @@ class TSPTest {
         deliveries.add(new Delivery(courier, intersection3, tw10));
         deliveries.add(new Delivery(courier, intersection4, tw10));
 
-        DeliveryGraph g = new DeliveryGraph(costMatrix);
+        Graph graph = new DeliveryGraph(costMatrix);
 
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
         for (Delivery d : deliveries) {
@@ -203,7 +204,7 @@ class TSPTest {
                     .add(deliveries.indexOf(d));
         }
 
-        tsp.searchSolution(10000, g, deliveriesByTimeWindow);
+        tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
 
         // Test the solution
         for (int i = 0; i < costMatrix.length; i++) {
@@ -240,7 +241,7 @@ class TSPTest {
         otherCostMatrix[1][0].setLength(Float.MAX_VALUE);
         otherCostMatrix[1][1].setLength(0);
 
-        DeliveryGraph g = new DeliveryGraph(otherCostMatrix);
+        Graph graph = new DeliveryGraph(otherCostMatrix);
 
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
         for (Delivery d : deliveries) {
@@ -249,7 +250,7 @@ class TSPTest {
                     .add(deliveries.indexOf(d));
         }
 
-        tsp.searchSolution(10000, g, deliveriesByTimeWindow);
+        tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
 
         // Test the solution
         for (int i = 0; i < otherCostMatrix.length; i++) {
