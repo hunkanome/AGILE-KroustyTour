@@ -36,19 +36,19 @@ class TSPTest {
 
         costMatrix[0][0].setLength(0);
         costMatrix[0][1].setLength(100);
-        costMatrix[0][2].setLength(900);
-        costMatrix[0][3].setLength(900);
-        costMatrix[1][0].setLength(900);
+        costMatrix[0][2].setLength(Float.MAX_VALUE);
+        costMatrix[0][3].setLength(Float.MAX_VALUE);
+        costMatrix[1][0].setLength(Float.MAX_VALUE);
         costMatrix[1][1].setLength(0);
         costMatrix[1][2].setLength(100);
-        costMatrix[1][3].setLength(900);
-        costMatrix[2][0].setLength(900);
-        costMatrix[2][1].setLength(900);
+        costMatrix[1][3].setLength(Float.MAX_VALUE);
+        costMatrix[2][0].setLength(Float.MAX_VALUE);
+        costMatrix[2][1].setLength(Float.MAX_VALUE);
         costMatrix[2][2].setLength(0);
         costMatrix[2][3].setLength(100);
         costMatrix[3][0].setLength(100);
-        costMatrix[3][1].setLength(900);
-        costMatrix[3][2].setLength(900);
+        costMatrix[3][1].setLength(Float.MAX_VALUE);
+        costMatrix[3][2].setLength(Float.MAX_VALUE);
         costMatrix[3][3].setLength(0);
     }
 
@@ -86,7 +86,7 @@ class TSPTest {
         for (Delivery d : deliveries) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d)+1);
+                    .add(deliveries.indexOf(d));
         }
         DeliveryGraph graph = new DeliveryGraph(costMatrix);
 
