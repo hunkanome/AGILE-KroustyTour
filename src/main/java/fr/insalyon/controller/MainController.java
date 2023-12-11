@@ -135,12 +135,12 @@ public class MainController implements Controller {
 	}
 
 	@FXML
-	private void redoCommande() {
+	private void redoCommand() {
 		this.commandList.redo();
 	}
 
 	@FXML
-	private void undoCommande() {
+	private void undoCommand() {
 		this.commandList.undo();
 	}
 

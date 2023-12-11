@@ -46,14 +46,14 @@
 		</Menu>
 		<Menu mnemonicParsing="false" text="Edit">
 			<MenuItem mnemonicParsing="false" text="Undo"
-				onAction="#undoCommande">
+				onAction="#undoCommand">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="Z"
 						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 				</accelerator>
 			</MenuItem>
 			<MenuItem mnemonicParsing="false" text="Redo"
-				onAction="#redoCommande">
+				onAction="#redoCommand">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="Y"
 						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
