@@ -1,10 +1,10 @@
 package fr.insalyon.model;
 
+import fr.insalyon.geometry.GeoCoordinates;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import fr.insalyon.geometry.GeoCoordinates;
 
 /**
  * The map of a city or a part of a city.
@@ -45,19 +45,33 @@ public class CityMap {
         this.intersections.add(intersection);
     }
 
-    public Intersection getIntersectionById(Long id) throws IndexOutOfBoundsException {
+    /**
+     * Get an intersection using an id
+     * @param id the id of the intersection
+     * @return the intersection corresponding to the id
+     * @throws IndexOutOfBoundsException if no intersection is found
+     */
+    public Intersection getIntersectionById(long id) throws IndexOutOfBoundsException {
         for (Intersection intersection : this.intersections) {
-            if (intersection.getId().equals(id)) {
+            if (intersection.getId() == id) {
                 return intersection;
             }
         }
         throw new IndexOutOfBoundsException();
     }
-    
+
+    /**
+     * Used to obtain the most north-west coordinates of all intersections
+     * @return the geoCoordinate with the maxLat and minLong
+     */
     public GeoCoordinates getNorthWestMostCoordinates() {
     	return new GeoCoordinates(this.getMaxLatitude(), this.getMinLongitude());
     }
 
+    /**
+     * Used to obtain the most south-east coordinates of all intersections
+     * @return the geoCoordinate with the minLat and maxLong
+     */
     public GeoCoordinates getSouthEastMostCoordinates() {
     	return new GeoCoordinates(this.getMinLatitude(), this.getMaxLongitude());
     }

@@ -1,20 +1,10 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.Intersection;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
-import fr.insalyon.model.Tour;
+import fr.insalyon.model.*;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.xml.XMLParserException;
@@ -23,18 +13,30 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+/**
+ * Controller for the map view (middle)
+ * @see Controller
+ */
 public class CityMapController implements Controller {
+	private static final Color[] COLORS = { Color.SALMON, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.PURPLE,
+			Color.ORANGE, Color.PINK, Color.BROWN, Color.CYAN, Color.MAGENTA };
+
+	private static final String BG_DEFAULT_COLOR = "#F5F3F3";
+	private static final String BG_HIGHLIGHT_COLOR = "#E6E4E4";
+	private static final String ROAD_COLOR = "#CAD2D8";
+
 	@FXML
 	private AnchorPane anchorPane;
 
@@ -69,6 +71,8 @@ public class CityMapController implements Controller {
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
 
+		this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
+
 		if (this.dataModel.getCityMap() != null) {
 			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
 					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.anchorPane.getWidth(),
@@ -82,7 +86,7 @@ public class CityMapController implements Controller {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
-			// TODO : draw all the tours
+			drawTours();
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
@@ -103,7 +107,7 @@ public class CityMapController implements Controller {
 							segment.getDestination().getCoordinates(), this.translationFactor, this.scaleFactor);
 
 					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-					line.setStroke(Color.BLUE);
+					line.setStroke(Color.valueOf(ROAD_COLOR));
 					line.setUserData(segment);
 					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
 					anchorPane.getChildren().add(line);
@@ -164,7 +168,21 @@ public class CityMapController implements Controller {
 		this.anchorPane.getChildren().add(point);
 	}
 
-	private void drawPath(Path path) {
+	private void drawTours() {
+		for (int i = 0; i < this.dataModel.getTours().size(); i++) {
+			Tour tour = this.dataModel.getTours().get(i);
+			Color color = COLORS[i % COLORS.length];
+
+			if (this.dataModel.getSelectedTour() == null || !this.dataModel.getSelectedTour().equals(tour)) {
+				tour.getPathList().forEach(path -> drawPath(path, color, 2));
+			}
+		}
+		if (this.dataModel.getSelectedTour() != null) {
+			this.dataModel.getSelectedTour().getPathList().forEach(path -> drawPath(path, Color.BLACK, 3));
+		}
+	}
+
+	private void drawPath(Path path, Color color, int width) {
 		for (Segment segment : path.getSegments()) {
 			Position origin = transformer.transformToDragAndZoomPosition(segment.getOrigin().getCoordinates(),
 					this.translationFactor, this.scaleFactor);
@@ -172,7 +190,8 @@ public class CityMapController implements Controller {
 					this.translationFactor, this.scaleFactor);
 
 			Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-			line.setStroke(Color.RED);
+			line.setStroke(color);
+			line.setStrokeWidth(width);
 			line.setUserData(segment);
 			line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
 			this.anchorPane.getChildren().add(line);
@@ -251,10 +270,9 @@ public class CityMapController implements Controller {
 
 	/**
 	 * Open the given file and load it onto the map
-	 * 
 	 * @param path - the path to the file to load
 	 */
-	public boolean loadCityMapXMLFile(String path) {
+	private boolean loadCityMapXMLFile(String path) {
 		File mapFile = new File(path);
 		if (!mapFile.isFile()) {
 			this.parentController.displayToolBarMessage("The item is not a file");
@@ -262,7 +280,7 @@ public class CityMapController implements Controller {
 			this.parentController.displayToolBarMessage("The file is not readable");
 		} else {
 			try {
-				this.anchorPane.setStyle("-fx-background-color: lightgrey");
+				this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
@@ -311,7 +329,7 @@ public class CityMapController implements Controller {
 		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			this.anchorPane.setStyle("-fx-background-color: darkgrey");
+			this.anchorPane.setStyle("-fx-background-color: " + BG_HIGHLIGHT_COLOR);
 		}
 		event.consume();
 	}
@@ -321,7 +339,7 @@ public class CityMapController implements Controller {
 		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			this.anchorPane.setStyle("-fx-background-color: lightgrey");
+			this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
 		}
 		event.consume();
 	}
@@ -339,23 +357,15 @@ public class CityMapController implements Controller {
 
 	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
 			Delivery newValue) {
-		// TODO show the delivery on the map
-		System.out.println("Changement de delivery");
 		drawCanvas();
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
-		// TODO show the tour on the map
-		if (newValue == null) {
-			System.out.println("plus de tour");
-		} else {
-			System.out.println("Changement de tour");
-		}
+		drawCanvas();
 	}
 
 	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue,
 			Intersection newValue) {
 		drawCanvas();
 	}
-
 }

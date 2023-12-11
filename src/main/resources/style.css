@@ -5,3 +5,7 @@
 .deliveryTextualView.selected {
 	-fx-background-color: #deebff;
 }
+
+.deliveryTextualView.late * {
+	-fx-text-fill: red;
+}

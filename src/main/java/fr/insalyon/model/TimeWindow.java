@@ -1,10 +1,10 @@
 package fr.insalyon.model;
 
-import java.time.Duration;
-import java.util.Objects;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.time.Duration;
+import java.util.Objects;
 
 /**
  * A one-hour time interval during which a courier can make a delivery.<br/>
@@ -26,7 +26,7 @@ public class TimeWindow {
 	/**
 	 * The start hour of the last TimeWindow
 	 */
-	public static final int MAX_TIME_WINDOW = 14;
+	public static final int MAX_TIME_WINDOW = 11;
 
 	/**
 	 * @return the list of the available time windows
@@ -64,6 +64,10 @@ public class TimeWindow {
 
 	public int getStartHour() {
 		return startHour;
+	}
+
+	public int getEndHour() {
+		return startHour + (int) DURATION.toHours();
 	}
 
 	public boolean isRightBefore(TimeWindow other) {

@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 public class Path {
 
-    protected Intersection start;
+    protected final Intersection start;
 
-    protected List<Segment> segments;
+    protected final List<Segment> segments;
 
-    protected Intersection end;
+    protected final Intersection end;
 
     protected float length;
 
@@ -54,16 +54,8 @@ public class Path {
         this.segments = segments;
     }
 
-    public Intersection getStart() {
-        return start;
-    }
-
     public List<Segment> getSegments() {
         return segments;
-    }
-
-    public Intersection getEnd() {
-        return end;
     }
 
     public float getLength() {

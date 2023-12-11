@@ -9,15 +9,9 @@ import java.util.Objects;
  */
 public class GeoCoordinates {
 
-	private Float latitude;
+	private final Float latitude;
 
-	private Float longitude;
-
-	/**
-	 * Creates an empty instance of GeoCoordinates with null values
-	 */
-	public GeoCoordinates() {
-	}
+	private final Float longitude;
 
 	/**
 	 * Creates an instance of GeoCoordinates with the given latitude and longitude
@@ -30,40 +24,12 @@ public class GeoCoordinates {
 		this.longitude = longitude;
 	}
 
-	/**
-	 * Gets the latitude coordinate
-	 * 
-	 * @return latitude - the latitude coordinate
-	 */
 	public Float getLatitude() {
 		return latitude;
 	}
 
-	/**
-	 * Sets the latitude coordinate
-	 * 
-	 * @param latitude - the latitude coordinate
-	 */
-	public void setLatitude(Float latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * Gets the longitude coordinate
-	 * 
-	 * @return longitude - the longitude coordinate
-	 */
 	public Float getLongitude() {
 		return longitude;
-	}
-
-	/**
-	 * Sets the longitude coordinate
-	 * 
-	 * @param longitude - the longitude coordinate
-	 */
-	public void setLongitude(Float longitude) {
-		this.longitude = longitude;
 	}
 
 	@Override

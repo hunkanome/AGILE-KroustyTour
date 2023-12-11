@@ -9,13 +9,13 @@ import java.util.Objects;
  */
 public class Segment {
 
-    private Intersection origin;
+    private final Intersection origin;
 
-    private Intersection destination;
+    private final Intersection destination;
 
-    private String name;
+    private final String name;
 
-    private float length;
+    private final float length;
 
     /**
      * Construct a segment
@@ -35,32 +35,16 @@ public class Segment {
         return origin;
     }
 
-    public void setOrigin(Intersection origin) {
-        this.origin = origin;
-    }
-
     public Intersection getDestination() {
         return destination;
-    }
-
-    public void setDestination(Intersection destination) {
-        this.destination = destination;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public float getLength() {
         return length;
-    }
-
-    public void setLength(float length) {
-        this.length = length;
     }
 
     @Override
@@ -91,5 +75,4 @@ public class Segment {
 				&& Float.floatToIntBits(length) == Float.floatToIntBits(other.length)
 				&& Objects.equals(name, other.name) && Objects.equals(origin, other.origin);
 	}
-    
 }

@@ -1,10 +1,8 @@
 package fr.insalyon.view;
 
-import java.time.Duration;
-import java.time.LocalTime;
-
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
+import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
@@ -15,6 +13,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+
+import java.time.Duration;
+import java.time.LocalTime;
 
 public class TourTextualView extends AnchorPane {
 // TODO : add the warehouse start and end in the view
@@ -59,11 +60,33 @@ public class TourTextualView extends AnchorPane {
 	}
 
 	private void showTour() {
-		int i = 0;
-		for (Delivery d : tour.getDeliveriesList()) {
-			double bottom = this.showDelivery(d, LocalTime.of(8, 30), i++);
-			if (i < tour.getDeliveriesList().size()) {
-				this.showTravelTime(bottom, Duration.ofMinutes(30));
+		if (!this.tour.getDeliveriesList().isEmpty()) {
+			// TODO : prendre en compte le temps depuis le warehouse (départ à 8h)
+			// TODO : si la delivery n'est pas à 8h, possibilité de partir plus tard du coup
+
+//			float distance = this.tour.getPathList().get(0).getLength();
+//			Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+//			start = start.plus(duration);
+
+			LocalTime start = LocalTime.of(this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour(), 0);
+			Delivery delivery = this.tour.getDeliveriesList().get(0);
+			double bottom = this.showDelivery(delivery, start, 0);
+			start = start.plus(Delivery.DURATION);
+
+			for (int i = 1; i < this.tour.getDeliveriesList().size(); i++) {
+				delivery = this.tour.getDeliveriesList().get(i);
+
+				float distance = this.tour.getPathList().get(i - 1).getLength();
+				Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+				start = start.plus(duration);
+				this.showTravelTime(bottom, start, duration, delivery.getTimeWindow());
+
+				if (start.isBefore(LocalTime.of(delivery.getTimeWindow().getStartHour(), 0))) {
+					start = LocalTime.of(delivery.getTimeWindow().getStartHour(), 0);
+				}
+
+				bottom = this.showDelivery(delivery, start, i);
+				start = start.plus(Delivery.DURATION);
 			}
 		}
 	}
@@ -78,7 +101,7 @@ public class TourTextualView extends AnchorPane {
 		return topAnchor + DELIVERY_VIEW_HEIGHT;
 	}
 
-	private void showTravelTime(double top, Duration duration) {
+	private void showTravelTime(double top, LocalTime startTime, Duration duration, TimeWindow timeWindow) {
 		Line line = new Line();
 		line.setStartX(LINE_LEFT_MARGIN);
 		line.setEndX(LINE_LEFT_MARGIN);
@@ -89,14 +112,19 @@ public class TourTextualView extends AnchorPane {
 		this.getChildren().add(line);
 
 		double middle = (top + bottom) / 2d;
-		String durationFormatted = String.format("Travel time : %02d min", duration.toMinutesPart());
+		String durationFormatted = String.format("Travel time : %d min", duration.toMinutes());
 		Label timeLabel = new Label(durationFormatted);
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
 
-		if (true) { // TODO : s'il y a un temps d'attente
-			Label waitingTimeLabel = new Label("Waiting time : 2 min");
+		LocalTime endTime = startTime.plus(duration);
+		LocalTime deliveryTime = LocalTime.of(timeWindow.getStartHour(), 0);
+
+		if (endTime.isBefore(deliveryTime)) {
+			Duration delta = Duration.between(endTime, deliveryTime);
+			String waitingTimeFormatted = String.format("Waiting time : %02d min", delta.toMinutes());
+			Label waitingTimeLabel = new Label(waitingTimeFormatted);
 			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 			waitingTimeLabel.setLayoutY(middle + 10);
 			this.getChildren().add(waitingTimeLabel);
@@ -113,7 +141,6 @@ public class TourTextualView extends AnchorPane {
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
 		if (newValue == tour) {
-			// TODO check that it works
 			this.parent.setExpanded(true);
 		}
 	}
