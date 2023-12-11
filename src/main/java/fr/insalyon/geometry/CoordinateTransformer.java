@@ -1,5 +1,7 @@
 package fr.insalyon.geometry;
 
+import javafx.geometry.Pos;
+
 /**
  * Transforms the coordinates in spherical coordinate system into a position in
  * the Cartesian coordinate system The position is calculated by mapping each
@@ -69,9 +71,7 @@ public class CoordinateTransformer {
 		return new Position((float) x, (float) y);
 	}
 
-	public Position transformToDragAndZoomPosition(GeoCoordinates coordinates, Position translation, double scaleFactor) throws IllegalArgumentException {
-		Position position = transformToPosition(coordinates);
-
+	public Position transformToDragAndZoom(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
 		position.setX(position.getX() + translation.getX());
 		position.setY(position.getY() + translation.getY());
 
@@ -81,12 +81,15 @@ public class CoordinateTransformer {
 		return position;
 	}
 
-	public Position transformToDragAndZoomPosition(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
-		position.setX(position.getX() + translation.getX());
-		position.setY(position.getY() + translation.getY());
+	public Position transformToDragAndZoomPosition(GeoCoordinates coordinates, Position translation, double scaleFactor) throws IllegalArgumentException {
+		Position position = transformToPosition(coordinates);
+		position = transformToDragAndZoom(position, translation, scaleFactor);
 
-		position.setX(position.getX() * new Float(scaleFactor));
-		position.setY(position.getY() * new Float(scaleFactor));
+		return position;
+	}
+
+	public Position transformToDragAndZoomPosition(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
+		position = transformToDragAndZoom(position, translation, scaleFactor);
 
 		return position;
 	}

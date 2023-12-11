@@ -18,14 +18,12 @@
 			<Color red="0.624" green="0.624" blue="0.624" />
 		</textFill>
 	</Label>
-	<AnchorPane fx:id="canvasContainer" layoutY="49.0"
+	<AnchorPane fx:id="anchorPane" layoutY="49.0" prefHeight="626.0" prefWidth="664.0"
 		onDragDropped="#handleFileDropped" onDragExited="#handleFileExit"
 		onDragOver="#handleFileOver"
 		onMouseClicked="#selectIntersection" onMouseDragged="#moveOnDrag"
 		onMousePressed="#saveMousePosition" onScroll="#zoomOnScroll"
-		prefHeight="626.0" prefWidth="664.0"
 		style="-fx-background-color: lightgrey;">
-		<Canvas fx:id="canvasMap" height="626.0" width="664.0" />
 	</AnchorPane>
 	<Label fx:id="selectedSegmentLabel" alignment="TOP_RIGHT"
 		contentDisplay="RIGHT" layoutX="301.0" layoutY="33.0"

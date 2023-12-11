@@ -34,13 +34,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 public class CityMapController implements Controller {
 	@FXML
-	private Canvas canvasMap;
-
-	@FXML
-	private AnchorPane canvasContainer;
+	private AnchorPane anchorPane;
 
 	@FXML
 	private Label selectedSegmentLabel;
@@ -78,8 +76,8 @@ public class CityMapController implements Controller {
 
 		if (this.dataModel.getCityMap() != null) {
 			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
-					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.canvasContainer.getWidth(),
-					(float) this.canvasContainer.getHeight());
+					this.dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.anchorPane.getWidth(),
+					(float) this.anchorPane.getHeight());
 			drawCanvas();
 		}
 	}
@@ -97,50 +95,32 @@ public class CityMapController implements Controller {
 		}
 	}
 
-	/**
-	 * Updates the canvas scale and translation
-	 */
-	private void updateCanvasProperties() {
-		GraphicsContext gc = canvasMap.getGraphicsContext2D();
-
-		if (this.prevTranslationFactor != this.translationFactor) {
-			gc.translate(-this.prevTranslationFactor.getX(), -this.prevTranslationFactor.getY());
-			gc.translate(this.translationFactor.getX(), this.translationFactor.getY());
-			this.prevTranslationFactor = this.translationFactor.copy();
-		}
-
-		if (this.prevScaleFactor != this.scaleFactor) {
-			gc.scale(1 / this.prevScaleFactor, 1 / this.prevScaleFactor);
-			gc.scale(this.scaleFactor, this.scaleFactor);
-			this.prevScaleFactor = this.scaleFactor;
-		}
-	}
-
 	private void clearCanvas() {
-		this.canvasContainer.getChildren().clear();
+		this.anchorPane.getChildren().clear();
 	}
 
 	private void drawCityMap() {
 		dataModel.getCityMap().getIntersections()
-				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
-					// Calculating better coordinates to display on map
-					Position origin = transformer.transformToDragAndZoomPosition(
-							segment.getOrigin().getCoordinates(),
-							this.translationFactor,
-							this.scaleFactor
-					);
-					Position destination = transformer.transformToDragAndZoomPosition(
-							segment.getDestination().getCoordinates(),
-							this.translationFactor,
-							this.scaleFactor
-					);
+				.forEach(intersection -> {
+					intersection.getOutwardSegments().forEach(segment -> {
+						// Calculating better coordinates to display on map
+						Position origin = transformer.transformToDragAndZoomPosition(
+								segment.getOrigin().getCoordinates(),
+								this.translationFactor, this.scaleFactor
+						);
+						Position destination = transformer.transformToDragAndZoomPosition(
+								segment.getDestination().getCoordinates(),
+								this.translationFactor, this.scaleFactor
+						);
 
-					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-					line.setStroke(Color.BLUE);
-					line.setUserData(segment);
-					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
-					canvasContainer.getChildren().add(line);
-				}));
+						Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
+						line.setStroke(Color.BLUE);
+						line.setUserData(segment);
+						line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
+						anchorPane.getChildren().add(line);
+
+					});
+				});
 	}
 
 	private void drawWarehouse() {
@@ -156,7 +136,7 @@ public class CityMapController implements Controller {
 		imageView.setY(imgPosition.getY()-12);
 		imageView.setFitHeight(25);
 		imageView.setFitWidth(25);
-		this.canvasContainer.getChildren().add(imageView);
+		this.anchorPane.getChildren().add(imageView);
 	}
 
 	private void drawSelectedIntersection() {
@@ -173,9 +153,10 @@ public class CityMapController implements Controller {
 			imageView.setY(imgPosition.getY()-25);
 			imageView.setFitHeight(25);
 			imageView.setFitWidth(25);
-			this.canvasContainer.getChildren().add(imageView);
+			this.anchorPane.getChildren().add(imageView);
 		}
 	}
+
 	private void drawAllDeliveries() {
 		dataModel.getTours()
 				.forEach(tour -> tour.getDeliveriesList()
@@ -200,7 +181,7 @@ public class CityMapController implements Controller {
 		point.setCenterX(position.getX());
 		point.setCenterY(position.getY());
 
-		this.canvasContainer.getChildren().add(point);
+		this.anchorPane.getChildren().add(point);
 	}
 
 	private void drawPath(Path path) {
@@ -214,7 +195,7 @@ public class CityMapController implements Controller {
 			line.setStroke(Color.RED);
 			line.setUserData(segment);
 			line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
-			canvasContainer.getChildren().add(line);
+			this.anchorPane.getChildren().add(line);
 		}
 	}
 
@@ -266,8 +247,8 @@ public class CityMapController implements Controller {
 
 	@FXML
 	private void saveMousePosition(MouseEvent event) {
-		lastClickX = event.getX();
-		lastClickY = event.getY();
+		this.lastClickX = event.getX();
+		this.lastClickY = event.getY();
 	}
 
 	@FXML
@@ -281,13 +262,13 @@ public class CityMapController implements Controller {
 	@FXML
 	private void moveOnDrag(MouseEvent event) {
 		this.prevTranslationFactor = this.translationFactor.copy();
-		float xFactor = (float) ((event.getX() - lastClickX) / this.scaleFactor);
-		float yFactor = (float) ((event.getY() - lastClickY) / this.scaleFactor);
+		float xFactor = (float) ((event.getX() - this.lastClickX) / this.scaleFactor);
+		float yFactor = (float) ((event.getY() - this.lastClickY) / this.scaleFactor);
 		this.translationFactor.setX(this.translationFactor.getX() + xFactor);
 		this.translationFactor.setY(this.translationFactor.getY() + yFactor);
 		drawCanvas();
-		lastClickX = event.getX();
-		lastClickY = event.getY();
+		this.lastClickX = event.getX();
+		this.lastClickY = event.getY();
 	}
 
 	/**
@@ -303,11 +284,11 @@ public class CityMapController implements Controller {
 			this.parentController.displayToolBarMessage("The file is not readable");
 		} else {
 			try {
-				canvasContainer.setStyle("-fx-background-color: lightgrey");
+				this.anchorPane.setStyle("-fx-background-color: lightgrey");
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
-				dataModel.setMap(newMap);
+				this.dataModel.setMap(newMap);
 				return true;
 			} catch (BadlyFormedXMLException | XMLParserException e) {
 				this.parentController.displayToolBarMessage(e);
@@ -349,29 +330,29 @@ public class CityMapController implements Controller {
 	 */
 	@FXML
 	private void handleFileOver(DragEvent event) {
-		if (event.getGestureSource() != canvasContainer && event.getDragboard().hasFiles()) {
+		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			canvasContainer.setStyle("-fx-background-color: darkgrey");
+			this.anchorPane.setStyle("-fx-background-color: darkgrey");
 		}
 		event.consume();
 	}
 
 	@FXML
 	private void handleFileExit(DragEvent event) {
-		if (event.getGestureSource() != canvasContainer && event.getDragboard().hasFiles()) {
+		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			canvasContainer.setStyle("-fx-background-color: lightgrey");
+			this.anchorPane.setStyle("-fx-background-color: lightgrey");
 		}
 		event.consume();
 	}
 
-
 	private void onCityMapUpdate(ObservableValue<? extends CityMap> observable, CityMap oldValue, CityMap newValue) {
 		transformer = new CoordinateTransformer(dataModel.getCityMap().getNorthWestMostCoordinates(),
-				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) canvasContainer.getWidth(),
-				(float) canvasContainer.getHeight());
+				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.anchorPane.getWidth(),
+				(float) this.anchorPane.getHeight());
+		this.anchorPane.setClip(new Rectangle(this.anchorPane.getWidth(), this.anchorPane.getHeight()));
 		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor = 1;
 		this.prevTranslationFactor = this.translationFactor.copy();
