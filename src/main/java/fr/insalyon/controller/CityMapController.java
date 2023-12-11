@@ -20,9 +20,8 @@ import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.xml.XMLParserException;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -31,7 +30,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -42,11 +40,11 @@ public class CityMapController implements Controller {
 
 	@FXML
 	private Label selectedSegmentLabel;
-	
+
 	private DataModel dataModel;
-	
+
 	private MainController parentController;
-	
+
 	/**
 	 * Used to keep track of the last click X coordinate to make dragging possible
 	 */
@@ -97,39 +95,30 @@ public class CityMapController implements Controller {
 
 	private void drawCityMap() {
 		dataModel.getCityMap().getIntersections()
-				.forEach(intersection -> {
-					intersection.getOutwardSegments().forEach(segment -> {
-						// Calculating better coordinates to display on map
-						Position origin = transformer.transformToDragAndZoomPosition(
-								segment.getOrigin().getCoordinates(),
-								this.translationFactor, this.scaleFactor
-						);
-						Position destination = transformer.transformToDragAndZoomPosition(
-								segment.getDestination().getCoordinates(),
-								this.translationFactor, this.scaleFactor
-						);
+				.forEach(intersection -> intersection.getOutwardSegments().forEach(segment -> {
+					// Calculating better coordinates to display on map
+					Position origin = transformer.transformToDragAndZoomPosition(segment.getOrigin().getCoordinates(),
+							this.translationFactor, this.scaleFactor);
+					Position destination = transformer.transformToDragAndZoomPosition(
+							segment.getDestination().getCoordinates(), this.translationFactor, this.scaleFactor);
 
-						Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-						line.setStroke(Color.BLUE);
-						line.setUserData(segment);
-						line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
-						anchorPane.getChildren().add(line);
+					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
+					line.setStroke(Color.BLUE);
+					line.setUserData(segment);
+					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
+					anchorPane.getChildren().add(line);
 
-					});
-				});
+				}));
 	}
 
 	private void drawWarehouse() {
-		Image img  = new Image("file:images/warehouse.png");
+		Image img = new Image("file:images/warehouse.png");
 		Position imgPosition = transformer.transformToDragAndZoomPosition(
-				dataModel.getCityMap().getWarehouse().getCoordinates(),
-				this.translationFactor,
-				this.scaleFactor
-		);
+				dataModel.getCityMap().getWarehouse().getCoordinates(), this.translationFactor, this.scaleFactor);
 
 		ImageView imageView = new ImageView(img);
-		imageView.setX(imgPosition.getX()-12);
-		imageView.setY(imgPosition.getY()-12);
+		imageView.setX(imgPosition.getX() - 12);
+		imageView.setY(imgPosition.getY() - 12);
 		imageView.setFitHeight(25);
 		imageView.setFitWidth(25);
 		this.anchorPane.getChildren().add(imageView);
@@ -137,16 +126,13 @@ public class CityMapController implements Controller {
 
 	private void drawSelectedIntersection() {
 		if (dataModel.getSelectedIntersection() != null) {
-			Image img  = new Image("file:images/pointGPS.png");
+			Image img = new Image("file:images/pointGPS.png");
 			Position imgPosition = transformer.transformToDragAndZoomPosition(
-					dataModel.getSelectedIntersection().getCoordinates(),
-					this.translationFactor,
-					this.scaleFactor
-			);
+					dataModel.getSelectedIntersection().getCoordinates(), this.translationFactor, this.scaleFactor);
 
 			ImageView imageView = new ImageView(img);
-			imageView.setX(imgPosition.getX()-12);
-			imageView.setY(imgPosition.getY()-25);
+			imageView.setX(imgPosition.getX() - 12);
+			imageView.setY(imgPosition.getY() - 25);
 			imageView.setFitHeight(25);
 			imageView.setFitWidth(25);
 			this.anchorPane.getChildren().add(imageView);
@@ -155,20 +141,18 @@ public class CityMapController implements Controller {
 
 	private void drawAllDeliveries() {
 		dataModel.getTours()
-				.forEach(tour -> tour.getDeliveriesList()
-						.forEach(delivery -> drawPoint(
-								transformer.transformToDragAndZoomPosition(delivery.getLocation().getCoordinates(),
-										this.translationFactor, this.scaleFactor),
-								Color.BLACK)
-						)
-				);
+				.forEach(
+						tour -> tour.getDeliveriesList()
+								.forEach(delivery -> drawPoint(transformer.transformToDragAndZoomPosition(
+										delivery.getLocation().getCoordinates(), this.translationFactor,
+										this.scaleFactor), Color.BLACK)));
 	}
 
 	private void drawSelectedDelivery() {
 		if (dataModel.getSelectedDelivery() != null) {
-			drawPoint(transformer.transformToDragAndZoomPosition(dataModel.getSelectedDelivery().getLocation().getCoordinates(),
-							this.translationFactor, this.scaleFactor),
-					Color.RED);
+			drawPoint(transformer.transformToDragAndZoomPosition(
+					dataModel.getSelectedDelivery().getLocation().getCoordinates(), this.translationFactor,
+					this.scaleFactor), Color.RED);
 		}
 	}
 
@@ -229,7 +213,7 @@ public class CityMapController implements Controller {
 			}
 		}
 	}
-	
+
 	private Delivery getDeliveryAt(Intersection selectedIntersection) {
 		for (Tour tour : dataModel.getTours()) {
 			for (Delivery delivery : tour.getDeliveriesList()) {

@@ -1,7 +1,5 @@
 package fr.insalyon.geometry;
 
-import javafx.geometry.Pos;
-
 /**
  * Transforms the coordinates in spherical coordinate system into a position in
  * the Cartesian coordinate system The position is calculated by mapping each
@@ -75,8 +73,8 @@ public class CoordinateTransformer {
 		position.setX(position.getX() + translation.getX());
 		position.setY(position.getY() + translation.getY());
 
-		position.setX(position.getX() * new Float(scaleFactor));
-		position.setY(position.getY() * new Float(scaleFactor));
+		position.setX((float) (position.getX() * scaleFactor));
+		position.setY((float) (position.getY() * scaleFactor));
 
 		return position;
 	}
