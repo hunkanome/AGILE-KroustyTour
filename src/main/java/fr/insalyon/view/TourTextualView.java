@@ -61,17 +61,20 @@ public class TourTextualView extends AnchorPane {
 
 	private void showTour() {
 		int i = 0;
-		int lastArrivalTime = this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour();
 
-		for (Delivery d : this.tour.getDeliveriesList()) {
-			double bottom = this.showDelivery(d, LocalTime.of(lastArrivalTime % 60, lastArrivalTime / 60), i++);
+		if (this.tour.getDeliveriesList().size() > 0) {
+			int lastArrivalTime = this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour();
 
-			if (i < this.tour.getDeliveriesList().size()) {
-				float distance = this.tour.getPathList().get(i - 1).getLength();
-				long minutesElapsed = (long) (distance / 15 * 60L / 3.6f);
+			for (Delivery d : this.tour.getDeliveriesList()) {
+				double bottom = this.showDelivery(d, LocalTime.of(lastArrivalTime % 60, lastArrivalTime / 60), i++);
 
-				lastArrivalTime += (int) minutesElapsed;
-				this.showTravelTime(bottom, Duration.ofMinutes(minutesElapsed), d.getTimeWindow());
+				if (i < this.tour.getDeliveriesList().size()) {
+					float distance = this.tour.getPathList().get(i - 1).getLength();
+					long minutesElapsed = (long) (distance / 15 * 60L / 3.6f);
+
+					lastArrivalTime += (int) minutesElapsed;
+					this.showTravelTime(bottom, Duration.ofMinutes(minutesElapsed), d.getTimeWindow());
+				}
 			}
 		}
 	}
