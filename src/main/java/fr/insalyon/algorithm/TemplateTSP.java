@@ -38,6 +38,7 @@ public abstract class TemplateTSP implements TSP {
 
 		Collection<Integer> visited = new ArrayList<>(graph.getNbVertices());
 		visited.add(0); // The first visited vertex is 0, corresponding to the warehouse
+		deliveriesByTimeWindow.get(TimeWindow.getTimeWindow(8)).remove(0); // We remove the warehouse from the list of deliveries to be visited
 
 		branchAndBound(0, deliveriesByTimeWindow, visited, 0, 0, TimeWindow.getTimeWindow(8));
 	}
