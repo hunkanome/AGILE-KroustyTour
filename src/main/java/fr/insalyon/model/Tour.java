@@ -62,15 +62,16 @@ public class Tour {
                     .add(deliveries.indexOf(d));
         }
         // Computing TSP solution
-        tsp1.searchSolution(5000, graph, deliveriesByTimeWindow);
+        int limitTime = 10 * 1000;
+        tsp1.searchSolution(limitTime, graph, deliveriesByTimeWindow);
         Integer[] solution = tsp1.getBestSol();
 
-        List<Delivery> newDeliveries = new ArrayList<>(solution.length-1);
-        List<Path> newPaths = new ArrayList<>(solution.length-1);
+        List<Delivery> newDeliveries = new ArrayList<>(solution.length - 1);
+        List<Path> newPaths = new ArrayList<>(solution.length - 1);
         
-        for (int i=1; i<solution.length; i++) {
-            newDeliveries.add(this.deliveriesList.get(i-1));
-            newPaths.add(graph.getShortestPath(solution[i-1], solution[i]));
+        for (int i = 1; i < solution.length; i++) {
+            newDeliveries.add(this.deliveriesList.get(solution[i] - 1));
+            newPaths.add(graph.getShortestPath(solution[i - 1], solution[i]));
         }
 
         this.deliveriesList.setAll(newDeliveries);

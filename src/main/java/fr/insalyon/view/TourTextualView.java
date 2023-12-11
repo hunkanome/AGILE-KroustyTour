@@ -61,23 +61,29 @@ public class TourTextualView extends AnchorPane {
 
 	private void showTour() {
 		if (!this.tour.getDeliveriesList().isEmpty()) {
-			int i = 0;
-
 			LocalTime start = LocalTime.of(this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour(), 0);
+			Delivery delivery = this.tour.getDeliveriesList().get(0);
+			double bottom = this.showDelivery(delivery, start, 0);
+			start = start.plus(Delivery.DURATION);
 
-			for (Delivery d : this.tour.getDeliveriesList()) {
-				double bottom = this.showDelivery(d, start, i++);
+//			float distance = this.tour.getPathList().get(0).getLength();
+//			Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+//			start = start.plus(duration);
 
-				if (i < this.tour.getDeliveriesList().size()) {
-					float distance = 0;
-					if (!this.tour.getPathList().isEmpty()) {
-						distance = this.tour.getPathList().get(i - 1).getLength();
-					}
-					Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
-					start = start.plus(duration);
-					this.showTravelTime(bottom, duration, d.getTimeWindow());
-					start = start.plus(Delivery.DURATION);
+			for (int i = 1; i < this.tour.getDeliveriesList().size(); i++) {
+				delivery = this.tour.getDeliveriesList().get(i);
+
+				float distance = this.tour.getPathList().get(i - 1).getLength();
+				Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+				start = start.plus(duration);
+				this.showTravelTime(bottom, start, duration, delivery.getTimeWindow());
+
+				if (start.isBefore(LocalTime.of(delivery.getTimeWindow().getStartHour(), 0))) {
+					start = LocalTime.of(delivery.getTimeWindow().getStartHour(), 0);
 				}
+
+				bottom = this.showDelivery(delivery, start, i);
+				start = start.plus(Delivery.DURATION);
 			}
 		}
 	}
@@ -92,7 +98,7 @@ public class TourTextualView extends AnchorPane {
 		return topAnchor + DELIVERY_VIEW_HEIGHT;
 	}
 
-	private void showTravelTime(double top, Duration duration, TimeWindow timeWindow) {
+	private void showTravelTime(double top, LocalTime startTime, Duration duration, TimeWindow timeWindow) {
 		Line line = new Line();
 		line.setStartX(LINE_LEFT_MARGIN);
 		line.setEndX(LINE_LEFT_MARGIN);
@@ -103,20 +109,18 @@ public class TourTextualView extends AnchorPane {
 		this.getChildren().add(line);
 
 		double middle = (top + bottom) / 2d;
-		String durationFormatted = String.format("Travel time : %02d min", duration.toMinutesPart());
+		String durationFormatted = String.format("Travel time : %d min", duration.toMinutes());
 		Label timeLabel = new Label(durationFormatted);
 		timeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
 
-		int start = this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour();
+		LocalTime endTime = startTime.plus(duration);
+		LocalTime deliveryTime = LocalTime.of(timeWindow.getStartHour(), 0);
 
-		// time in minutes
-		int arrivalTime = start * 60 + duration.toMinutesPart();
-		int deliveryTime = timeWindow.getStartHour() * 60;
-
-		if (arrivalTime < deliveryTime) { //
-			String waitingTimeFormatted = String.format("Travel time : %02d min", deliveryTime - arrivalTime);
+		if (endTime.isBefore(deliveryTime)) {
+			Duration delta = Duration.between(endTime, deliveryTime);
+			String waitingTimeFormatted = String.format("Waiting time : %02d min", delta.toMinutes());
 			Label waitingTimeLabel = new Label(waitingTimeFormatted);
 			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 			waitingTimeLabel.setLayoutY(middle + 10);
