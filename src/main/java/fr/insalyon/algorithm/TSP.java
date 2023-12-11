@@ -12,6 +12,7 @@ public interface TSP {
 	 * Warning: The computed tour always start from vertex 0
 	 * @param timeLimit maximal time allowed to find a solution
 	 * @param graph the DeliveryGraph in which a TSP tour must be computed
+	 * @param deliveriesByTimeWindow the list of index of deliveries to be visited, grouped by time window
 	 */
     void searchSolution(int timeLimit, Graph graph, Map<TimeWindow, List<Integer>> deliveriesByTimeWindow);
 	

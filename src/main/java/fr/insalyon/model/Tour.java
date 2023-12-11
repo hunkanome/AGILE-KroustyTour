@@ -17,6 +17,7 @@ import java.util.*;
  * @see CityMap
  */
 public class Tour {
+    private static final int MAX_TSP_TIME = 10000;
 
     private final ObservableList<Delivery> deliveriesList = FXCollections.observableArrayList();
 
@@ -37,6 +38,12 @@ public class Tour {
 		return deliveriesList;
 	}
 
+    /**
+     * Add a delivery to the tour and recalculate the graph
+     * @param delivery the delivery to add
+     * @param cityMap the city map used to recalculate the graph
+     * @param shortestPathAlgorithm the algorithm used to recalculate the graph
+     */
     public void addDelivery(Delivery delivery, CityMap cityMap, ShortestPathAlgorithm shortestPathAlgorithm) {
         this.deliveriesList.add(delivery);
         recalculateGraph(cityMap, shortestPathAlgorithm);
@@ -62,8 +69,7 @@ public class Tour {
                     .add(deliveries.indexOf(d));
         }
         // Computing TSP solution
-        int limitTime = 10 * 1000;
-        tsp1.searchSolution(limitTime, graph, deliveriesByTimeWindow);
+        tsp1.searchSolution(MAX_TSP_TIME, graph, deliveriesByTimeWindow);
         Integer[] solution = tsp1.getBestSol();
 
         List<Delivery> newDeliveries = new ArrayList<>(solution.length - 1);
