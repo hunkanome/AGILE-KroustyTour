@@ -59,7 +59,7 @@ public class Tour {
         for (Delivery d : deliveriesList) {
             deliveriesByTimeWindow
                     .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveriesList.indexOf(d)+1);
+                    .add(deliveriesList.indexOf(d));
         }
         // Computing TSP solution
         tsp1.searchSolution(5000, graph, deliveriesByTimeWindow);
