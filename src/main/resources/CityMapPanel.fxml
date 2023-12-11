@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane	prefHeight="675.0" prefWidth="541.0"
+<AnchorPane prefHeight="675.0" prefWidth="541.0"
 	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="fr.insalyon.controller.CityMapController">
 	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
@@ -18,11 +17,12 @@
 			<Color red="0.624" green="0.624" blue="0.624" />
 		</textFill>
 	</Label>
-	<AnchorPane fx:id="anchorPane" layoutY="49.0" prefHeight="626.0" prefWidth="664.0"
+	<AnchorPane fx:id="anchorPane" layoutY="49.0"
+		maxHeight="626.0" maxWidth="664.0" minHeight="626.0" minWidth="664.0"
 		onDragDropped="#handleFileDropped" onDragExited="#handleFileExit"
-		onDragOver="#handleFileOver"
-		onMouseClicked="#selectIntersection" onMouseDragged="#moveOnDrag"
-		onMousePressed="#saveMousePosition" onScroll="#zoomOnScroll"
+		onDragOver="#handleFileOver" onMouseClicked="#selectIntersection"
+		onMouseDragged="#moveOnDrag" onMousePressed="#saveMousePosition"
+		onScroll="#zoomOnScroll" prefHeight="626.0" prefWidth="664.0"
 		style="-fx-background-color: lightgrey;">
 	</AnchorPane>
 	<Label fx:id="selectedSegmentLabel" alignment="TOP_RIGHT"
