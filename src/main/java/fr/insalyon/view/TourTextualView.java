@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
+import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
@@ -60,10 +61,17 @@ public class TourTextualView extends AnchorPane {
 
 	private void showTour() {
 		int i = 0;
-		for (Delivery d : tour.getDeliveriesList()) {
-			double bottom = this.showDelivery(d, LocalTime.of(8, 30), i++);
-			if (i < tour.getDeliveriesList().size()) {
-				this.showTravelTime(bottom, Duration.ofMinutes(30));
+		int lastArrivalTime = this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour();
+
+		for (Delivery d : this.tour.getDeliveriesList()) {
+			double bottom = this.showDelivery(d, LocalTime.of(lastArrivalTime % 60, lastArrivalTime / 60), i++);
+
+			if (i < this.tour.getDeliveriesList().size()) {
+				float distance = this.tour.getPathList().get(i - 1).getLength();
+				long minutesElapsed = (long) (distance / 15 * 60L / 3.6f);
+
+				lastArrivalTime += (int) minutesElapsed;
+				this.showTravelTime(bottom, Duration.ofMinutes(minutesElapsed), d.getTimeWindow());
 			}
 		}
 	}
@@ -78,7 +86,7 @@ public class TourTextualView extends AnchorPane {
 		return topAnchor + DELIVERY_VIEW_HEIGHT;
 	}
 
-	private void showTravelTime(double top, Duration duration) {
+	private void showTravelTime(double top, Duration duration, TimeWindow timeWindow) {
 		Line line = new Line();
 		line.setStartX(LINE_LEFT_MARGIN);
 		line.setEndX(LINE_LEFT_MARGIN);
@@ -95,8 +103,15 @@ public class TourTextualView extends AnchorPane {
 		timeLabel.setLayoutY(middle - 10);
 		this.getChildren().add(timeLabel);
 
-		if (true) { // TODO : s'il y a un temps d'attente
-			Label waitingTimeLabel = new Label("Waiting time : 2 min");
+		int start = this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour();
+
+		// time in minutes
+		int arrivalTime = start * 60 + duration.toMinutesPart();
+		int deliveryTime = timeWindow.getStartHour() * 60;
+
+		if (arrivalTime < deliveryTime) { //
+			String waitingTimeFormatted = String.format("Travel time : %02d min", deliveryTime - arrivalTime);
+			Label waitingTimeLabel = new Label(waitingTimeFormatted);
 			waitingTimeLabel.setLayoutX(LINE_LEFT_MARGIN + LINE_RIGHT_MARGIN);
 			waitingTimeLabel.setLayoutY(middle + 10);
 			this.getChildren().add(waitingTimeLabel);
