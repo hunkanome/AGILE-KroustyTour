@@ -51,7 +51,7 @@ public class Tour {
         List<Delivery> deliveries = new ArrayList<>(this.deliveriesList);
         Delivery warehouseDelivery = new Delivery(this.courier, cityMap.getWarehouse(), TimeWindow.getTimeWindow(8));
         deliveries.add(0, warehouseDelivery);
-        Graph graph = new DeliveryGraph(this.deliveriesList, cityMap, shortestPathAlgorithm);
+        Graph graph = new DeliveryGraph(deliveries, cityMap, shortestPathAlgorithm);
         TSP1 tsp1 = new TSP1();
 
         // Grouping the deliveries by TimeWindow
@@ -67,24 +67,14 @@ public class Tour {
 
         List<Delivery> newDeliveries = new ArrayList<>(solution.length-1);
         List<Path> newPaths = new ArrayList<>(solution.length-1);
-
-        if(solution.length > 1) {
-            newDeliveries.add(deliveries.get(solution[1]));
-        }
-        for (int i=2; i<solution.length; i++) {
-            newDeliveries.add(this.deliveriesList.get(i));
+        
+        for (int i=1; i<solution.length; i++) {
+            newDeliveries.add(this.deliveriesList.get(i-1));
             newPaths.add(graph.getShortestPath(solution[i-1], solution[i]));
         }
 
         this.deliveriesList.setAll(newDeliveries);
         this.pathList = newPaths;
-
-        System.out.println(Arrays.stream(solution).toList());
-        System.out.println(deliveries);
-        System.out.println(deliveriesList);
-        System.out.println(pathList);
-
-
     }
 
     public Courier getCourier() {
