@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
  * @see Controller
  */
 public class ActionController implements Controller {
+	private static final String NO_TOUR_SELECTED = "No tour selected";
 
 	@FXML
 	private ComboBox<TimeWindow> timeWindowChooser;
@@ -48,7 +49,7 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
-			this.parentController.displayToolBarMessage("No tour selected");
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
 			return;
 		}
 		Command command = new RemoveSelectedTourCommand(this.dataModel, selectedTour);
@@ -63,7 +64,7 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
-			this.parentController.displayToolBarMessage("No tour selected");
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
 			return;
 		}
 		Intersection selectedIntersection = this.dataModel.getSelectedIntersection();
@@ -76,7 +77,7 @@ public class ActionController implements Controller {
 			this.parentController.displayToolBarMessage("No time window selected");
 			return;
 		}
-		Delivery newDelivery = new Delivery(selectedTour.getCourier(), selectedIntersection, selectedTimeWindow);
+		Delivery newDelivery = new Delivery(selectedIntersection, selectedTimeWindow);
 		Command command = new AddDeliveryCommand(this.dataModel, newDelivery);
 		this.commandList.execute(command);
 		this.parentController.displayToolBarMessage("Delivery added");
@@ -89,7 +90,7 @@ public class ActionController implements Controller {
 		}
 		Tour selectedTour = this.dataModel.getSelectedTour();
 		if (selectedTour == null) {
-			this.parentController.displayToolBarMessage("No tour selected");
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
 			return;
 		}
 		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();

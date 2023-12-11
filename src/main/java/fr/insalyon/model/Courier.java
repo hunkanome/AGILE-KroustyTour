@@ -11,27 +11,15 @@ public class Courier {
 
     private final int id;
 
-    private boolean available;
-
     /**
      * Construct a new courier
-     * Define that he is available
      */
     public Courier() {
-        this.available = true;
         this.id = nbCouriers;
         nbCouriers++;
     }
 
     public int getId() {
         return id;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
 }

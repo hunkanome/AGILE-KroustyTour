@@ -15,11 +15,11 @@ import fr.insalyon.model.Tour;
  */
 public class RemoveSelectedDeliveryCommand implements Command {
 
-    protected DataModel dataModel;
+    protected final DataModel dataModel;
 
-    protected Tour tour;
+    protected final Tour tour;
 
-    protected Delivery delivery;
+    protected final Delivery delivery;
 
     /**
      * Used when initializing the command

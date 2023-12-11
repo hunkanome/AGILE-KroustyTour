@@ -80,7 +80,6 @@ class TSPTest {
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         deliveries.add(
             new Delivery(
-                new Courier(),
                 new Intersection(0L, coordinates, 0),
                 TimeWindow.getTimeWindow(8)));
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
@@ -102,7 +101,6 @@ class TSPTest {
     void testTSPSameTimeWindow() {
         TSP tsp = new TSP1();
 
-        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -112,10 +110,10 @@ class TSPTest {
         TimeWindow tw8 = TimeWindow.getTimeWindow(8);
 
         List<Delivery> deliveries = new ArrayList<>(4);
-        deliveries.add(new Delivery(courier, intersection1, tw8));
-        deliveries.add(new Delivery(courier, intersection2, tw8));
-        deliveries.add(new Delivery(courier, intersection3, tw8));
-        deliveries.add(new Delivery(courier, intersection4, tw8));
+        deliveries.add(new Delivery(intersection1, tw8));
+        deliveries.add(new Delivery(intersection2, tw8));
+        deliveries.add(new Delivery(intersection3, tw8));
+        deliveries.add(new Delivery(intersection4, tw8));
 
         DeliveryGraph graph = new DeliveryGraph(costMatrix);
 
@@ -139,7 +137,6 @@ class TSPTest {
     void testTSPDifferentTimeWindows() {
         TSP tsp = new TSP1();
 
-        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -152,18 +149,18 @@ class TSPTest {
 
 
         List<Delivery> deliveries = new ArrayList<>(4);
-        deliveries.add(new Delivery(courier, intersection1, tw8));
-        deliveries.add(new Delivery(courier, intersection2, tw9));
-        deliveries.add(new Delivery(courier, intersection3, tw10));
-        deliveries.add(new Delivery(courier, intersection4, tw10));
+        deliveries.add(new Delivery(intersection1, tw8));
+        deliveries.add(new Delivery(intersection2, tw9));
+        deliveries.add(new Delivery(intersection3, tw10));
+        deliveries.add(new Delivery(intersection4, tw10));
 
         Graph graph = new DeliveryGraph(costMatrix);
 
         Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
-        for (Delivery d : deliveries) {
+        for (Delivery delivery : deliveries) {
             deliveriesByTimeWindow
-                    .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
-                    .add(deliveries.indexOf(d));
+                    .computeIfAbsent(delivery.getTimeWindow(), k -> new ArrayList<>())
+                    .add(deliveries.indexOf(delivery));
         }
 
         tsp.searchSolution(10000, graph, deliveriesByTimeWindow);
@@ -179,7 +176,6 @@ class TSPTest {
     void testTSPNonContiguousTimeWindows() {
         TSP tsp = new TSP1();
 
-        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -190,10 +186,10 @@ class TSPTest {
         TimeWindow tw10 = TimeWindow.getTimeWindow(10);
 
         List<Delivery> deliveries = new ArrayList<>(4);
-        deliveries.add(new Delivery(courier, intersection1, tw8));
-        deliveries.add(new Delivery(courier, intersection2, tw8));
-        deliveries.add(new Delivery(courier, intersection3, tw10));
-        deliveries.add(new Delivery(courier, intersection4, tw10));
+        deliveries.add(new Delivery(intersection1, tw8));
+        deliveries.add(new Delivery(intersection2, tw8));
+        deliveries.add(new Delivery(intersection3, tw10));
+        deliveries.add(new Delivery(intersection4, tw10));
 
         Graph graph = new DeliveryGraph(costMatrix);
 
@@ -217,7 +213,6 @@ class TSPTest {
     void testTSPNoDeliveryInWarehouseTimeWindow() {
         TSP tsp = new TSP1();
 
-        Courier courier = new Courier();
         GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
         Intersection intersection1 = new Intersection(0L, coordinates, 0);
         Intersection intersection2 = new Intersection(1L, coordinates, 1);
@@ -226,8 +221,8 @@ class TSPTest {
         TimeWindow tw10 = TimeWindow.getTimeWindow(10);
 
         List<Delivery> deliveries = new ArrayList<>(4);
-        deliveries.add(new Delivery(courier, intersection1, tw8));
-        deliveries.add(new Delivery(courier, intersection2, tw10));
+        deliveries.add(new Delivery(intersection1, tw8));
+        deliveries.add(new Delivery(intersection2, tw10));
 
         MockPath[][] otherCostMatrix = new MockPath[2][2];
         for (int i = 0; i < otherCostMatrix.length; i++) {

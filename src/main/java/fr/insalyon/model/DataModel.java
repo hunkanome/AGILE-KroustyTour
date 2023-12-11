@@ -8,9 +8,8 @@ import javafx.collections.ObservableList;
 
 /**
  * Class used to store the data needed by the controllers It contains a city
- * map, a list of tours and a list of couriers.
+ * map, a list of tours
  * @see Tour
- * @see Courier
  */
 public class DataModel {
 	private final ObjectProperty<CityMap> cityMap = new SimpleObjectProperty<>(null);

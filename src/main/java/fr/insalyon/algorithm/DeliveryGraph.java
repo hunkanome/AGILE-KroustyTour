@@ -15,7 +15,7 @@ import java.util.List;
 public class DeliveryGraph implements Graph {
 	protected static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
 	protected static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
-	protected Path[][] paths;
+	protected final Path[][] paths;
 
 	public DeliveryGraph(){
 		this.paths = new Path[0][0];

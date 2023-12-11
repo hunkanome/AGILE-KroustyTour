@@ -21,7 +21,7 @@ public class Tour {
 
     private final ObservableList<Delivery> deliveriesList = FXCollections.observableArrayList();
 
-    protected Courier courier;
+    protected final Courier courier;
 
     private List<Path> pathList = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class Tour {
 
     private void recalculateGraph(CityMap cityMap, ShortestPathAlgorithm shortestPathAlgorithm){
         List<Delivery> deliveries = new ArrayList<>(this.deliveriesList);
-        Delivery warehouseDelivery = new Delivery(this.courier, cityMap.getWarehouse(), TimeWindow.getTimeWindow(8));
+        Delivery warehouseDelivery = new Delivery(cityMap.getWarehouse(), TimeWindow.getTimeWindow(8));
         deliveries.add(0, warehouseDelivery);
         Graph graph = new DeliveryGraph(deliveries, cityMap, shortestPathAlgorithm);
         TSP1 tsp1 = new TSP1();
