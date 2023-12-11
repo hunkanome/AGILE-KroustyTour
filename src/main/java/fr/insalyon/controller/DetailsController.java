@@ -1,11 +1,7 @@
 package fr.insalyon.controller;
 
-import java.util.List;
-
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.TimeWindow;
 import fr.insalyon.model.Tour;
 import fr.insalyon.view.TourTextualView;
 import javafx.collections.ListChangeListener.Change;
@@ -13,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+
+import java.util.List;
 
 public class DetailsController implements Controller {
 
@@ -26,18 +24,6 @@ public class DetailsController implements Controller {
 		this.dataModel = dataModel;
 		
 		this.dataModel.getTours().addListener(this::onTourListChanged);
-	}
-
-	@FXML
-	private void addDelivery() {
-		if (dataModel.getSelectedIntersection() != null) {
-			Delivery d = new Delivery(null, dataModel.getSelectedIntersection(), TimeWindow.getTimeWindow(9));
-			// TODO : choose the tour to use either from the details Pane, or from the
-			// controls Pane (actually : may crash)
-			dataModel.getSelectedTour().addDelivery(d);
-			dataModel.setSelectedDelivery(d);
-			dataModel.setSelectedIntersection(null);
-		}
 	}
 
 	private void onTourListChanged(Change<? extends Tour> c) {

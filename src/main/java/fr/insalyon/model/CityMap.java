@@ -1,10 +1,10 @@
 package fr.insalyon.model;
 
+import fr.insalyon.geometry.GeoCoordinates;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import fr.insalyon.geometry.GeoCoordinates;
 
 /**
  * The map of a city or a part of a city.
@@ -51,9 +51,9 @@ public class CityMap {
      * @return the intersection corresponding to the id
      * @throws IndexOutOfBoundsException if no intersection is found
      */
-    public Intersection getIntersectionById(Long id) throws IndexOutOfBoundsException {
+    public Intersection getIntersectionById(long id) throws IndexOutOfBoundsException {
         for (Intersection intersection : this.intersections) {
-            if (intersection.getId().equals(id)) {
+            if (intersection.getId() == id) {
                 return intersection;
             }
         }

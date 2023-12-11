@@ -26,7 +26,7 @@ public class TimeWindow {
 	/**
 	 * The start hour of the last TimeWindow
 	 */
-	public static final int MAX_TIME_WINDOW = 14;
+	public static final int MAX_TIME_WINDOW = 11;
 
 	/**
 	 * @return the list of the available time windows

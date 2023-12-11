@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.input.*?>
 
 <VBox prefHeight="700.0" prefWidth="1227.0"
 	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -15,20 +16,57 @@
 	<MenuBar>
 		<Menu mnemonicParsing="false" text="File">
 			<MenuItem mnemonicParsing="false" onAction="#openMapFile"
-				text="Open map" />
+				text="Open map">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="N"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Export tours" />
-			<MenuItem mnemonicParsing="false" text="Import tours" />
+			<MenuItem mnemonicParsing="false" text="Export tours">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="E"
+						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
+			<MenuItem mnemonicParsing="false" text="Import tours">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="E"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem mnemonicParsing="false"
-				onAction="#quitApplication" text="Quit" />
+				onAction="#quitApplication" text="Quit">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="Q"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 		</Menu>
 		<Menu mnemonicParsing="false" text="Edit">
-			<MenuItem mnemonicParsing="false" text="Undo" />
-			<MenuItem mnemonicParsing="false" text="Redo" />
+			<MenuItem mnemonicParsing="false" text="Undo"
+				onAction="#undoCommand">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="Z"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
+			<MenuItem mnemonicParsing="false" text="Redo"
+				onAction="#redoCommand">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="Y"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem mnemonicParsing="false"
-				text="Remove all deliveries" />
+				text="Remove all deliveries">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="DELETE"
+						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
 			<MenuItem mnemonicParsing="false" text="About" />

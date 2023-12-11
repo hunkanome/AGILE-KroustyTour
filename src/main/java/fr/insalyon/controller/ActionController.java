@@ -1,9 +1,7 @@
 package fr.insalyon.controller;
 
-import fr.insalyon.controller.command.CommandList;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.TimeWindow;
+import fr.insalyon.controller.command.*;
+import fr.insalyon.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
@@ -12,41 +10,97 @@ import javafx.scene.control.ComboBox;
  * @see Controller
  */
 public class ActionController implements Controller {
+	private static final String NO_TOUR_SELECTED = "No tour selected";
 
 	@FXML
 	private ComboBox<TimeWindow> timeWindowChooser;
-	
+
 	private DataModel dataModel;
-	
+
+	private CommandList commandList;
+
+	private MainController parentController;
+
 	@Override
 	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
-	
+		this.commandList = commandList;
+		this.parentController = parentController;
+
 		this.timeWindowChooser.setItems(TimeWindow.getTimeWindows());
 	}
 
 	@FXML
-	private void addCourier() {
-		System.out.println("nouveau courier");
+	private void addTour() {
+		if (dataModel == null || dataModel.getCityMap() == null) {
+			return;
+		}
+		Courier courier = new Courier();
+		Tour newTour = new Tour(courier);
+		Command command = new AddTourCommand(dataModel, newTour);
+		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Tour added");
 	}
 
 	@FXML
-	private void removeSelectedCourier() {
-		System.out.println("suppression courier");
+	private void removeSelectedTour() {
+		if (this.dataModel == null) {
+			return;
+		}
+		Tour selectedTour = this.dataModel.getSelectedTour();
+		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
+			return;
+		}
+		Command command = new RemoveSelectedTourCommand(this.dataModel, selectedTour);
+		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Tour removed");
 	}
 
 	@FXML
 	private void addDelivery() {
-		System.out.println("ajout delivery");
-	}
-	
-	@FXML
-	private void removeSelectedDelivery() {
-		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
-		if (selectedDelivery == null) {
+		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
 			return;
 		}
-		
-		System.out.println("suppression delivery");
+		Tour selectedTour = this.dataModel.getSelectedTour();
+		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
+			return;
+		}
+		Intersection selectedIntersection = this.dataModel.getSelectedIntersection();
+		if (selectedIntersection == null) {
+			this.parentController.displayToolBarMessage("No intersection selected");
+			return;
+		}
+		TimeWindow selectedTimeWindow = this.timeWindowChooser.getValue();
+		if (selectedTimeWindow == null) {
+			this.parentController.displayToolBarMessage("No time window selected");
+			return;
+		}
+		Delivery newDelivery = new Delivery(selectedIntersection, selectedTimeWindow);
+		Command command = new AddDeliveryCommand(this.dataModel, newDelivery);
+		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Delivery added");
+	}
+
+	@FXML
+	private void removeSelectedDelivery() {
+		if (this.dataModel == null) {
+			return;
+		}
+		Tour selectedTour = this.dataModel.getSelectedTour();
+		if (selectedTour == null) {
+			this.parentController.displayToolBarMessage(NO_TOUR_SELECTED);
+			return;
+		}
+		Delivery selectedDelivery = this.dataModel.getSelectedDelivery();
+		if (selectedDelivery == null) {
+			this.parentController.displayToolBarMessage("No delivery selected");
+			return;
+		}
+		Command command = new RemoveSelectedDeliveryCommand(this.dataModel);
+		this.commandList.execute(command);
+		this.parentController.displayToolBarMessage("Delivery removed");
+
 	}
 }

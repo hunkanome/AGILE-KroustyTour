@@ -23,5 +23,5 @@ public interface Controller {
 	 * @param mainController - the main controller (if so)
 	 * @param commandList    - the command list
 	 */
-	public void initialize(DataModel dataModel, MainController mainController, CommandList commandList);
+	void initialize(DataModel dataModel, MainController mainController, CommandList commandList);
 }

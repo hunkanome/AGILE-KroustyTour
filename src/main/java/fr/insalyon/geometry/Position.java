@@ -15,12 +15,6 @@ public class Position {
 	private Float y;
 
 	/**
-	 * Creates an empty instance of Position with null values
-	 */
-	public Position() {
-	}
-
-	/**
 	 * Creates an instance of Position with the given x and y coordinates
 	 * 
 	 * @param x - the x coordinate of the point
@@ -96,16 +90,6 @@ public class Position {
 	@Override
 	public String toString() {
 		return "Position [x=" + x + ", y=" + y + "]";
-	}
-	
-	
-	/**
-	 * Copy the current Position instance
-	 * 
-	 * @return a copy of the current Position instance
-	 */
-	public Position copy() {
-		return new Position(x, y);
 	}
 
 	public void substract(Position translationFactor) {

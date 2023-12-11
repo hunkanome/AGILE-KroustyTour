@@ -1,5 +1,11 @@
 package fr.insalyon.controller;
 
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
@@ -19,11 +25,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.paint.LinearGradient;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * Controller for the map view (middle)
@@ -347,18 +348,17 @@ public class CityMapController implements Controller {
 
 	private void onSelectedDeliveryUpdate(ObservableValue<? extends Delivery> observable, Delivery oldValue,
 			Delivery newValue) {
-		// TODO show the delivery on the map
-		System.out.println("Changement de delivery");
 		drawCanvas();
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
 		// TODO show the tour on the map
 		if (newValue == null) {
-			System.out.println("plus de tour");
+			System.out.println("No more tour");
 		} else {
-			System.out.println("Changement de tour");
+			System.out.println("Change of tour");
 		}
+		drawCanvas();
 	}
 
 	private void onSelectedIntersection(ObservableValue<? extends Intersection> observable, Intersection oldValue,
