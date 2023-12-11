@@ -16,10 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +30,13 @@ import java.util.List;
  * @see Controller
  */
 public class CityMapController implements Controller {
+	private static final Color[] COLORS = { Color.SALMON, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.PURPLE,
+			Color.ORANGE, Color.PINK, Color.BROWN, Color.CYAN, Color.MAGENTA };
+
+	private static final String BG_DEFAULT_COLOR = "#F5F3F3";
+	private static final String BG_HIGHLIGHT_COLOR = "#E6E4E4";
+	private static final String ROAD_COLOR = "#CAD2D8";
+
 	@FXML
 	private AnchorPane anchorPane;
 
@@ -64,6 +70,8 @@ public class CityMapController implements Controller {
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
+
+		this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
 
 		if (this.dataModel.getCityMap() != null) {
 			transformer = new CoordinateTransformer(this.dataModel.getCityMap().getNorthWestMostCoordinates(),
@@ -99,7 +107,7 @@ public class CityMapController implements Controller {
 							segment.getDestination().getCoordinates(), this.translationFactor, this.scaleFactor);
 
 					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-					line.setStroke(Color.BLACK);
+					line.setStroke(Color.valueOf(ROAD_COLOR));
 					line.setUserData(segment);
 					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
 					anchorPane.getChildren().add(line);
@@ -161,32 +169,33 @@ public class CityMapController implements Controller {
 	}
 
 	private void drawTours() {
-		dataModel.getTours().forEach(tour -> tour.getPathList().forEach(this::drawPath));
+		for (int i = 0; i < this.dataModel.getTours().size(); i++) {
+			Tour tour = this.dataModel.getTours().get(i);
+			Color color = COLORS[i % COLORS.length];
+
+			if (this.dataModel.getSelectedTour() == null || !this.dataModel.getSelectedTour().equals(tour)) {
+				tour.getPathList().forEach(path -> drawPath(path, color, 2));
+			}
+		}
+		if (this.dataModel.getSelectedTour() != null) {
+			this.dataModel.getSelectedTour().getPathList().forEach(path -> drawPath(path, Color.BLACK, 3));
+		}
 	}
 
-	private void drawPath(fr.insalyon.model.Path path) {
-		javafx.scene.shape.Path fxPath = new javafx.scene.shape.Path();
+	private void drawPath(Path path, Color color, int width) {
+		for (Segment segment : path.getSegments()) {
+			Position origin = transformer.transformToDragAndZoomPosition(segment.getOrigin().getCoordinates(),
+					this.translationFactor, this.scaleFactor);
+			Position destination = transformer.transformToDragAndZoomPosition(segment.getDestination().getCoordinates(),
+					this.translationFactor, this.scaleFactor);
 
-		if(!path.getSegments().isEmpty()) {
-			// Add the origin of the path to the JavaFX path
-			Position originPosition = transformer.transformToDragAndZoomPosition(path.getSegments().getFirst().getOrigin()
-					.getCoordinates(), this.translationFactor, this.scaleFactor);
-			fxPath.getElements().add(new MoveTo(originPosition.getX(), originPosition.getY()));
-
-			// Add all segments to a JavaFX path
-			for (Segment segment : path.getSegments()) {
-				Position destination = transformer.transformToDragAndZoomPosition(segment.getDestination().getCoordinates(),
-						this.translationFactor, this.scaleFactor);
-				fxPath.getElements().add(new LineTo(destination.getX(), destination.getY()));
-			}
-
-			// Add a color gradient to the path
-			LinearGradient grad = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
-					new Stop(0.0, Color.RED), new Stop(1.0, Color.LIGHTGREEN));
-			fxPath.setStroke(grad);
-			fxPath.setStrokeWidth(3);
+			Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
+			line.setStroke(color);
+			line.setStrokeWidth(width);
+			line.setUserData(segment);
+			line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
+			this.anchorPane.getChildren().add(line);
 		}
-		this.anchorPane.getChildren().add(fxPath);
 	}
 
 	@FXML
@@ -271,7 +280,7 @@ public class CityMapController implements Controller {
 			this.parentController.displayToolBarMessage("The file is not readable");
 		} else {
 			try {
-				this.anchorPane.setStyle("-fx-background-color: lightgrey");
+				this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
 				FileInputStream input = new FileInputStream(mapFile);
 				CityMapXMLParser parser = new CityMapXMLParser(input);
 				CityMap newMap = parser.parse();
@@ -320,7 +329,7 @@ public class CityMapController implements Controller {
 		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			this.anchorPane.setStyle("-fx-background-color: darkgrey");
+			this.anchorPane.setStyle("-fx-background-color: " + BG_HIGHLIGHT_COLOR);
 		}
 		event.consume();
 	}
@@ -330,7 +339,7 @@ public class CityMapController implements Controller {
 		if (event.getGestureSource() != this.anchorPane && event.getDragboard().hasFiles()) {
 			/* allow for both copying and moving, whatever user chooses */
 			event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-			this.anchorPane.setStyle("-fx-background-color: lightgrey");
+			this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
 		}
 		event.consume();
 	}
@@ -352,12 +361,6 @@ public class CityMapController implements Controller {
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
-		// TODO show the tour on the map
-		if (newValue == null) {
-			System.out.println("No more tour");
-		} else {
-			System.out.println("Change of tour");
-		}
 		drawCanvas();
 	}
 

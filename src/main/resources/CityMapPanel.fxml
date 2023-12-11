@@ -22,8 +22,7 @@
 		onDragDropped="#handleFileDropped" onDragExited="#handleFileExit"
 		onDragOver="#handleFileOver" onMouseClicked="#selectIntersection"
 		onMouseDragged="#moveOnDrag" onMousePressed="#saveMousePosition"
-		onScroll="#zoomOnScroll" prefHeight="626.0" prefWidth="664.0"
-		style="-fx-background-color: lightgrey;">
+		onScroll="#zoomOnScroll" prefHeight="626.0" prefWidth="664.0">
 	</AnchorPane>
 	<Label fx:id="selectedSegmentLabel" alignment="TOP_RIGHT"
 		contentDisplay="RIGHT" layoutX="301.0" layoutY="33.0"
