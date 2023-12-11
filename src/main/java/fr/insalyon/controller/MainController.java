@@ -1,23 +1,24 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Tour;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
+import fr.insalyon.xml.TourSaveAndLoad;
 import fr.insalyon.xml.XMLParserException;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -62,6 +63,40 @@ public class MainController implements Controller {
 		Controller controller = panelLoader.getController();
 		controller.initialize(dataModel, this, commandList);
 		panelsContainer.getChildren().add(panel);
+	}
+
+	@FXML
+	private void saveTourFile() {
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Choose a directory");
+
+		// Set default to user home directory
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		directoryChooser.setInitialDirectory(userDirectory);
+
+		File selectedDirectory = directoryChooser.showDialog(panelsContainer.getScene().getWindow());
+
+		if (selectedDirectory != null) {
+			// Get tours from the model
+
+			ObservableList<Tour> tours = dataModel.getTours();
+
+			// Parse tours to XML
+			TourSaveAndLoad tourSaveAndLoad = new TourSaveAndLoad();
+
+			String saveOutput = tourSaveAndLoad.askForSaveOutput(tours);
+
+			// Write the output to the file
+			try (FileWriter writer = new FileWriter(selectedDirectory+"/tour.xml")) {
+				writer.write(saveOutput.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@FXML

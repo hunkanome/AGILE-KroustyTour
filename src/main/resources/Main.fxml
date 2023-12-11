@@ -17,7 +17,7 @@
 			<MenuItem mnemonicParsing="false" onAction="#openMapFile"
 				text="Open map" />
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Export tours" />
+			<MenuItem mnemonicParsing="false" onAction="#saveTourFile" text="Export tours" />
 			<MenuItem mnemonicParsing="false" text="Import tours" />
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem mnemonicParsing="false"
