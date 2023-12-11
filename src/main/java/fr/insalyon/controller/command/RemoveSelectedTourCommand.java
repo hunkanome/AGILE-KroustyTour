@@ -4,6 +4,13 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 
+/**
+ * Command used to remove a <code>Tour</code>
+ * The <code>Tour</code> to be deleted is the <code>SelectedTour</code> in the <code>DataModel</code>
+ * @see CommandList
+ * @see Tour
+ * @see DataModel
+ */
 public class RemoveSelectedTourCommand implements Command {
 
     private final DataModel dataModel;

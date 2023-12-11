@@ -5,6 +5,13 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 
+/**
+ * Command used to add a <code>Delivery</code> to a <code>Tour</code>
+ * @see CommandList
+ * @see Tour
+ * @see Delivery
+ * @see DataModel
+ */
 public class AddDeliveryCommand implements Command {
     private final DataModel dataModel;
 

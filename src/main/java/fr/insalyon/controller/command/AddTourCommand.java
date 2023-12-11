@@ -5,7 +5,10 @@ import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 
 /**
- *
+ * Command used to add a <code>Tour</code>
+ * @see CommandList
+ * @see Tour
+ * @see DataModel
  */
 public class AddTourCommand implements Command {
 

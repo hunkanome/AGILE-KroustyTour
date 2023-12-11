@@ -5,6 +5,14 @@ import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
 
+/**
+ * Command used to remove a <code>Delivery</code> from a <code>Tour</code>
+ * The <code>Delivery</code> to be deleted is the <code>SelectedDelivery</code> in the <code>DataModel</code>
+ * @see CommandList
+ * @see Tour
+ * @see Delivery
+ * @see DataModel
+ */
 public class RemoveSelectedDeliveryCommand implements Command {
 
     protected DataModel dataModel;
