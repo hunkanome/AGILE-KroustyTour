@@ -113,7 +113,6 @@ public class TourTextualView extends AnchorPane {
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
 		if (newValue == tour) {
-			// TODO check that it works
 			this.parent.setExpanded(true);
 		}
 	}
