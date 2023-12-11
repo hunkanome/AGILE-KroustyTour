@@ -37,10 +37,6 @@ public class DataModel {
 		return cityMapProperty().get();
 	}
 
-	/**
-	 * Sets the CityMap for the DataModel.
-	 * @param map the CityMap to set
-	 */
 	public void setMap(CityMap map) {
 		this.tours.clear();
 		Tour tour = new Tour();
