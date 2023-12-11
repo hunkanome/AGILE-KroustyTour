@@ -71,6 +71,7 @@ public class DataModel {
 		this.couriers.add(courier);
 		this.tours.clear();
 		Tour tour = new Tour(courier, map);
+
 		this.tours.add(tour);
 		this.selectedTour.set(tour);
 		this.selectedIntersection.set(null);

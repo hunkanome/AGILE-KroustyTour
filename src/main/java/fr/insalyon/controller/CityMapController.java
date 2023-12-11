@@ -1,20 +1,9 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
-
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.CityMap;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.Intersection;
-import fr.insalyon.model.Path;
-import fr.insalyon.model.Segment;
-import fr.insalyon.model.Tour;
+import fr.insalyon.model.*;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
 import fr.insalyon.xml.XMLParserException;
@@ -23,16 +12,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.*;
+import javafx.scene.paint.LinearGradient;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Controller for the map view (middle)
@@ -86,7 +77,7 @@ public class CityMapController implements Controller {
 			clearCanvas();
 			drawCityMap();
 			drawSelectedIntersection();
-			// TODO : draw all the tours
+			drawTours();
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
@@ -168,19 +159,33 @@ public class CityMapController implements Controller {
 		this.anchorPane.getChildren().add(point);
 	}
 
-	private void drawPath(Path path) {
-		for (Segment segment : path.getSegments()) {
-			Position origin = transformer.transformToDragAndZoomPosition(segment.getOrigin().getCoordinates(),
-					this.translationFactor, this.scaleFactor);
-			Position destination = transformer.transformToDragAndZoomPosition(segment.getDestination().getCoordinates(),
-					this.translationFactor, this.scaleFactor);
+	private void drawTours() {
+		dataModel.getTours().forEach(tour -> tour.getPathList().forEach(this::drawPath));
+	}
 
-			Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-			line.setStroke(Color.RED);
-			line.setUserData(segment);
-			line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
-			this.anchorPane.getChildren().add(line);
+	private void drawPath(fr.insalyon.model.Path path) {
+		javafx.scene.shape.Path fxPath = new javafx.scene.shape.Path();
+
+		if(!path.getSegments().isEmpty()) {
+			// Add the origin of the path to the JavaFX path
+			Position originPosition = transformer.transformToDragAndZoomPosition(path.getSegments().getFirst().getOrigin()
+					.getCoordinates(), this.translationFactor, this.scaleFactor);
+			fxPath.getElements().add(new MoveTo(originPosition.getX(), originPosition.getY()));
+
+			// Add all segments to a JavaFX path
+			for (Segment segment : path.getSegments()) {
+				Position destination = transformer.transformToDragAndZoomPosition(segment.getDestination().getCoordinates(),
+						this.translationFactor, this.scaleFactor);
+				fxPath.getElements().add(new LineTo(destination.getX(), destination.getY()));
+			}
+
+			// Add a color gradient to the path
+			LinearGradient grad = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
+					new Stop(0.0, Color.RED), new Stop(1.0, Color.LIGHTGREEN));
+			fxPath.setStroke(grad);
+			fxPath.setStrokeWidth(3);
 		}
+		this.anchorPane.getChildren().add(fxPath);
 	}
 
 	@FXML
@@ -360,5 +365,4 @@ public class CityMapController implements Controller {
 			Intersection newValue) {
 		drawCanvas();
 	}
-
 }
