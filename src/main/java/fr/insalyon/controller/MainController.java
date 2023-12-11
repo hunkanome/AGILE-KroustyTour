@@ -1,35 +1,30 @@
 package fr.insalyon.controller;
 
-<<<<<<< HEAD
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.logging.Logger;
 
-=======
->>>>>>> main
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Tour;
+import fr.insalyon.seralization.TourSerializer;
+import fr.insalyon.seralization.XMLTourSerializer;
 import fr.insalyon.xml.BadlyFormedXMLException;
 import fr.insalyon.xml.CityMapXMLParser;
-import fr.insalyon.xml.TourSaveAndLoad;
 import fr.insalyon.xml.XMLParserException;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 public class MainController implements Controller {
 
@@ -43,7 +38,7 @@ public class MainController implements Controller {
 
 	private DataModel dataModel;
 
-	private CommandList commandList; // TODO use this from the menu bar
+	private CommandList commandList;
 
 	/**
 	 * In this implementation, the parent controller is ignored, as it is supposed
@@ -76,70 +71,6 @@ public class MainController implements Controller {
 		Controller controller = panelLoader.getController();
 		controller.initialize(dataModel, this, commandList);
 		panelsContainer.getChildren().add(panel);
-	}
-
-	@FXML
-	private void saveTour() {
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle("Choose a directory");
-
-		// Set default to user home directory
-		String userDirectoryString = System.getProperty("user.home");
-		File userDirectory = new File(userDirectoryString);
-		if (!userDirectory.canRead()) {
-			userDirectory = null;
-		}
-		directoryChooser.setInitialDirectory(userDirectory);
-
-		File selectedDirectory = directoryChooser.showDialog(panelsContainer.getScene().getWindow());
-
-		if (selectedDirectory != null) {
-			// Get tours from the model
-
-			ObservableList<Tour> tours = dataModel.getTours();
-
-			// Parse tours to XML
-			TourSaveAndLoad tourSaveAndLoad = new TourSaveAndLoad();
-
-			String saveOutput = tourSaveAndLoad.askForSaveOutput(tours);
-
-			// Write the output to the file
-			try (FileWriter writer = new FileWriter(selectedDirectory+"/tour.xml")) {
-				writer.write(saveOutput.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@FXML
-	private void openMapFile() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose a CityMap XML file");
-
-		// Set default to user home directory
-		String userDirectoryString = System.getProperty("user.home");
-		File userDirectory = new File(userDirectoryString);
-		if (!userDirectory.canRead()) {
-			userDirectory = null;
-		}
-		fileChooser.setInitialDirectory(userDirectory);
-
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
-		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
-		if (selectedFile != null) {
-			FileInputStream inputStream;
-			try {
-				inputStream = new FileInputStream(selectedFile);
-				CityMapXMLParser parser = new CityMapXMLParser(inputStream);
-				CityMap map = parser.parse();
-				this.dataModel.setMap(map);
-			} catch (FileNotFoundException e) {
-				this.displayToolBarMessage("The file " + selectedFile.getName() + " could not be found.");
-			} catch (BadlyFormedXMLException | XMLParserException e) {
-				this.displayToolBarMessage(e);
-			}
-		}
 	}
 
 	/**
@@ -175,6 +106,36 @@ public class MainController implements Controller {
 	@FXML
 	private void quitApplication() {
 		System.exit(0);
+	}
+
+	@FXML
+	private void saveTour() {
+		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
+			return;
+		}
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save the tours");
+
+		// Set default to user home directory
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		fileChooser.setInitialDirectory(userDirectory);
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Tours XML file", "*.xml"));
+		
+		File selectedFile = fileChooser.showSaveDialog(null);
+
+		try (OutputStream out = new FileOutputStream(selectedFile)) {
+			TourSerializer serializer = new XMLTourSerializer(); // TODO choose the good serializer based on the extension
+			serializer.setTours(this.dataModel.getTours()).setCityMap(this.dataModel.getCityMap()).setFile(out)
+					.serialize();
+		} catch (Exception e) {
+			this.displayToolBarMessage(e);
+			return;
+		}
+		this.displayToolBarMessage("Tours saved to " + selectedFile.getName());
 	}
 
 	@FXML

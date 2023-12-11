@@ -63,7 +63,7 @@ public class Intersection {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(coordinates, id, index);
+		return Objects.hash(coordinates, id, index, outwardSegments);
 	}
 
 	@Override
