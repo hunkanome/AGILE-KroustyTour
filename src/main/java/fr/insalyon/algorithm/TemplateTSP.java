@@ -72,7 +72,7 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Branch and bound algorithm for solving the TSP in <code>g</code>. Includes consideration of time windows.
 	 * @param currentVertex the last visited vertex
-	 * @param unvisitedByTimeWindow the set of vertex that have not yet been visited
+	 * @param unvisitedByTimeWindow the set of vertices that have not yet been visited indexed by TimeWindow
 	 * @param visited the sequence of vertices that have been already visited (including currentVertex)
 	 * @param branchCost the cost of the path corresponding to <code>visited</code>
 	 * @param currentTimeWindowCost the time spent in the current time window
@@ -101,9 +101,7 @@ public abstract class TemplateTSP implements TSP {
 		if (unvisitedByTimeWindow.get(currentTimeWindow) == null || unvisitedByTimeWindow.get(currentTimeWindow).isEmpty()) {
 			unvisitedByTimeWindow.remove(currentTimeWindow);
 			if (unvisitedByTimeWindow.isEmpty()) {// If we have entirely explored all the TimeWindow
-				if (graph.isArc(currentVertex, 0) // If we can go back to the warehouse
-						&& (branchCost + this.graph.getCost(currentVertex, 0) < this.bestSolCost) // If the cost is better than the best solution
-				) {
+				if (branchCost + this.graph.getCost(currentVertex, 0) < this.bestSolCost) {
 					visited.toArray(this.bestSol);
 					this.bestSolCost = branchCost + this.graph.getCost(currentVertex, 0);
 				}

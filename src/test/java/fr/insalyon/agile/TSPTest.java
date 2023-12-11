@@ -211,4 +211,50 @@ class TSPTest {
             assertEquals(i, tsp.getSolution(i));
         }
     }
+
+    @Test
+    void testTSPNoDeliveryInWarehouseTimeWindow() {
+        TSP tsp = new TSP1();
+
+        Courier courier = new Courier();
+        GeoCoordinates coordinates = new GeoCoordinates(0.f, 0.f);
+        Intersection intersection1 = new Intersection(0L, coordinates, 0);
+        Intersection intersection2 = new Intersection(1L, coordinates, 1);
+
+        TimeWindow tw8 = TimeWindow.getTimeWindow(8);
+        TimeWindow tw10 = TimeWindow.getTimeWindow(10);
+
+        List<Delivery> deliveries = new ArrayList<>(4);
+        deliveries.add(new Delivery(courier, intersection1, tw8));
+        deliveries.add(new Delivery(courier, intersection2, tw10));
+
+        MockPath[][] otherCostMatrix = new MockPath[2][2];
+        for (int i = 0; i < otherCostMatrix.length; i++) {
+            for (int j = 0; j < otherCostMatrix.length; j++) {
+                otherCostMatrix[i][j] = new MockPath();
+            }
+        }
+
+        otherCostMatrix[0][0].setLength(0);
+        otherCostMatrix[0][1].setLength(100);
+        otherCostMatrix[1][0].setLength(Float.MAX_VALUE);
+        otherCostMatrix[1][1].setLength(0);
+
+        DeliveryGraph g = new DeliveryGraph(otherCostMatrix);
+
+        Map<TimeWindow, List<Integer>> deliveriesByTimeWindow = new HashMap<>();
+        for (Delivery d : deliveries) {
+            deliveriesByTimeWindow
+                    .computeIfAbsent(d.getTimeWindow(), k -> new ArrayList<>())
+                    .add(deliveries.indexOf(d));
+        }
+
+        tsp.searchSolution(10000, g, deliveriesByTimeWindow);
+
+        // Test the solution
+        for (int i = 0; i < otherCostMatrix.length; i++) {
+            // The graph is constructed so that the solution is i (0 1 2 3)
+            assertEquals(i, tsp.getSolution(i));
+        }
+    }
 }
