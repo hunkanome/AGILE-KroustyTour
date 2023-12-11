@@ -74,7 +74,9 @@ public class CoordinateTransformer {
 
 		position.setX(position.getX() + translation.getX());
 		position.setY(position.getY() + translation.getY());
-		// TODO the zoom transformation
+
+		position.setX(position.getX() * new Float(scaleFactor));
+		position.setY(position.getY() * new Float(scaleFactor));
 
 		return position;
 	}
@@ -82,7 +84,9 @@ public class CoordinateTransformer {
 	public Position transformToDragAndZoomPosition(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
 		position.setX(position.getX() + translation.getX());
 		position.setY(position.getY() + translation.getY());
-		// TODO the zoom transformation
+
+		position.setX(position.getX() * new Float(scaleFactor));
+		position.setY(position.getY() * new Float(scaleFactor));
 
 		return position;
 	}
