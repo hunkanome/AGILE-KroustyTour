@@ -61,14 +61,17 @@ public class TourTextualView extends AnchorPane {
 
 	private void showTour() {
 		if (!this.tour.getDeliveriesList().isEmpty()) {
-			LocalTime start = LocalTime.of(this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour(), 0);
-			Delivery delivery = this.tour.getDeliveriesList().get(0);
-			double bottom = this.showDelivery(delivery, start, 0);
-			start = start.plus(Delivery.DURATION);
+			// TODO : prendre en compte le temps depuis le warehouse (départ à 8h)
+			// TODO : si la delivery n'est pas à 8h, possibilité de partir plus tard du coup
 
 //			float distance = this.tour.getPathList().get(0).getLength();
 //			Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
 //			start = start.plus(duration);
+
+			LocalTime start = LocalTime.of(this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour(), 0);
+			Delivery delivery = this.tour.getDeliveriesList().get(0);
+			double bottom = this.showDelivery(delivery, start, 0);
+			start = start.plus(Delivery.DURATION);
 
 			for (int i = 1; i < this.tour.getDeliveriesList().size(); i++) {
 				delivery = this.tour.getDeliveriesList().get(i);
