@@ -50,11 +50,11 @@ public class CoordinateTransformer {
 	 *      Wikipedia - Aide:Systèmes de projection - Décomposition de la
 	 *      projection</a> for the algorithm
 	 */
-	public Position transformToPosition(GeoCoordinates coord) throws IllegalArgumentException {
-		if (coord.getLongitude() < northWestMostPoint.getLongitude()
-				|| coord.getLongitude() > southEastMostPoint.getLongitude()
-				|| coord.getLatitude() > northWestMostPoint.getLatitude()
-				|| coord.getLatitude() < southEastMostPoint.getLatitude()) {
+	public Position transformToPosition(GeoCoordinates coordinates) throws IllegalArgumentException {
+		if (coordinates.getLongitude() < northWestMostPoint.getLongitude()
+				|| coordinates.getLongitude() > southEastMostPoint.getLongitude()
+				|| coordinates.getLatitude() > northWestMostPoint.getLatitude()
+				|| coordinates.getLatitude() < southEastMostPoint.getLatitude()) {
 			throw new IllegalArgumentException("The coordinate is out of bound");
 		}
 
@@ -63,11 +63,33 @@ public class CoordinateTransformer {
 		double top = northWestMostPoint.getLatitude();
 		double bottom = southEastMostPoint.getLatitude();
 
-		double x = targetWidth * (coord.getLongitude() - left) / (right - left);
-		double y = targetHeight * (top - coord.getLatitude()) / (top - bottom);
+		double x = targetWidth * (coordinates.getLongitude() - left) / (right - left);
+		double y = targetHeight * (top - coordinates.getLatitude()) / (top - bottom);
 
 		return new Position((float) x, (float) y);
 	}
 
+	public Position transformToDragAndZoom(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
+		position.setX(position.getX() + translation.getX());
+		position.setY(position.getY() + translation.getY());
+
+		position.setX((float) (position.getX() * scaleFactor));
+		position.setY((float) (position.getY() * scaleFactor));
+
+		return position;
+	}
+
+	public Position transformToDragAndZoomPosition(GeoCoordinates coordinates, Position translation, double scaleFactor) throws IllegalArgumentException {
+		Position position = transformToPosition(coordinates);
+		position = transformToDragAndZoom(position, translation, scaleFactor);
+
+		return position;
+	}
+
+	public Position transformToDragAndZoomPosition(Position position, Position translation, double scaleFactor) throws IllegalArgumentException {
+		position = transformToDragAndZoom(position, translation, scaleFactor);
+
+		return position;
+	}
 
 }
