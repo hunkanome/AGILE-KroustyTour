@@ -24,7 +24,6 @@ public class CoordinateTransformer {
 	 * Creates a CoordinateTransformer configured with the border of the map
 	 * (North-West most and South-East most points) and with the size of the image
 	 * target.
-	 * 
 	 * @param northWestMostPoint - the North-West most point of the map
 	 * @param southEastMostPoint - the South-East most point of the map
 	 * @param targetWidth 	  - the width of the image target
@@ -41,8 +40,7 @@ public class CoordinateTransformer {
 	/**
 	 * Transforms the coordinates in the spherical coordinate system into a position
 	 * in the Cartesian coordinate system
-	 * 
-	 * @param coord - the coordinates in the spherical coordinate system. Must be in the bound of the map
+	 * @param coordinates - the coordinates in the spherical coordinate system. Must be in the bound of the map
 	 * @return the position in the Cartesian system
 	 * @throws IllegalArgumentException if the coordinate is out of bound
 	 * @see <a href=
@@ -50,11 +48,11 @@ public class CoordinateTransformer {
 	 *      Wikipedia - Aide:Systèmes de projection - Décomposition de la
 	 *      projection</a> for the algorithm
 	 */
-	public Position transformToPosition(GeoCoordinates coord) throws IllegalArgumentException {
-		if (coord.getLongitude() < northWestMostPoint.getLongitude()
-				|| coord.getLongitude() > southEastMostPoint.getLongitude()
-				|| coord.getLatitude() > northWestMostPoint.getLatitude()
-				|| coord.getLatitude() < southEastMostPoint.getLatitude()) {
+	public Position transformToPosition(GeoCoordinates coordinates) throws IllegalArgumentException {
+		if (coordinates.getLongitude() < northWestMostPoint.getLongitude()
+				|| coordinates.getLongitude() > southEastMostPoint.getLongitude()
+				|| coordinates.getLatitude() > northWestMostPoint.getLatitude()
+				|| coordinates.getLatitude() < southEastMostPoint.getLatitude()) {
 			throw new IllegalArgumentException("The coordinate is out of bound");
 		}
 
@@ -63,11 +61,53 @@ public class CoordinateTransformer {
 		double top = northWestMostPoint.getLatitude();
 		double bottom = southEastMostPoint.getLatitude();
 
-		double x = targetWidth * (coord.getLongitude() - left) / (right - left);
-		double y = targetHeight * (top - coord.getLatitude()) / (top - bottom);
+		double x = targetWidth * (coordinates.getLongitude() - left) / (right - left);
+		double y = targetHeight * (top - coordinates.getLatitude()) / (top - bottom);
 
 		return new Position((float) x, (float) y);
 	}
 
+	/**
+	 * Transform a position to take into account the translation and the zoom
+	 * @param position - a position
+	 * @param translation - the translation
+	 * @param scaleFactor - the scale factor
+	 * @return the position taking into account the translation and the zoom
+	 */
+	public Position transformToDragAndZoom(Position position, Position translation, double scaleFactor) {
+		position.setX(position.getX() + translation.getX());
+		position.setY(position.getY() + translation.getY());
+
+		position.setX((float) (position.getX() * scaleFactor));
+		position.setY((float) (position.getY() * scaleFactor));
+
+		return position;
+	}
+
+	/**
+	 * Transform a geoCoordinate to a position which takes into account the translation and the zoom
+	 * @param coordinates - coordinates
+	 * @param translation - the translation
+	 * @param scaleFactor - the scale factor
+	 * @return the position in the Cartesian system taking into account the translation and the zoom
+	 * @throws IllegalArgumentException if the coordinate is out of bound
+	 */
+	public Position transformToDragAndZoomPosition(GeoCoordinates coordinates, Position translation, double scaleFactor) throws IllegalArgumentException {
+		Position position = transformToPosition(coordinates);
+		position = transformToDragAndZoom(position, translation, scaleFactor);
+
+		return position;
+	}
+
+	/**
+	 * Transform a geoCoordinate to a position which takes into account the translation and the zoom
+	 * @param position - a position
+	 * @param translation - the translation
+	 * @param scaleFactor - the scale factor
+	 * @return the position in the Cartesian system taking into account the translation and the zoom
+	 */
+	public Position transformToDragAndZoomPosition(Position position, Position translation, double scaleFactor) {
+		return transformToDragAndZoom(position, translation, scaleFactor);
+	}
 
 }

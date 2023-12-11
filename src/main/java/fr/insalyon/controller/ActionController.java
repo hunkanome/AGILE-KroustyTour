@@ -5,6 +5,10 @@ import fr.insalyon.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
+/**
+ * Controller for the action panel (left side)
+ * @see Controller
+ */
 public class ActionController implements Controller {
 
 	@FXML
@@ -16,15 +20,12 @@ public class ActionController implements Controller {
 
 	private MainController parentController;
 
-	/**
-	 * Initialize the view by filling the time window chooser with the time windows
-	 */
 	@Override
 	public void initialize(DataModel dataModel, MainController parentController, CommandList commandList) {
 		this.dataModel = dataModel;
 		this.commandList = commandList;
 		this.parentController = parentController;
-		
+
 		this.timeWindowChooser.setItems(TimeWindow.getTimeWindows());
 	}
 
