@@ -39,7 +39,8 @@ public class DataModel {
 
 	public void setMap(CityMap map) {
 		this.tours.clear();
-		Tour tour = new Tour();
+		Courier courier = new Courier();
+		Tour tour = new Tour(courier);
 		this.tours.add(tour);
 		this.selectedTour.set(tour);
 		this.selectedIntersection.set(null);

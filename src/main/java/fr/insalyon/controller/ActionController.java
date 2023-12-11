@@ -1,11 +1,7 @@
 package fr.insalyon.controller;
 
 import fr.insalyon.controller.command.*;
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.Intersection;
-import fr.insalyon.model.TimeWindow;
-import fr.insalyon.model.Tour;
+import fr.insalyon.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
@@ -37,7 +33,9 @@ public class ActionController implements Controller {
 		if (dataModel == null || dataModel.getCityMap() == null) {
 			return;
 		}
-		Command command = new AddTourCommand(dataModel, new Tour());
+		Courier courier = new Courier();
+		Tour newTour = new Tour(courier);
+		Command command = new AddTourCommand(dataModel, newTour);
 		this.commandList.execute(command);
 		this.parentController.displayToolBarMessage("Tour added");
 	}

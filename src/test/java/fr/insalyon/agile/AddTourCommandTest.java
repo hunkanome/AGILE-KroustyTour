@@ -1,6 +1,7 @@
 package fr.insalyon.agile;
 
 import fr.insalyon.controller.command.AddTourCommand;
+import fr.insalyon.model.Courier;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,46 +16,47 @@ class AddTourCommandTest {
 
     @BeforeEach
     void setUp() {
-        dataModel = new DataModel();
-        tour = new Tour();
-        command = new AddTourCommand(dataModel, tour);
+        this.dataModel = new DataModel();
+        Courier courier = new Courier();
+        this.tour = new Tour(courier);
+        this.command = new AddTourCommand(this.dataModel, this.tour);
     }
 
     @Test
     void testAddTourSuccess(){
         // Normal usage
-        assertFalse(dataModel.getTours().contains(tour));
-        command.doCommand();
-        assertTrue(dataModel.getTours().contains(tour));
+        assertFalse(this.dataModel.getTours().contains(this.tour));
+        this.command.doCommand();
+        assertTrue(this.dataModel.getTours().contains(this.tour));
     }
 
     @Test
     void testAddTourAlreadyAdded() {
         // Add courier shall not be added if it is already present
-        dataModel.getTours().add(tour);
-        int lengthBefore = dataModel.getTours().size();
+        this.dataModel.getTours().add(this.tour);
+        int lengthBefore = this.dataModel.getTours().size();
 
-        command.doCommand();
+        this.command.doCommand();
 
-        assertEquals(lengthBefore, dataModel.getTours().size());
+        assertEquals(lengthBefore, this.dataModel.getTours().size());
     }
 
     @Test
     void testUndoAddTourSuccess() {
-        command.doCommand();
-        assertTrue(dataModel.getTours().contains(tour));
+        this.command.doCommand();
+        assertTrue(this.dataModel.getTours().contains(tour));
 
-        command.undoCommand();
-        assertFalse(dataModel.getTours().contains(tour));
+        this.command.undoCommand();
+        assertFalse(this.dataModel.getTours().contains(this.tour));
     }
 
     @Test
     void testUndoAddTourAlreadyAdded() {
         // If the courier to remove is not present then nothing should happen
-        int lengthBefore = dataModel.getTours().size();
+        int lengthBefore = this.dataModel.getTours().size();
 
-        command.undoCommand();
+        this.command.undoCommand();
 
-        assertEquals(lengthBefore, dataModel.getTours().size());
+        assertEquals(lengthBefore, this.dataModel.getTours().size());
     }
 }
