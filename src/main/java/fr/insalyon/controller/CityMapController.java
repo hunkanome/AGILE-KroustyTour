@@ -34,6 +34,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Controller for the map view (middle)
+ * @see Controller
+ */
 public class CityMapController implements Controller {
 	@FXML
 	private AnchorPane anchorPane;
@@ -251,10 +255,9 @@ public class CityMapController implements Controller {
 
 	/**
 	 * Open the given file and load it onto the map
-	 * 
 	 * @param path - the path to the file to load
 	 */
-	public boolean loadCityMapXMLFile(String path) {
+	private boolean loadCityMapXMLFile(String path) {
 		File mapFile = new File(path);
 		if (!mapFile.isFile()) {
 			this.parentController.displayToolBarMessage("The item is not a file");
