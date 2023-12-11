@@ -1,8 +1,5 @@
 package fr.insalyon.view;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import javafx.beans.value.ObservableValue;
@@ -13,6 +10,9 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class DeliveryTextualView extends AnchorPane {
 
@@ -52,6 +52,10 @@ public class DeliveryTextualView extends AnchorPane {
 			this.arrivalTimeLabel.setText(dtf.format(arrivalTime));
 			LocalTime departureTime = arrivalTime.plus(Delivery.DURATION);
 			this.departureTimeLabel.setText(dtf.format(departureTime));
+		}
+		LocalTime endWindow = LocalTime.of(delivery.getTimeWindow().getEndHour(), 0, 0);
+		if (arrivalTime.isAfter(endWindow)) {
+			this.getStyleClass().add("late");
 		}
 	}
 
