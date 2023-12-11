@@ -1,11 +1,6 @@
 package fr.insalyon.controller;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
-
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
@@ -22,9 +17,14 @@ import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
-import javafx.scene.paint.LinearGradient;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Controller for the map view (middle)
@@ -99,7 +99,7 @@ public class CityMapController implements Controller {
 							segment.getDestination().getCoordinates(), this.translationFactor, this.scaleFactor);
 
 					Line line = new Line(origin.getX(), origin.getY(), destination.getX(), destination.getY());
-					line.setStroke(Color.BLUE);
+					line.setStroke(Color.BLACK);
 					line.setUserData(segment);
 					line.setOnMouseEntered(event -> selectedSegmentLabel.setText(segment.getName()));
 					anchorPane.getChildren().add(line);
