@@ -21,6 +21,10 @@ public class RemoveSelectedDeliveryCommand implements Command {
 
     protected Delivery delivery;
 
+    /**
+     * Used when initializing the command
+     * @param dataModel the dataModel where the information is stored
+     */
     public RemoveSelectedDeliveryCommand(DataModel dataModel) {
         this.dataModel = dataModel;
         this.tour = dataModel.getSelectedTour();

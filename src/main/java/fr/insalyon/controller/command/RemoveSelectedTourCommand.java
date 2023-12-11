@@ -20,12 +20,16 @@ public class RemoveSelectedTourCommand implements Command {
     /**
      * Used when initializing the command
      * @param dataModel the dataModel where the information is stored
+     * @param tour the tour to remove
      */
     public RemoveSelectedTourCommand(DataModel dataModel, Tour tour) {
         this.dataModel = dataModel;
         this.tourToRemove = tour;
     }
 
+    /**
+     * Removes the tour from the DataModel
+     */
     @Override
     public void doCommand() {
         if (this.tourToRemove != null && this.dataModel.getTours().contains(this.tourToRemove)) {
@@ -38,6 +42,9 @@ public class RemoveSelectedTourCommand implements Command {
         }
     }
 
+    /**
+     * Adds the removed tour to the DataModel
+     */
     @Override
     public void undoCommand() {
         if (this.tourToRemove != null && !this.dataModel.getTours().contains(this.tourToRemove)){

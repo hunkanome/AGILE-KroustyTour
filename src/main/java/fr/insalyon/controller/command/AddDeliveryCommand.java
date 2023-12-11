@@ -19,6 +19,11 @@ public class AddDeliveryCommand implements Command {
 
     private final Tour tour;
 
+    /**
+     * Used when initializing the command
+     * @param dataModel the dataModel where the information is stored
+     * @param delivery the delivery to add
+     */
     public AddDeliveryCommand(DataModel dataModel, Delivery delivery) {
         this.dataModel = dataModel;
         this.tour = dataModel.getSelectedTour();
