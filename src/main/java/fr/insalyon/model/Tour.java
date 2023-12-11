@@ -81,8 +81,9 @@ public class Tour {
             newPaths.add(graph.getShortestPath(solution[i - 1], solution[i]));
         }
 
-        this.deliveriesList.setAll(newDeliveries);
         this.pathList = newPaths;
+        this.deliveriesList.setAll(newDeliveries);
+
     }
 
     public Courier getCourier() {

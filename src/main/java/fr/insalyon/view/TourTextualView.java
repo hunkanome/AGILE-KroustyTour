@@ -1,9 +1,6 @@
 package fr.insalyon.view;
 
-import fr.insalyon.model.DataModel;
-import fr.insalyon.model.Delivery;
-import fr.insalyon.model.TimeWindow;
-import fr.insalyon.model.Tour;
+import fr.insalyon.model.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +13,8 @@ import javafx.scene.shape.Line;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TourTextualView extends AnchorPane {
 // TODO : add the warehouse start and end in the view
@@ -60,21 +59,22 @@ public class TourTextualView extends AnchorPane {
 	}
 
 	private void showTour() {
-		if (!this.tour.getDeliveriesList().isEmpty()) {
+		if (!this.tour.getDeliveriesList().isEmpty() &&  this.tour.getDeliveriesList().size() == this.tour.getPathList().size()) {
 			// TODO : prendre en compte le temps depuis le warehouse (départ à 8h)
 			// TODO : si la delivery n'est pas à 8h, possibilité de partir plus tard du coup
 
-//			float distance = this.tour.getPathList().get(0).getLength();
-//			Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
-//			start = start.plus(duration);
+			Intersection warehouse = this.dataModel.getCityMap().getWarehouse();
+			Delivery warehouseDelivery = new Delivery(warehouse, TimeWindow.getTimeWindow(8));
+			List<Delivery> deliveryList = new ArrayList<>();
+			deliveryList.add(0, warehouseDelivery);
+			deliveryList.addAll(this.tour.getDeliveriesList());
 
-			LocalTime start = LocalTime.of(this.tour.getDeliveriesList().get(0).getTimeWindow().getStartHour(), 0);
-			Delivery delivery = this.tour.getDeliveriesList().get(0);
+			LocalTime start = LocalTime.of(deliveryList.get(0).getTimeWindow().getStartHour(), 0);
+			Delivery delivery = deliveryList.get(0);
 			double bottom = this.showDelivery(delivery, start, 0);
-			start = start.plus(Delivery.DURATION);
 
-			for (int i = 1; i < this.tour.getDeliveriesList().size(); i++) {
-				delivery = this.tour.getDeliveriesList().get(i);
+			for (int i = 1; i < deliveryList.size(); i++) {
+				delivery = deliveryList.get(i);
 
 				float distance = this.tour.getPathList().get(i - 1).getLength();
 				Duration duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
