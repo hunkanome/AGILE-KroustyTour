@@ -57,10 +57,7 @@ public class CityMapController implements Controller {
 	 */
 	private double lastClickY = -1;
 
-	private double prevScaleFactor = 1;
 	private double scaleFactor = 1;
-
-	private Position prevTranslationFactor = new Position(0f, 0f);
 	private Position translationFactor = new Position(0f, 0f);
 	private CoordinateTransformer transformer;
 
@@ -83,7 +80,6 @@ public class CityMapController implements Controller {
 	}
 
 	private void drawCanvas() {
-		//updateCanvasProperties();
 		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
 			drawCityMap();
@@ -254,14 +250,12 @@ public class CityMapController implements Controller {
 	@FXML
 	private void zoomOnScroll(ScrollEvent event) {
 		double zoomFactor = event.getDeltaY() > 0 ? 1.03 : 0.97;
-		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor *= zoomFactor;
 		drawCanvas();
 	}
 
 	@FXML
 	private void moveOnDrag(MouseEvent event) {
-		this.prevTranslationFactor = this.translationFactor.copy();
 		float xFactor = (float) ((event.getX() - this.lastClickX) / this.scaleFactor);
 		float yFactor = (float) ((event.getY() - this.lastClickY) / this.scaleFactor);
 		this.translationFactor.setX(this.translationFactor.getX() + xFactor);
@@ -353,9 +347,7 @@ public class CityMapController implements Controller {
 				dataModel.getCityMap().getSouthEastMostCoordinates(), (float) this.anchorPane.getWidth(),
 				(float) this.anchorPane.getHeight());
 		this.anchorPane.setClip(new Rectangle(this.anchorPane.getWidth(), this.anchorPane.getHeight()));
-		this.prevScaleFactor = this.scaleFactor;
 		this.scaleFactor = 1;
-		this.prevTranslationFactor = this.translationFactor.copy();
 		this.translationFactor = new Position(0f, 0f);
 		drawCanvas();
 		this.parentController.displayToolBarMessage("Map loaded successfully");
