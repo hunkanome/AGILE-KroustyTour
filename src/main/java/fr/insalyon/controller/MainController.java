@@ -10,9 +10,9 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.logging.Logger;
 
-import fr.insalyon.cityMapXML.BadlyFormedXMLException;
-import fr.insalyon.cityMapXML.CityMapXMLParser;
-import fr.insalyon.cityMapXML.XMLParserException;
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.CityMapXMLParser;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;

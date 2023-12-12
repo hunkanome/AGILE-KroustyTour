@@ -1,8 +1,8 @@
 package fr.insalyon.agile;
 
-import fr.insalyon.cityMapXML.BadlyFormedXMLException;
-import fr.insalyon.cityMapXML.CityMapXMLParser;
-import fr.insalyon.cityMapXML.XMLParserException;
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.CityMapXMLParser;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;

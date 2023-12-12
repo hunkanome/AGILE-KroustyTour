@@ -12,8 +12,8 @@ import org.xml.sax.SAXParseException;
 
 import fr.insalyon.algorithm.AStar;
 import fr.insalyon.algorithm.ShortestPathAlgorithm;
-import fr.insalyon.cityMapXML.BadlyFormedXMLException;
-import fr.insalyon.cityMapXML.XMLParserException;
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.model.Courier;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Intersection;

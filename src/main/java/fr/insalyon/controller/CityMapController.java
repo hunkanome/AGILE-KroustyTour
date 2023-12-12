@@ -1,9 +1,9 @@
 package fr.insalyon.controller;
 
 
-import fr.insalyon.cityMapXML.BadlyFormedXMLException;
-import fr.insalyon.cityMapXML.CityMapXMLParser;
-import fr.insalyon.cityMapXML.XMLParserException;
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.CityMapXMLParser;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
