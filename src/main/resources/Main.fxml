@@ -23,13 +23,13 @@
 				</accelerator>
 			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Export tours">
+			<MenuItem mnemonicParsing="false" text="Export tours" onAction="#saveTours">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="E"
 						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
 				</accelerator>
 			</MenuItem>
-			<MenuItem mnemonicParsing="false" text="Import tours">
+			<MenuItem mnemonicParsing="false" text="Import tours" onAction="#loadTours">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="E"
 						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -69,7 +69,7 @@
 			</MenuItem>
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About" />
+			<MenuItem mnemonicParsing="false" text="About" onAction="#showPopupVersion"/>
 		</Menu>
 	</MenuBar>
 	<HBox fx:id="panelsContainer" prefHeight="647.0"

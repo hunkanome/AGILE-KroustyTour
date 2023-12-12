@@ -59,7 +59,7 @@ public class Segment {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(destination, length, name, origin);
+		return Objects.hash(length, name);
 	}
 
 	@Override

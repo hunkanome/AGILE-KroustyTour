@@ -1,26 +1,41 @@
 package fr.insalyon.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.CityMapXMLParser;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
-import fr.insalyon.xml.BadlyFormedXMLException;
-import fr.insalyon.xml.CityMapXMLParser;
-import fr.insalyon.xml.XMLParserException;
+import fr.insalyon.model.Tour;
+import fr.insalyon.seralization.TourDeserializer;
+import fr.insalyon.seralization.TourSerializer;
+import fr.insalyon.seralization.XMLTourDeserializer;
+import fr.insalyon.seralization.XMLTourSerializer;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Logger;
+import javafx.stage.Stage;
 
 public class MainController implements Controller {
 
@@ -34,7 +49,7 @@ public class MainController implements Controller {
 
 	private DataModel dataModel;
 
-	private CommandList commandList; // TODO use this from the menu bar
+	private CommandList commandList;
 
 	/**
 	 * In this implementation, the parent controller is ignored, as it is supposed
@@ -105,19 +120,64 @@ public class MainController implements Controller {
 	}
 
 	@FXML
-	private void openMapFile() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose a CityMap XML file");
-
-		// Set default to user home directory
-		String userDirectoryString = System.getProperty("user.home");
-		File userDirectory = new File(userDirectoryString);
-		if (!userDirectory.canRead()) {
-			userDirectory = null;
+	private void saveTours() {
+		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
+			return;
 		}
-		fileChooser.setInitialDirectory(userDirectory);
+		
+		Map<String, String> fileExtensions = new HashMap<>();
+		fileExtensions.put("Tours XML file", "*.xml");
+		FileChooser fileChooser = createFileChooser("Save the tours", fileExtensions);
 
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("CityMap XML file", "*.xml"));
+		File selectedFile = fileChooser.showSaveDialog(null);
+
+		try (OutputStream out = new FileOutputStream(selectedFile)) {
+			// set the xml extension if not already
+			if (!selectedFile.getName().endsWith(".xml")) {
+				String newPath = selectedFile.getAbsolutePath() + ".xml";
+				selectedFile = new File(newPath);
+			}
+			TourSerializer serializer = new XMLTourSerializer(); // choose the good serializer based on the extension
+																	// (when there will be more of them)
+			serializer.setTours(this.dataModel.getTours()).setCityMap(this.dataModel.getCityMap()).setFile(out)
+					.serialize();
+		} catch (Exception e) {
+			this.displayToolBarMessage(e);
+			return;
+		}
+		this.displayToolBarMessage("Tours saved to " + selectedFile.getName());
+	}
+
+	@FXML
+	private void loadTours() {
+		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
+			return;
+		}
+		
+		Map<String, String> fileExtensions = new HashMap<>();
+		fileExtensions.put("Tours XML file", "*.xml");
+		FileChooser fileChooser = createFileChooser("Load the tours", fileExtensions);
+		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
+
+		try (InputStream in = new FileInputStream(selectedFile)) {
+			TourDeserializer deserializer = new XMLTourDeserializer(); // choose the good one
+			deserializer.setCityMap(this.dataModel.getCityMap()).setInputFile(in).deserialize();
+			List<Tour> tours = deserializer.getTours();
+
+			this.dataModel.getTours().clear();
+			this.dataModel.getTours().addAll(tours);
+		} catch (Exception e) {
+			this.displayToolBarMessage(e);
+			return;
+		}
+		this.displayToolBarMessage("Tours loaded from " + selectedFile.getName());
+	}
+
+	@FXML
+	private void openMapFile() {
+		Map<String, String> fileExtensions = new HashMap<>();
+		fileExtensions.put("CityMap XML file", "*.xml");
+		FileChooser fileChooser = createFileChooser("Choose a CityMap XML file", fileExtensions);
 		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
 		if (selectedFile != null) {
 			FileInputStream inputStream;
@@ -144,4 +204,49 @@ public class MainController implements Controller {
 		this.commandList.undo();
 	}
 
+	@FXML
+	private void showPopupVersion(ActionEvent actionEvent) {
+		// Opens another window that displays the current application version
+		Stage window = new Stage();
+		window.setTitle("About");
+		window.setResizable(false);
+		window.initOwner(panelsContainer.getScene().getWindow());
+		window.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+		// Add a label to the window containing the version
+		Label label = new Label("Version 1.0\n©Hunkanome");
+		label.setAlignment(Pos.BASELINE_CENTER);
+		label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+		label.setPrefHeight(100);
+		label.setPrefWidth(200);
+
+		// add the label to a pane
+		Pane pane = new Pane();
+		pane.getChildren().add(label);
+
+		// add the pane to the window
+		Scene scene = new Scene(pane);
+		window.setScene(scene);
+
+		window.show();
+	}
+
+	private FileChooser createFileChooser(String title, Map<String, String> fileExtensions) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+
+		// Set default to user home directory
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		fileChooser.setInitialDirectory(userDirectory);
+
+		for (Map.Entry<String, String> entry : fileExtensions.entrySet()) {
+			fileChooser.getExtensionFilters().add(new ExtensionFilter(entry.getKey(), entry.getValue()));
+		}
+
+		return fileChooser;
+	}
 }
