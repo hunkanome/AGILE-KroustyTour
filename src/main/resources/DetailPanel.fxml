@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="675.0" prefWidth="315.0"
-	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="fr.insalyon.controller.DetailsController">
-	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0"
-		minWidth="60.0" style="&#10;" text="Informations"
-		textAlignment="CENTER">
+<AnchorPane prefHeight="675.0" prefWidth="315.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insalyon.controller.DetailsController">
+	<Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" style="&#10;" text="Informations" textAlignment="CENTER">
 		<font>
 			<Font size="18.0" />
 		</font>
@@ -19,10 +14,10 @@
 			<Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
 		</textFill>
 	</Label>
-	<Accordion fx:id="accordion" layoutY="48.0"
-		AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-		AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
-		<panes>
-		</panes>
-	</Accordion>
+	<ScrollPane hbarPolicy="NEVER" layoutY="43.0" prefHeight="633.0" prefWidth="315.0" vbarPolicy="ALWAYS">
+		<Accordion fx:id="accordion" layoutY="48.0" prefHeight="630.0" prefWidth="312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+			<panes>
+			</panes>
+		</Accordion>
+	</ScrollPane>
 </AnchorPane>
