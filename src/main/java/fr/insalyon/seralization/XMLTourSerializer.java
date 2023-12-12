@@ -5,6 +5,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -33,10 +34,7 @@ public class XMLTourSerializer extends TourSerializer {
 		int cityMapHash = this.cityMap.hashCode();
 		root.setAttribute("cityMapHash", Integer.toString(cityMapHash));
 
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		transformer.setOutputProperty("encoding", "UTF-8");
-		transformer.setOutputProperty("indent", "yes");
+		Transformer transformer = this.getTransformer();
 		transformer.transform(new DOMSource(document), new StreamResult(this.out));
 
 		return this;
@@ -85,6 +83,19 @@ public class XMLTourSerializer extends TourSerializer {
 		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 
 		return factory.newDocumentBuilder();
+	}
+	
+	private Transformer getTransformer() throws TransformerConfigurationException {
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+		
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty("encoding", "UTF-8");
+		transformer.setOutputProperty("indent", "yes");
+		
+		return transformer;
 	}
 
 }
