@@ -34,6 +34,7 @@ public class DetailsController implements Controller {
 				pane.setText("Tour of courier n°" + tour.getCourier().getId());
 				ScrollPane scrollPane = new ScrollPane();
 				scrollPane.setFitToWidth(true);
+				scrollPane.setMinHeight(300);
 				pane.setContent(scrollPane);
 				TourTextualView view = new TourTextualView(pane, dataModel);
 				scrollPane.setContent(view);
