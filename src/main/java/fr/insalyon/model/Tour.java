@@ -1,13 +1,17 @@
 package fr.insalyon.model;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import fr.insalyon.algorithm.DeliveryGraph;
 import fr.insalyon.algorithm.Graph;
 import fr.insalyon.algorithm.ShortestPathAlgorithm;
 import fr.insalyon.algorithm.TSP1;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.*;
 
 /**
  * A sequence of deliveries located on a single path and handled by a courier.
@@ -18,6 +22,7 @@ import java.util.*;
  */
 public class Tour {
     private static final int MAX_TSP_TIME = 10000;
+    public static final LocalTime TOUR_START = LocalTime.of(8, 0);
 
     private final ObservableList<Delivery> deliveriesList = FXCollections.observableArrayList();
 

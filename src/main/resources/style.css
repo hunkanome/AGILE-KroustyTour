@@ -1,4 +1,4 @@
-.deliveryTextualView {
+.deliveryTextualView, .warehouseTextualView {
 	-fx-border-color: black;
 }
 
