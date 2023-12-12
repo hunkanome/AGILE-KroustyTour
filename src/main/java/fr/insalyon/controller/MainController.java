@@ -181,7 +181,6 @@ public class MainController implements Controller {
 			this.dataModel.getTours().clear();
 			this.dataModel.getTours().addAll(tours);
 		} catch (Exception e) {
-			e.printStackTrace();
 			this.displayToolBarMessage(e);
 			return;
 		}
