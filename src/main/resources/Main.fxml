@@ -23,13 +23,13 @@
 				</accelerator>
 			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Export tours" onAction="#saveTour">
+			<MenuItem mnemonicParsing="false" text="Export tours" onAction="#saveTours">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="E"
 						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
 				</accelerator>
 			</MenuItem>
-			<MenuItem mnemonicParsing="false" text="Import tours">
+			<MenuItem mnemonicParsing="false" text="Import tours" onAction="#loadTours">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="E"
 						control="DOWN" meta="UP" shift="UP" shortcut="UP" />

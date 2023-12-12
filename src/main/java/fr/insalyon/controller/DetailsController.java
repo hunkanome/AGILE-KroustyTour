@@ -29,17 +29,17 @@ public class DetailsController implements Controller {
 	private void onTourListChanged(Change<? extends Tour> c) {
 		while (c.next()) {
 			if (c.wasAdded()) { // Add a new TitledPane to the Accordion
-				Tour tour = c.getList().get(c.getFrom());
-				TitledPane pane = new TitledPane();
-				pane.setText("Tour of courier n°" + tour.getCourier().getId());
-				ScrollPane scrollPane = new ScrollPane();
-				scrollPane.setFitToWidth(true);
-				pane.setContent(scrollPane);
-				TourTextualView view = new TourTextualView(pane, dataModel);
-				scrollPane.setContent(view);
-				accordion.getPanes().add(pane);
-				view.setTour(tour);
-
+				for (Tour tour: c.getAddedSubList()) {
+					TitledPane pane = new TitledPane();
+					pane.setText("Tour of courier n°" + tour.getCourier().getId());
+					ScrollPane scrollPane = new ScrollPane();
+					scrollPane.setFitToWidth(true);
+					pane.setContent(scrollPane);
+					TourTextualView view = new TourTextualView(pane, dataModel);
+					scrollPane.setContent(view);
+					accordion.getPanes().add(pane);
+					view.setTour(tour);
+				}
 			} else if (c.wasRemoved()) { // Remove the corresponding TitledPane(s) from the Accordion
 				List<TitledPane> panes = accordion.getPanes();
 				if (c.getRemovedSize() == panes.size()) {

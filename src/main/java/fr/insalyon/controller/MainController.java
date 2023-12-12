@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.logging.Logger;
 
 import fr.insalyon.cityMapXML.BadlyFormedXMLException;
@@ -14,7 +16,10 @@ import fr.insalyon.cityMapXML.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Tour;
+import fr.insalyon.seralization.TourDeserializer;
 import fr.insalyon.seralization.TourSerializer;
+import fr.insalyon.seralization.XMLTourDeserializer;
 import fr.insalyon.seralization.XMLTourSerializer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -109,7 +114,7 @@ public class MainController implements Controller {
 	}
 
 	@FXML
-	private void saveTour() {
+	private void saveTours() {
 		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
 			return;
 		}
@@ -142,6 +147,41 @@ public class MainController implements Controller {
 			return;
 		}
 		this.displayToolBarMessage("Tours saved to " + selectedFile.getName());
+	}
+	
+	@FXML
+	private void loadTours() {
+		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
+			return;
+		}
+		
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Load the tours");
+
+		// Set default to user home directory
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = null;
+		}
+		fileChooser.setInitialDirectory(userDirectory);
+
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Tours XML file", "*.xml"));
+		File selectedFile = fileChooser.showOpenDialog(panelsContainer.getScene().getWindow());
+		
+		try (InputStream in = new FileInputStream(selectedFile)) {
+			TourDeserializer deserializer = new XMLTourDeserializer(); // choose the good one
+			deserializer.setCityMap(this.dataModel.getCityMap()).setInputFile(in).deserialize();
+			List<Tour> tours = deserializer.getTours();
+			
+			this.dataModel.getTours().clear();
+			this.dataModel.getTours().addAll(tours);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.displayToolBarMessage(e);
+			return;
+		}
+		this.displayToolBarMessage("Tours loaded from " + selectedFile.getName());
 	}
 
 	@FXML
