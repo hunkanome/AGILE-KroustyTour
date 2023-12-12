@@ -53,7 +53,7 @@ public class TourTextualView extends AnchorPane {
 		try {
 			loader.load();
 		} catch (Exception e) {
-			this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
+			this.showErrorView();
 		}
 	}
 
@@ -63,8 +63,7 @@ public class TourTextualView extends AnchorPane {
 		try {
 			this.showTour();
 		} catch (IOException e) {
-			this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
-
+			this.showErrorView();
 		}
 		this.dataModel.setSelectedTour(this.tour);
 	}
@@ -170,9 +169,12 @@ public class TourTextualView extends AnchorPane {
 		try {
 			this.showTour();
 		} catch (IOException e) {
-			this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
-			e.printStackTrace(); // TODO remove
+			this.showErrorView();
 		}
+	}
+	
+	private void showErrorView() {
+		this.getChildren().add(new Pane(new Label("An error occurred while loading the view.")));
 	}
 
 }
