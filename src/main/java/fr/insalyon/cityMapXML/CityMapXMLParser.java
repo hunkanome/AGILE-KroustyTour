@@ -1,4 +1,4 @@
-package fr.insalyon.xml;
+package fr.insalyon.cityMapXML;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

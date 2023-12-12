@@ -1,4 +1,4 @@
-package fr.insalyon.xml;
+package fr.insalyon.cityMapXML;
 //
 //import java.util.Collection;
 //import java.util.List;

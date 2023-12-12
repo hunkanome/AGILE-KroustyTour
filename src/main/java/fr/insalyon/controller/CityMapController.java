@@ -1,13 +1,13 @@
 package fr.insalyon.controller;
 
 
+import fr.insalyon.cityMapXML.BadlyFormedXMLException;
+import fr.insalyon.cityMapXML.CityMapXMLParser;
+import fr.insalyon.cityMapXML.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
 import fr.insalyon.model.*;
-import fr.insalyon.xml.BadlyFormedXMLException;
-import fr.insalyon.xml.CityMapXMLParser;
-import fr.insalyon.xml.XMLParserException;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

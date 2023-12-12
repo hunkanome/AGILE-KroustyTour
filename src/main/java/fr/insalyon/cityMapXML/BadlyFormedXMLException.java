@@ -1,4 +1,4 @@
-package fr.insalyon.xml;
+package fr.insalyon.cityMapXML;
 
 /**
  * Thrown when an error occurs during the parsing of the XML file. <br/>

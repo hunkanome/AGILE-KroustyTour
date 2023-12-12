@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
+import fr.insalyon.cityMapXML.BadlyFormedXMLException;
+import fr.insalyon.cityMapXML.CityMapXMLParser;
+import fr.insalyon.cityMapXML.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.seralization.TourSerializer;
 import fr.insalyon.seralization.XMLTourSerializer;
-import fr.insalyon.xml.BadlyFormedXMLException;
-import fr.insalyon.xml.CityMapXMLParser;
-import fr.insalyon.xml.XMLParserException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
