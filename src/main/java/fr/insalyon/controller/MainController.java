@@ -126,9 +126,15 @@ public class MainController implements Controller {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Tours XML file", "*.xml"));
 		
 		File selectedFile = fileChooser.showSaveDialog(null);
+		
 
 		try (OutputStream out = new FileOutputStream(selectedFile)) {
-			TourSerializer serializer = new XMLTourSerializer(); // TODO choose the good serializer based on the extension
+			// set the xml extension if not already
+			if (!selectedFile.getName().endsWith(".xml")) {
+				String newPath = selectedFile.getAbsolutePath() + ".xml";
+				selectedFile = new File(newPath);
+			}
+			TourSerializer serializer = new XMLTourSerializer(); // choose the good serializer based on the extension (when there will be more of them)
 			serializer.setTours(this.dataModel.getTours()).setCityMap(this.dataModel.getCityMap()).setFile(out)
 					.serialize();
 		} catch (Exception e) {
