@@ -31,7 +31,7 @@ public abstract class TourDeserializer {
 	/**
 	 * Sets the input stream for deserialization.
 	 * 
-	 * @param - in the input file to set
+	 * @param in - the input file to set
 	 * @return this deserializer
 	 */
 	public TourDeserializer setInputFile(InputStream in) {
