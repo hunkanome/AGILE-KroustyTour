@@ -64,7 +64,7 @@ public class CommandList {
      * @see Command
      */
     public void redo() {
-        if (this.lastCommand < this.history.size() && !this.history.isEmpty()) {
+        if (this.lastCommand < this.history.size() -1 && !this.history.isEmpty()) {
             this.lastCommand++;
             this.history.get(this.lastCommand).doCommand();
         }
