@@ -1,8 +1,9 @@
 fr.insalyon
 fr.insalyon.algorithm
+fr.insalyon.city_map_xml
 fr.insalyon.controller
 fr.insalyon.controller.command
 fr.insalyon.geometry
 fr.insalyon.model
+fr.insalyon.seralization
 fr.insalyon.view
-fr.insalyon.xml
