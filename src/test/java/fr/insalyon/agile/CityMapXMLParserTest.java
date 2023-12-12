@@ -1,12 +1,12 @@
 package fr.insalyon.agile;
 
+import fr.insalyon.city_map_xml.BadlyFormedXMLException;
+import fr.insalyon.city_map_xml.CityMapXMLParser;
+import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.geometry.GeoCoordinates;
 import fr.insalyon.model.CityMap;
 import fr.insalyon.model.Intersection;
 import fr.insalyon.model.Segment;
-import fr.insalyon.xml.BadlyFormedXMLException;
-import fr.insalyon.xml.CityMapXMLParser;
-import fr.insalyon.xml.XMLParserException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
