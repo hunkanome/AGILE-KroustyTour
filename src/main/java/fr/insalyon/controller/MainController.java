@@ -22,14 +22,18 @@ import fr.insalyon.seralization.TourSerializer;
 import fr.insalyon.seralization.XMLTourDeserializer;
 import fr.insalyon.seralization.XMLTourSerializer;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class MainController implements Controller {
 
@@ -224,4 +228,31 @@ public class MainController implements Controller {
 		this.commandList.undo();
 	}
 
+	@FXML
+    private void showPopupVersion(ActionEvent actionEvent) {
+		// Opens another window that displays the current application version
+		Stage window = new Stage();
+		window.setTitle("About");
+		window.setResizable(false);
+		window.initOwner(panelsContainer.getScene().getWindow());
+		window.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+		// Add a label to the window containing the version
+		Label label = new Label("Version 1.0\n©Hunkanome");
+		label.setAlignment(Pos.BASELINE_CENTER);
+		label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+		label.setPrefHeight(100);
+		label.setPrefWidth(200);
+
+
+		// add the label to a pane
+		Pane pane = new Pane();
+		pane.getChildren().add(label);
+
+		// add the pane to the window
+		Scene scene = new Scene(pane);
+		window.setScene(scene);
+
+		window.show();
+    }
 }

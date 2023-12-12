@@ -69,7 +69,7 @@
 			</MenuItem>
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About" />
+			<MenuItem mnemonicParsing="false" text="About" onAction="#showPopupVersion"/>
 		</Menu>
 	</MenuBar>
 	<HBox fx:id="panelsContainer" prefHeight="647.0"
