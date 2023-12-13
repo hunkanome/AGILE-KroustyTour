@@ -85,8 +85,8 @@ public class CityMapController implements Controller {
 		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
 			drawCityMap();
-			drawSelectedIntersection();
 			drawTours();
+			drawSelectedIntersection();
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
