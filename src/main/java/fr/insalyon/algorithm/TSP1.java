@@ -13,7 +13,10 @@ public class TSP1 extends TemplateTSP {
 	protected float bound(Integer currentVertex, Collection<Integer> unvisited) {
 		float bound = 0;
 		for (Integer i : unvisited) {
-			bound += graph.getCost(currentVertex, i);
+			float cost = graph.getCost(currentVertex, i);
+			if (cost < bound) {
+				bound = cost;
+			}
 		}
 		return bound;
 	}
