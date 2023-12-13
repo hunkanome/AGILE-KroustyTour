@@ -4,6 +4,7 @@ import fr.insalyon.algorithm.AStar;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
 import fr.insalyon.model.Tour;
+import fr.insalyon.view.PopUp;
 
 /**
  * Command used to add a <code>Delivery</code> to a <code>Tour</code>
@@ -35,9 +36,17 @@ public class AddDeliveryCommand implements Command {
      */
     @Override
     public void doCommand() {
+        int sizeBefore = this.tour.getDeliveriesList().size();
         this.tour.addDelivery(this.delivery, dataModel.getCityMap(), new AStar());
         this.dataModel.setSelectedIntersection(null);
-        this.dataModel.setSelectedDelivery(delivery);
+        if (sizeBefore < this.tour.getDeliveriesList().size()) {
+            this.dataModel.setSelectedDelivery(delivery);
+        } else { // If the delivery could not be added and was deleted
+            this.dataModel.setSelectedDelivery(null);
+            PopUp popUpErrorMessage = new PopUp("Error", "The delivery could not be added\nto the tour because your courier\nwould be trapped.");
+            popUpErrorMessage.show();
+        }
+
     }
 
     /**
