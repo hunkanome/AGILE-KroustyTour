@@ -122,10 +122,6 @@ public abstract class TemplateTSP implements TSP {
                 newCurrentTimeWindowCost = 5 - graph.getCost(currentVertex, deliveryVertex);
                 newBranchCost = (float) (Math.ceil(branchCost/60) * 60 + currentTimeWindowCost);
 			}
-            // If we are running out of time, we stop the branch
-            if(newCurrentTimeWindowCost > 55) {
-                return;
-            }
 			visited.add(deliveryVertex);
 			unvisitedByTimeWindow.get(currentTimeWindow).remove(deliveryVertex);
 			branchAndBound(deliveryVertex, unvisitedByTimeWindow, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);

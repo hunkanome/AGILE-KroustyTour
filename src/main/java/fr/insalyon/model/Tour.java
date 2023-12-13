@@ -88,7 +88,6 @@ public class Tour {
 
         this.pathList = newPaths;
         this.deliveriesList.setAll(newDeliveries);
-
     }
 
     public Courier getCourier() {
