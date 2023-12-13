@@ -152,6 +152,9 @@ public class TourTextualView extends AnchorPane {
 
 	private void handleClick(MouseEvent event) {
 		if (this.parent.isExpanded()) {
+			if (this.dataModel.getSelectedTour() != null && this.dataModel.getSelectedTour().equals(this.tour)) {
+				return;
+			}
 			this.dataModel.setSelectedTour(this.tour);
 		} else {
 			this.dataModel.setSelectedTour(null);

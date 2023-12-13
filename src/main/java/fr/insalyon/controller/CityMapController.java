@@ -1,29 +1,40 @@
 package fr.insalyon.controller;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
 import fr.insalyon.city_map_xml.BadlyFormedXMLException;
 import fr.insalyon.city_map_xml.CityMapXMLParser;
 import fr.insalyon.city_map_xml.XMLParserException;
 import fr.insalyon.controller.command.CommandList;
 import fr.insalyon.geometry.CoordinateTransformer;
 import fr.insalyon.geometry.Position;
-import fr.insalyon.model.*;
+import fr.insalyon.model.CityMap;
+import fr.insalyon.model.DataModel;
+import fr.insalyon.model.Delivery;
+import fr.insalyon.model.Intersection;
+import fr.insalyon.model.Path;
+import fr.insalyon.model.Segment;
+import fr.insalyon.model.Tour;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * Controller for the map view (middle)
@@ -69,6 +80,7 @@ public class CityMapController implements Controller {
 		this.dataModel.cityMapProperty().addListener(this::onCityMapUpdate);
 		this.dataModel.selectedDeliveryProperty().addListener(this::onSelectedDeliveryUpdate);
 		this.dataModel.selectedTourProperty().addListener(this::onSelectedTourUpdate);
+		this.dataModel.getTours().addListener(this::onToursUpdate);
 		this.dataModel.selectedIntersectionProperty().addListener(this::onSelectedIntersection);
 
 		this.anchorPane.setStyle("-fx-background-color: " + BG_DEFAULT_COLOR);
@@ -85,8 +97,8 @@ public class CityMapController implements Controller {
 		if (this.dataModel.getCityMap() != null) {
 			clearCanvas();
 			drawCityMap();
-			drawSelectedIntersection();
 			drawTours();
+			drawSelectedIntersection();
 			drawAllDeliveries();
 			drawSelectedDelivery();
 			drawWarehouse();
@@ -361,6 +373,10 @@ public class CityMapController implements Controller {
 	}
 
 	private void onSelectedTourUpdate(ObservableValue<? extends Tour> observable, Tour oldValue, Tour newValue) {
+		drawCanvas();
+	}
+
+	private void onToursUpdate(Change<? extends Tour> changes) {
 		drawCanvas();
 	}
 
