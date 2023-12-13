@@ -61,6 +61,10 @@ public class Tour {
     }
 
     private void recalculateGraph(CityMap cityMap, ShortestPathAlgorithm shortestPathAlgorithm){
+        if(this.deliveriesList.isEmpty()) {
+            return;
+        }
+
         List<Delivery> deliveries = new ArrayList<>(this.deliveriesList);
         Delivery warehouseDelivery = new Delivery(cityMap.getWarehouse(), TimeWindow.getTimeWindow(8));
         deliveries.add(0, warehouseDelivery);
@@ -77,6 +81,14 @@ public class Tour {
         // Computing TSP solution
         tsp1.searchSolution(MAX_TSP_TIME, graph, deliveriesByTimeWindow);
         Integer[] solution = tsp1.getBestSol();
+
+        if(solution == null) {
+            if(!this.deliveriesList.isEmpty()) {
+                this.deliveriesList.removeLast();
+                recalculateGraph(cityMap, shortestPathAlgorithm);
+            }
+            return;
+        }
 
         List<Delivery> newDeliveries = new ArrayList<>(solution.length - 1);
         List<Path> newPaths = new ArrayList<>(solution.length - 1);

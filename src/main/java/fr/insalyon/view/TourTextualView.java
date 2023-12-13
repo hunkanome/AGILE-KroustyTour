@@ -165,6 +165,7 @@ public class TourTextualView extends AnchorPane {
 	}
 
 	private void onTourUpdate(Change<? extends Delivery> c) {
+
 		this.getChildren().clear();
 		try {
 			this.showTour();

@@ -34,7 +34,7 @@ public abstract class TemplateTSP implements TSP {
 		// Check if the graph is complete (all the vertices are connected)
 		for (int i = 0; i < graph.getNbVertices(); i++) {
 			for (int j = 0; j < graph.getNbVertices(); j++) {
-				if (!graph.isArc(i, j)) {
+				if (i!=j && !graph.isArc(i, j)) {
 					return;
 				}
 			}
