@@ -67,6 +67,13 @@
 						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
 				</accelerator>
 			</MenuItem>
+			<MenuItem mnemonicParsing="false" onAction="#removeAllTours"
+				text="Remove all tours">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="DELETE"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
 			<MenuItem mnemonicParsing="false" text="About" onAction="#showPopupVersion"/>

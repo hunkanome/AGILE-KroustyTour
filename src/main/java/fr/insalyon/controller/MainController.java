@@ -216,6 +216,16 @@ public class MainController implements Controller {
 		}
 		this.dataModel.setSelectedDelivery(null);
 	}
+	
+	@FXML
+	private void removeAllTours() {
+		if (this.dataModel == null) {
+			return;
+		}
+		this.dataModel.getTours().clear();
+		this.dataModel.setSelectedDelivery(null);
+		this.dataModel.setSelectedTour(null);
+	}
 
 	@FXML
 	private void showPopupVersion() {
