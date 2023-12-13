@@ -13,7 +13,7 @@ import java.util.List;
  * @see Graph
  */
 public class DeliveryGraph implements Graph {
-	protected static final float AVG_SPEED = 15 * 60 / 3.6f; // m/min
+	protected static final float AVG_SPEED = 15 * 1000 / 60.f; // m/min
 	protected static final int DELIVERY_TIME = (int) Delivery.DURATION.toMinutes();
 	protected final Path[][] paths;
 

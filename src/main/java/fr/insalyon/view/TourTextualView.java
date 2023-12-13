@@ -89,7 +89,7 @@ public class TourTextualView extends AnchorPane {
 			delivery = deliveryList.get(i);
 
 			distance = this.tour.getPathList().get(i).getLength();
-			duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+			duration = Duration.ofSeconds((long) (distance / 15 * 3.6f));
 			start = start.plus(duration);
 			Duration waitTime = Duration.ZERO;
 			if (start.isBefore(LocalTime.of(delivery.getTimeWindow().getStartHour(), 0))) {
