@@ -124,7 +124,7 @@ public class MainController implements Controller {
 		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
 			return;
 		}
-		
+
 		Map<String, String> fileExtensions = new HashMap<>();
 		fileExtensions.put("Tours XML file", "*.xml");
 		FileChooser fileChooser = createFileChooser("Save the tours", fileExtensions);
@@ -153,7 +153,7 @@ public class MainController implements Controller {
 		if (this.dataModel == null || this.dataModel.getCityMap() == null) {
 			return;
 		}
-		
+
 		Map<String, String> fileExtensions = new HashMap<>();
 		fileExtensions.put("Tours XML file", "*.xml");
 		FileChooser fileChooser = createFileChooser("Load the tours", fileExtensions);
@@ -205,7 +205,20 @@ public class MainController implements Controller {
 	}
 
 	@FXML
-	private void showPopupVersion(ActionEvent actionEvent) {
+	private void removeAllDeliveries() {
+		if (this.dataModel == null) {
+			return;
+		}
+
+		for (Tour tour : this.dataModel.getTours()) {
+			tour.getPathList().clear();
+			tour.getDeliveriesList().clear();
+		}
+		this.dataModel.setSelectedDelivery(null);
+	}
+
+	@FXML
+	private void showPopupVersion() {
 		// Opens another window that displays the current application version
 		Stage window = new Stage();
 		window.setTitle("About");
