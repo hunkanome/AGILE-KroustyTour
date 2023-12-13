@@ -60,11 +60,18 @@
 				</accelerator>
 			</MenuItem>
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false"
+			<MenuItem mnemonicParsing="false" onAction="#removeAllDeliveries"
 				text="Remove all deliveries">
 				<accelerator>
 					<KeyCodeCombination alt="UP" code="DELETE"
 						control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+				</accelerator>
+			</MenuItem>
+			<MenuItem mnemonicParsing="false" onAction="#removeAllTours"
+				text="Remove all tours">
+				<accelerator>
+					<KeyCodeCombination alt="UP" code="DELETE"
+						control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 				</accelerator>
 			</MenuItem>
 		</Menu>
