@@ -101,6 +101,7 @@ public class DataModel {
 
 	public final void setSelectedTour(Tour tour) {
 		selectedTourProperty().set(tour);
+		selectedDeliveryProperty().set(null);
 	}
 
 	/**
@@ -117,6 +118,12 @@ public class DataModel {
 
 	public final void setSelectedDelivery(Delivery delivery) {
 		selectedDeliveryProperty().set(delivery);
+		for (Tour tour : getTours()) {
+			if (tour.getDeliveriesList().contains(delivery)) {
+				selectedTourProperty().set(tour);
+				return;
+			}
+		}
 	}
 
 }
