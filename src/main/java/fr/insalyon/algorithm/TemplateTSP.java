@@ -30,6 +30,16 @@ public abstract class TemplateTSP implements TSP {
 		if (timeLimit <= 0 || graph.getNbVertices() <= 0) {
 			return;
 		}
+
+		// Check if the graph is complete (all the vertices are connected)
+		for (int i = 0; i < graph.getNbVertices(); i++) {
+			for (int j = 0; j < graph.getNbVertices(); j++) {
+				if (!graph.isArc(i, j)) {
+					return;
+				}
+			}
+		}
+
 		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
 		this.graph = graph;

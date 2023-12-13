@@ -105,6 +105,6 @@ public class DeliveryGraph implements Graph {
 	 */
 	@Override
 	public boolean isArc(int i, int j) {
-		return getCost(i,j) != -1;
+		return this.paths[i][j].getLength() != 0;
 	}
 }
