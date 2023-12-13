@@ -57,7 +57,11 @@ public class Tour {
 
     public void removeDelivery(Delivery delivery, CityMap cityMap, ShortestPathAlgorithm shortestPathAlgorithm) {
         this.deliveriesList.remove(delivery);
-        recalculateGraph(cityMap, shortestPathAlgorithm);
+        if (!this.deliveriesList.isEmpty()) {
+            recalculateGraph(cityMap, shortestPathAlgorithm);
+        } else {
+            this.pathList.clear();
+        }
     }
 
     private void recalculateGraph(CityMap cityMap, ShortestPathAlgorithm shortestPathAlgorithm){
