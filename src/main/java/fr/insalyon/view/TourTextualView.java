@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Delivery;
@@ -74,8 +75,7 @@ public class TourTextualView extends AnchorPane {
 			return;
 		}
 
-		List<Delivery> deliveryList = new ArrayList<>();
-		deliveryList.addAll(this.tour.getDeliveriesList());
+        List<Delivery> deliveryList = new ArrayList<>(this.tour.getDeliveriesList());
 
 		topAnchor = DELIVERY_VIEW_TOP_MARGIN;
 		this.showWarehouse();
@@ -89,7 +89,7 @@ public class TourTextualView extends AnchorPane {
 			delivery = deliveryList.get(i);
 
 			distance = this.tour.getPathList().get(i).getLength();
-			duration = Duration.ofSeconds((long) (distance / 15 * 60L / 3.6f));
+			duration = Duration.ofSeconds((long) (distance / 15 * 3.6f));
 			start = start.plus(duration);
 			Duration waitTime = Duration.ZERO;
 			if (start.isBefore(LocalTime.of(delivery.getTimeWindow().getStartHour(), 0))) {
@@ -105,7 +105,7 @@ public class TourTextualView extends AnchorPane {
 	}
 
 	private void showWarehouse() throws IOException {
-		Parent warehouseView = FXMLLoader.load(getClass().getClassLoader().getResource("WarehouseTextualView.fxml"));
+		Parent warehouseView = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("WarehouseTextualView.fxml")));
 		AnchorPane.setTopAnchor(warehouseView, topAnchor);
 		AnchorPane.setLeftAnchor(warehouseView, DELIVERY_VIEW_LEFT_MARGIN);
 		this.getChildren().add(warehouseView);
