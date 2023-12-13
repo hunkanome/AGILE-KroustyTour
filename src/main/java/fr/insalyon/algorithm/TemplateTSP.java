@@ -80,7 +80,7 @@ public abstract class TemplateTSP implements TSP {
 			TimeWindow currentTimeWindow
 	){
 		// Avoid spending too much time in this method
-		if (System.currentTimeMillis() - startTime > timeLimit) {
+		if (System.currentTimeMillis() - startTime > timeLimit && this.bestSol != null) {
 			return;
 		}
 
