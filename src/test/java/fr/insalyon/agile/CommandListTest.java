@@ -6,13 +6,13 @@ import fr.insalyon.controller.command.RemoveSelectedTourCommand;
 import fr.insalyon.model.Courier;
 import fr.insalyon.model.DataModel;
 import fr.insalyon.model.Tour;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class CommandListTest {
+class CommandListTest {
 
     @Test
-    public void testHistory() {
+    void testHistory() {
         CommandList commandList = new CommandList();
         DataModel dataModel = new DataModel();
         Courier courier = new Courier();
@@ -49,6 +49,5 @@ public class CommandListTest {
 
         commandList.redo();
         Assertions.assertEquals(0, commandList.getLastCommand());
-
     }
 }
