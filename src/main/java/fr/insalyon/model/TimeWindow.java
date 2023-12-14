@@ -87,17 +87,7 @@ public class TimeWindow {
 		return Objects.hash(this.startHour);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TimeWindow other = (TimeWindow) obj;
-		return this.startHour == other.startHour;
-	}
+	// No equals method because we use a Multiton pattern and then the equals method is the same as Object's.
 
 	@Override
 	public String toString() {
