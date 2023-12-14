@@ -22,7 +22,7 @@ class SegmentTest {
         Segment segment2 = new Segment(intersection1, intersection2, street1, length1);
 
         assertEquals(segment1, segment1);
-        assertNotEquals(null, segment1);
+        assertNotEquals(segment1, null);
         assertNotEquals(segment1, new Object());
         assertEquals(segment1, segment2);
 
