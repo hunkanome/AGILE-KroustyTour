@@ -1,4 +1,4 @@
-package fr.insalyon.agile;
+package fr.insalyon.agile.mock;
 
 import fr.insalyon.model.CityMap;
 

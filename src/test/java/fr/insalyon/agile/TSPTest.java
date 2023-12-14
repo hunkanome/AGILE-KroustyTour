@@ -1,5 +1,6 @@
 package fr.insalyon.agile;
 
+import fr.insalyon.agile.mock.MockPath;
 import fr.insalyon.algorithm.DeliveryGraph;
 import fr.insalyon.algorithm.Graph;
 import fr.insalyon.algorithm.TSP;
