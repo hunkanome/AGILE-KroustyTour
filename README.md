@@ -5,4 +5,42 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hunkanome_AGILE-KroustyTour&metric=alert_status&branch=main)](https://sonarcloud.io/summary/new_code?id=hunkanome_AGILE-KroustyTour&branch=main)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=hunkanome_AGILE-KroustyTour&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=hunkanome_AGILE-KroustyTour)
 
-[Lien du sharepoint](https://l.messenger.com/l.php?u=https%3A%2F%2Finsalyonfrance-my.sharepoint.com%2F%3Af%3A%2Fg%2Fpersonal%2Famerle2_insa-lyon_fr%2FEtpvMGtW4K9JtUR_4VA8URIBDUfNCwmkhmg2GIB3N1NYmw%3Fe%3DphLJVq&h=AT38W_R_m5YJrIyJ8FXu1kmn3-LkHMOLeEhFzZLPmAX1DgfASkUhuNyQDESDPG_CzMzLu6E5HxO9i2Bn_A7O1Vw-IMWaXX9f5mMUaLi-PVYwWomQOuFokLIE7y0L5zqKARjDtA)
+
+La documentation est disponible [ici](https://hunkanome.github.io/AGILE-KroustyTour/javadoc).
+
+
+## Lancer le projet
+
+Il suffit de lancer la commande suivante :
+
+> mvn clean javafx:run
+
+
+### Lancer les tests
+
+Il suffit de lancer la commande suivante :
+
+> mvn clean test
+
+
+## Crédits
+
+### Auteurs
+
+- Martin Bonnefoy
+- Remy Etienne
+- Arthur Galet
+- Adrian Merle
+- Antonin Sibileau
+- Alexandre Rosard
+- Elie Tarassov
+
+### Dépendances
+
+Ce projet utilise [JUnit 5](https://junit.org/junit5/) pour les tests unitaires.
+
+L'outil [Maven](https://maven.apache.org/) est utilisé pour la gestion des dépendances et la compilation.
+
+Le projet utilise [JavaFX](https://openjfx.io/) pour l'interface graphique.
+
+Le pattern MVC est grandement inspiré de [ce projet](https://github.com/james-d/SimpleMVP)
