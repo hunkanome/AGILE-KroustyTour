@@ -1,17 +1,5 @@
 package fr.insalyon.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import fr.insalyon.city_map_xml.BadlyFormedXMLException;
 import fr.insalyon.city_map_xml.CityMapXMLParser;
 import fr.insalyon.city_map_xml.XMLParserException;
@@ -23,19 +11,22 @@ import fr.insalyon.seralization.TourDeserializer;
 import fr.insalyon.seralization.TourSerializer;
 import fr.insalyon.seralization.XMLTourDeserializer;
 import fr.insalyon.seralization.XMLTourSerializer;
+import fr.insalyon.view.PopUp;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class MainController implements Controller {
 
@@ -229,29 +220,8 @@ public class MainController implements Controller {
 
 	@FXML
 	private void showPopupVersion() {
-		// Opens another window that displays the current application version
-		Stage window = new Stage();
-		window.setTitle("About");
-		window.setResizable(false);
-		window.initOwner(panelsContainer.getScene().getWindow());
-		window.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-		// Add a label to the window containing the version
-		Label label = new Label("Version 1.0\n©Hunkanome");
-		label.setAlignment(Pos.BASELINE_CENTER);
-		label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-		label.setPrefHeight(100);
-		label.setPrefWidth(200);
-
-		// add the label to a pane
-		Pane pane = new Pane();
-		pane.getChildren().add(label);
-
-		// add the pane to the window
-		Scene scene = new Scene(pane);
-		window.setScene(scene);
-
-		window.show();
+		PopUp popUpVersion = new PopUp("About", "Version 1.0\n©Hunkanome");
+		popUpVersion.show();
 	}
 
 	private FileChooser createFileChooser(String title, Map<String, String> fileExtensions) {

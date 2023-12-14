@@ -30,6 +30,16 @@ public abstract class TemplateTSP implements TSP {
 		if (timeLimit <= 0 || graph.getNbVertices() <= 0) {
 			return;
 		}
+
+		// Check if the graph is complete (all the vertices are connected)
+		for (int i = 0; i < graph.getNbVertices(); i++) {
+			for (int j = 0; j < graph.getNbVertices(); j++) {
+				if (i!=j && !graph.isArc(i, j)) {
+					return;
+				}
+			}
+		}
+
 		this.startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
 		this.graph = graph;
@@ -80,7 +90,7 @@ public abstract class TemplateTSP implements TSP {
 			TimeWindow currentTimeWindow
 	){
 		// Avoid spending too much time in this method
-		if (System.currentTimeMillis() - startTime > timeLimit) {
+		if (System.currentTimeMillis() - startTime > timeLimit && this.bestSol != null) {
 			return;
 		}
 
@@ -122,10 +132,6 @@ public abstract class TemplateTSP implements TSP {
                 newCurrentTimeWindowCost = 5 - graph.getCost(currentVertex, deliveryVertex);
                 newBranchCost = (float) (Math.ceil(branchCost/60) * 60 + currentTimeWindowCost);
 			}
-            // If we are running out of time, we stop the branch
-            if(newCurrentTimeWindowCost > 55) {
-                return;
-            }
 			visited.add(deliveryVertex);
 			unvisitedByTimeWindow.get(currentTimeWindow).remove(deliveryVertex);
 			branchAndBound(deliveryVertex, unvisitedByTimeWindow, visited,newBranchCost, newCurrentTimeWindowCost, currentTimeWindow);
