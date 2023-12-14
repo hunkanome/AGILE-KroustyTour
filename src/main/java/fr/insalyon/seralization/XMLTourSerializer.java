@@ -93,7 +93,6 @@ public class XMLTourSerializer extends TourSerializer {
 		
 		Transformer transformer = transformerFactory.newTransformer();
 		transformer.setOutputProperty("encoding", "UTF-8");
-		transformer.setOutputProperty("indent", "yes");
 		
 		return transformer;
 	}

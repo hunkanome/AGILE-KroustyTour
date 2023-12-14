@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import fr.insalyon.algorithm.DeliveryGraph;
 import fr.insalyon.algorithm.Graph;
@@ -113,4 +114,24 @@ public class Tour {
     public List<Path> getPathList() {
         return pathList;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(courier, deliveriesList, pathList);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tour other = (Tour) obj;
+		return Objects.equals(courier, other.courier) && Objects.equals(deliveriesList, other.deliveriesList)
+				&& Objects.equals(pathList, other.pathList);
+	}
+    
+    
 }
