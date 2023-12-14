@@ -28,17 +28,33 @@ class XMLTourDeserializerTest {
 	private static CityMap cityMap;
 	private static Intersection intersection;
 	private static Intersection intersection1;
+	private static Intersection intersection2;
 	
 	@BeforeAll
 	static void createCityMap() {
 		intersection = new Intersection(0, new GeoCoordinates(1f, 1f), 0);
 		intersection1 = new Intersection(1, new GeoCoordinates(1f, 2f), 1);
-		Segment segment = new Segment(intersection, intersection1, "test", 0);
+		intersection2 = new Intersection(2, new GeoCoordinates(2f, 2f), 2);
+		Segment segment = new Segment(intersection, intersection1, "test", 10);
 		intersection.addOutwardSegment(segment);
+		Segment segment2 = new Segment(intersection, intersection2, "test2", 10);
+		intersection.addOutwardSegment(segment2);
+		
+		Segment segment1 = new Segment(intersection1, intersection, "test", 10);
+		intersection1.addOutwardSegment(segment1);
+		Segment segment3 = new Segment(intersection1, intersection2, "test1", 10);
+		intersection1.addOutwardSegment(segment3);
+		
+		Segment segment4 = new Segment(intersection2, intersection, "test2", 10);
+		intersection2.addOutwardSegment(segment4);
+		Segment segment5 = new Segment(intersection2, intersection1, "test1", 10);
+		intersection2.addOutwardSegment(segment5);
+		
 		cityMap = new MockCityMap();
-		cityMap.setWarehouse(intersection);
+		cityMap.setWarehouse(intersection1);
 		cityMap.addIntersection(intersection);
 		cityMap.addIntersection(intersection1);
+		cityMap.addIntersection(intersection2);
 	}
 
 	@Test
